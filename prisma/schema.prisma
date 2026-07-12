@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Owner {
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique
+  phoneNumber  String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  kennel       Kennel?
+}
+
+model Kennel {
+  id               String   @id @default(uuid())
+  name             String
+  cnpj             String   @unique
+  city             String
+  state            String
+  cbkcRegistration String
+  ownerId          String   @unique
+  createdAt        DateTime @default(now())
+  dogs             Dog[]
+  owner            Owner    @relation(fields: [ownerId], references: [id])
+}
+
+model Dog {
+  id          String    @id @default(uuid())
+  name        String
+  breed       String
+  gender      String
+  status      DogStatus @default(AVAILABLE_PUPPY)
+  pedigreeUrl String?
+  lineage     String?
+  photoUrls   String[]
+  kennelId    String
+  createdAt   DateTime  @default(now())
+  kennel      Kennel    @relation(fields: [kennelId], references: [id])
+}
+
+enum DogStatus {
+  BREEDING_STOCK
+  AVAILABLE_PUPPY
+  RESERVED
+  SOLD
+}
