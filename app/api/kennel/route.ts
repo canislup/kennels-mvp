@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import {NextRequest, NextResponse} from "next/server";
 import { jwtVerify } from "jose";
 import { prisma } from "@/lib/db";
+import { verifyKennelSession } from "@/lib/auth";
 
 export const PATCH = async (request: NextRequest) => {
 
