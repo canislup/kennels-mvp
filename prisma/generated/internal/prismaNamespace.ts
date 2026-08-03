@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Owner: 'Owner',
   Kennel: 'Kennel',
-  Dog: 'Dog'
+  Dog: 'Dog',
+  Breed: 'Breed'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "owner" | "kennel" | "dog"
+    modelProps: "owner" | "kennel" | "dog" | "breed"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Breed: {
+      payload: Prisma.$BreedPayload<ExtArgs>
+      fields: Prisma.BreedFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BreedFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BreedFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        findFirst: {
+          args: Prisma.BreedFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BreedFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        findMany: {
+          args: Prisma.BreedFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        create: {
+          args: Prisma.BreedCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        createMany: {
+          args: Prisma.BreedCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BreedCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        delete: {
+          args: Prisma.BreedDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        update: {
+          args: Prisma.BreedUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        deleteMany: {
+          args: Prisma.BreedDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BreedUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BreedUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        upsert: {
+          args: Prisma.BreedUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        aggregate: {
+          args: Prisma.BreedAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBreed>
+        }
+        groupBy: {
+          args: Prisma.BreedGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BreedCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -707,6 +782,15 @@ export const DogScalarFieldEnum = {
 } as const
 
 export type DogScalarFieldEnum = (typeof DogScalarFieldEnum)[keyof typeof DogScalarFieldEnum]
+
+
+export const BreedScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+} as const
+
+export type BreedScalarFieldEnum = (typeof BreedScalarFieldEnum)[keyof typeof BreedScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -907,6 +991,7 @@ export type GlobalOmitConfig = {
   owner?: Prisma.OwnerOmit
   kennel?: Prisma.KennelOmit
   dog?: Prisma.DogOmit
+  breed?: Prisma.BreedOmit
 }
 
 /* Types for Logging */

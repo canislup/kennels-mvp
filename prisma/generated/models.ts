@@ -11,4 +11,5 @@
 export type * from './models/Owner'
 export type * from './models/Kennel'
 export type * from './models/Dog'
+export type * from './models/Breed'
 export type * from './commonInputTypes'

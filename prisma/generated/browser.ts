@@ -32,3 +32,8 @@ export type Kennel = Prisma.KennelModel
  * 
  */
 export type Dog = Prisma.DogModel
+/**
+ * Model Breed
+ * 
+ */
+export type Breed = Prisma.BreedModel

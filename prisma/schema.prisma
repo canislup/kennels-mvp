@@ -35,7 +35,7 @@ model Dog {
   name        String
   breed       String
   gender      String
-  status      DogStatus @default(AVAILABLE_PUPPY)
+  status      DogStatus @default(BREEDING_STOCK)
   pedigreeUrl String?
   lineage     String?
   photoUrls   String[]
@@ -49,4 +49,10 @@ enum DogStatus {
   AVAILABLE_PUPPY
   RESERVED
   SOLD
+}
+
+model Breed {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
 }
