@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Edit, ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 
 // Adjust this type based on your actual schema/database return structure
-type DogProps = {
+export type DogProps = {
     id: string;
     name: string;
     breed: string;
@@ -13,6 +14,7 @@ type DogProps = {
 };
 
 export default function DogCard({ dog }: { dog: DogProps }) {
+    const t = useTranslations("dashboard.dogs.card");
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     
@@ -47,8 +49,8 @@ export default function DogCard({ dog }: { dog: DogProps }) {
                 >
                     {/* The Image */}
                     <img 
-                        src={photos[currentIndex]} 
-                        alt={`${dog.name} - Photo ${currentIndex + 1}`}
+                        src={photos[currentIndex]}
+                        alt={t("photoAlt", { name: dog.name, index: currentIndex + 1 })}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/carousel:scale-105"
                     />
                     
@@ -97,7 +99,7 @@ export default function DogCard({ dog }: { dog: DogProps }) {
                         {/* 1. Edit Button (Replaced Breed Status) */}
                         <button 
                             className="text-slate-400 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 p-2.5 rounded-xl transition-colors flex items-center justify-center"
-                            title="Edit Dog"
+                            title={t("editTooltip")}
                         >
                             <Edit className="w-4 h-4" />
                         </button>
@@ -121,8 +123,8 @@ export default function DogCard({ dog }: { dog: DogProps }) {
                     
                     {/* Fullscreen Image */}
                     <img 
-                        src={photos[currentIndex]} 
-                        alt={`${dog.name} - Fullscreen`}
+                        src={photos[currentIndex]}
+                        alt={t("fullscreenAlt", { name: dog.name })}
                         className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl animate-in zoom-in-95 duration-200"
                         onClick={(e) => e.stopPropagation()} // Prevent clicking the image from closing the modal
                     />

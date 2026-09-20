@@ -1,0 +1,265 @@
+{
+  "common": {
+    "localeSwitcher": {
+      "label": "Switch language"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "nav": {
+        "overview": "Overview",
+        "roster": "Roster",
+        "litters": "Litters",
+        "profile": "Profile",
+        "settings": "Settings"
+      },
+      "signOut": "Sign Out"
+    },
+    "overview": {
+      "heading": "Overview",
+      "welcome": "Welcome back to {kennelName}",
+      "onboarding": {
+        "title": "Welcome to KennelOS!",
+        "description": "You haven't set up your kennel yet. Create your profile to start managing your dogs and litters, and get discovered by buyers.",
+        "cta": "Create Your Kennel"
+      },
+      "metrics": {
+        "totalDogs": "Total Dogs",
+        "activeLitters": "Active Litters",
+        "publicProfile": "Public Profile"
+      }
+    },
+    "dogs": {
+      "card": {
+        "editTooltip": "Edit Dog",
+        "photoAlt": "{name} - Photo {index}",
+        "fullscreenAlt": "{name} - Fullscreen"
+      },
+      "addModal": {
+        "trigger": "Add New Profile",
+        "title": "New Dog Profile",
+        "imagesLabel": "Images",
+        "addImages": "Add Images",
+        "uploadedPreviewAlt": "Uploaded preview",
+        "nameLabel": "Name",
+        "namePlaceholder": "e.g., Bella",
+        "breedLabel": "Breed",
+        "breedPlaceholder": "Select a breed...",
+        "genderLabel": "Gender",
+        "genderPlaceholder": "Select gender",
+        "genderMale": "Male",
+        "genderFemale": "Female",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "submit": "Create Profile",
+        "errors": {
+          "createFailed": "Failed to create dog profile.",
+          "network": "A network error occurred."
+        }
+      },
+      "editModal": {
+        "trigger": "Edit Dog",
+        "title": "Edit Dog",
+        "nameLabel": "Name"
+      },
+      "page": {
+        "heading": "Dogs",
+        "subheading": "Manage {kennelName}'s roster",
+        "emptyTitle": "No dogs found",
+        "emptyDescription": "Get started by creating your first dog profile."
+      }
+    },
+    "layout": {
+      "viewPublicProfile": "View Public Profile"
+    },
+    "kennelSetup": {
+      "page": {
+        "heading": "Set Up Your Kennel",
+        "subheading": "This information powers your public profile — you can always update it later."
+      },
+      "form": {
+        "nameLabel": "Kennel Name",
+        "namePlaceholder": "e.g., Golden Meadows Kennel",
+        "slugLabel": "Public URL Slug",
+        "slugPrefix": "kennelos.com/kennel/",
+        "slugPlaceholder": "golden-meadows",
+        "slugHelp": "This is your public profile address — lowercase letters, numbers, and dashes only.",
+        "cityLabel": "City",
+        "cityPlaceholder": "e.g., Denver",
+        "stateLabel": "State",
+        "statePlaceholder": "e.g., CO",
+        "descriptionLabel": "Bio / Description",
+        "descriptionPlaceholder": "Tell buyers about your kennel's story, breeding philosophy, and what makes your dogs special...",
+        "breedsLabel": "Primary Breeds Raised",
+        "breedSearchPlaceholder": "Search breeds...",
+        "noBreedMatch": "No breeds match \"{query}\"",
+        "submit": "Create Your Kennel",
+        "submitting": "Creating your kennel...",
+        "errors": {
+          "failed": "Failed to create your kennel.",
+          "network": "A network error occurred."
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "subheading": "Sign in to manage your kennel",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "kennel@example.com",
+      "passwordLabel": "Password",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Sign up here",
+      "errors": {
+        "generic": "Something went wrong.",
+        "network": "Failed to connect to the server."
+      }
+    },
+    "divider": "or",
+    "google": {
+      "button": "Sign in with Google",
+      "comingSoon": "Google sign-in is coming soon — please use email & password for now."
+    },
+    "signup": {
+      "subheading": "Create your breeder account",
+      "fullNameLabel": "Full Name",
+      "fullNamePlaceholder": "Jane Breeder",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "kennel@example.com",
+      "phoneLabel": "Phone Number",
+      "optional": "(optional)",
+      "phonePlaceholder": "(555) 123-4567",
+      "passwordLabel": "Password",
+      "confirmLabel": "Confirm",
+      "submit": "Create Account",
+      "submitting": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in",
+      "errors": {
+        "mismatch": "Passwords don't match.",
+        "generic": "Something went wrong.",
+        "network": "Failed to connect to the server."
+      }
+    }
+  },
+  "public": {
+    "home": {
+      "metadata": {
+        "title": "KennelOS | Find Reputable Dog Breeders & Kennels",
+        "description": "Search a curated directory of professional, verified dog breeders. Browse kennels by breed and location, and find your next puppy from a trusted source.",
+        "ogDescription": "Search a curated directory of professional, verified dog breeders and find your next puppy from a trusted source."
+      },
+      "nav": {
+        "breederLogin": "Breeder Login"
+      },
+      "hero": {
+        "imageAlt": "A puppy meeting its new family at home",
+        "badge": "Trusted by families across the country",
+        "headingLine1": "Find your new best friend",
+        "headingLine2": "from trusted breeders.",
+        "subheading": "Search verified, professional kennels near you — real breeders, real photos, no guesswork."
+      },
+      "search": {
+        "placeholder": "Which breed are you looking for?",
+        "submit": "Search"
+      },
+      "trust": {
+        "verified": {
+          "title": "Verified Kennels",
+          "description": "Every breeder profile is tied to a registered, professional kennel — not an anonymous listing."
+        },
+        "prestige": {
+          "title": "Prestige Ranking",
+          "description": "Kennels are surfaced by reputation and track record, so the best breeders rise to the top."
+        },
+        "profiles": {
+          "title": "Beautiful Profiles",
+          "description": "Rich photo galleries and clean layouts replace the outdated breeder websites you're used to."
+        }
+      },
+      "cta": {
+        "heading": "Run a kennel? Get discovered.",
+        "description": "Join KennelOS to showcase your dogs with a beautiful public profile, reach serious buyers, and manage your roster in one place.",
+        "button": "Add Your Kennel"
+      }
+    },
+    "kennels": {
+      "metadata": {
+        "title": "Browse Kennels | KennelOS",
+        "description": "Browse verified, professional dog kennels. Filter by breed, available litters, and popularity to find your next puppy from a trusted breeder."
+      },
+      "heading": {
+        "all": "All Kennels",
+        "breed": "{breed} Breeders"
+      },
+      "count": "{count, plural, one {# kennel} other {# kennels}} found",
+      "filters": {
+        "allBreeds": "All Breeds",
+        "hasLitters": "Has Available Litters",
+        "sortPrestige": "Most Popular",
+        "sortNewest": "Newest",
+        "clear": "Clear"
+      },
+      "emptyState": {
+        "headingBreed": "No kennels found for \"{breed}\" yet",
+        "heading": "No kennels found",
+        "description": "Try a different breed or clear your filters — new kennels join KennelOS every week.",
+        "cta": "Browse All Kennels"
+      },
+      "card": {
+        "puppiesAvailable": "Puppies Available",
+        "prestige": "{score} prestige",
+        "photoAlt": "{name} - dog photo {index}",
+        "logoAlt": "{name} logo",
+        "locationUnavailable": "Location unavailable"
+      }
+    },
+    "kennel": {
+      "metadata": {
+        "notFound": "Kennel Not Found | KennelOS",
+        "title": "{name} | KennelOS",
+        "fallbackDescription": "Meet {name}, a verified breeder on KennelOS based in {location}."
+      },
+      "locationUnavailable": "Location unavailable",
+      "logoAlt": "{name} logo",
+      "prestige": "{score} Prestige",
+      "verified": "Verified Kennel",
+      "about": {
+        "heading": "About {name}",
+        "empty": "{name} hasn't added their story yet — check back soon to learn more about this kennel.",
+        "breeds": "Breeds"
+      },
+      "litters": {
+        "heading": "Available & Upcoming Litters",
+        "empty": "No litters planned right now — check back soon, or contact the breeder to ask about future availability.",
+        "status": {
+          "AVAILABLE": "Available Now",
+          "RESERVED": "Reserved",
+          "PLANNED": "Upcoming",
+          "SOLD_OUT": "Sold Out"
+        },
+        "unknownDam": "Unknown Dam",
+        "unknownSire": "Unknown Sire",
+        "puppyCount": "{count, plural, one {# puppy} other {# puppies}}",
+        "dateTbd": "Date TBD"
+      },
+      "dogs": {
+        "heading": "Meet Our Dogs",
+        "empty": "This kennel hasn't listed their breeding dogs yet.",
+        "sire": "Sire",
+        "dam": "Dam"
+      },
+      "contact": {
+        "heading": "Interested in a puppy?",
+        "description": "Reach out directly to {name} to ask about availability, pricing, and next steps.",
+        "theBreeder": "the breeder",
+        "responseTime": "Usually responds within 24 hours",
+        "button": "Contact Breeder",
+        "unavailable": "Contact info unavailable",
+        "footer": "Verified professional kennel on KennelOS"
+      }
+    }
+  }
+}

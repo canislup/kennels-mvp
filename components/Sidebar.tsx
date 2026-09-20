@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import {
     LayoutDashboard,
     Dog,
@@ -13,13 +14,14 @@ import {
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const t = useTranslations("dashboard.sidebar");
 
     const navItems = [
-        { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Plantel", href: "/dashboard/roster", icon: Dog },
-        { name: "Ninhadas", href: "/dashboard/litters", icon: Baby },
-        { name: "Perfil", href: "/dashboard/profile", icon: Store },
-        { name: "Configurações", href: "/dashboard/settings", icon: Settings },
+        { key: "overview", label: t("nav.overview"), href: "/dashboard", icon: LayoutDashboard },
+        { key: "roster", label: t("nav.roster"), href: "/dashboard/dogs", icon: Dog },
+        { key: "litters", label: t("nav.litters"), href: "/dashboard/litters", icon: Baby },
+        { key: "profile", label: t("nav.profile"), href: "/dashboard/profile", icon: Store },
+        { key: "settings", label: t("nav.settings"), href: "/dashboard/settings", icon: Settings },
     ];
 
     return (
@@ -42,7 +44,7 @@ export default function Sidebar() {
 
                     return (
                         <Link
-                            key={item.name}
+                            key={item.key}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
                                 isActive
@@ -51,17 +53,18 @@ export default function Sidebar() {
                             }`}
                         >
                             <Icon className={`w-5 h-5 ${isActive ? "text-indigo-600" : "text-slate-400"}`} />
-                            {item.name}
+                            {item.label}
                         </Link>
                     );
                 })}
             </div>
 
             {/* Bottom Actions */}
-            <div className="p-4 border-t border-slate-50">
+            <div className="p-4 border-t border-slate-50 space-y-3">
+                <LocaleSwitcher />
                 <button className="flex items-center gap-3 px-4 py-3 w-full text-left text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all font-medium">
                     <LogOut className="w-5 h-5 text-slate-400" />
-                    Sign Out
+                    {t("signOut")}
                 </button>
             </div>
         </aside>

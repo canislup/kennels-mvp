@@ -1,0 +1,265 @@
+{
+  "common": {
+    "localeSwitcher": {
+      "label": "Mudar idioma"
+    }
+  },
+  "dashboard": {
+    "sidebar": {
+      "nav": {
+        "overview": "Visão Geral",
+        "roster": "Plantel",
+        "litters": "Ninhadas",
+        "profile": "Perfil",
+        "settings": "Configurações"
+      },
+      "signOut": "Sair"
+    },
+    "overview": {
+      "heading": "Visão Geral",
+      "welcome": "Bem-vindo(a) de volta, {kennelName}",
+      "onboarding": {
+        "title": "Bem-vindo(a) ao KennelOS!",
+        "description": "Você ainda não configurou seu canil. Crie seu perfil para começar a gerenciar seus cachorros e ninhadas e ser encontrado por compradores.",
+        "cta": "Criar Seu Canil"
+      },
+      "metrics": {
+        "totalDogs": "Total de Cachorros",
+        "activeLitters": "Ninhadas Ativas",
+        "publicProfile": "Perfil Público"
+      }
+    },
+    "dogs": {
+      "card": {
+        "editTooltip": "Editar Cachorro",
+        "photoAlt": "{name} - Foto {index}",
+        "fullscreenAlt": "{name} - Tela Cheia"
+      },
+      "addModal": {
+        "trigger": "Adicionar Novo Perfil",
+        "title": "Novo Perfil de Cachorro",
+        "imagesLabel": "Imagens",
+        "addImages": "Adicionar Imagens",
+        "uploadedPreviewAlt": "Pré-visualização enviada",
+        "nameLabel": "Nome",
+        "namePlaceholder": "ex.: Bella",
+        "breedLabel": "Raça",
+        "breedPlaceholder": "Selecione uma raça...",
+        "genderLabel": "Sexo",
+        "genderPlaceholder": "Selecione o sexo",
+        "genderMale": "Macho",
+        "genderFemale": "Fêmea",
+        "cancel": "Cancelar",
+        "saving": "Salvando...",
+        "submit": "Criar Perfil",
+        "errors": {
+          "createFailed": "Não foi possível criar o perfil do cachorro.",
+          "network": "Ocorreu um erro de conexão."
+        }
+      },
+      "editModal": {
+        "trigger": "Editar Cachorro",
+        "title": "Editar Cachorro",
+        "nameLabel": "Nome"
+      },
+      "page": {
+        "heading": "Cachorros",
+        "subheading": "Gerencie o plantel de {kennelName}",
+        "emptyTitle": "Nenhum cachorro encontrado",
+        "emptyDescription": "Comece cadastrando o perfil do seu primeiro cachorro."
+      }
+    },
+    "layout": {
+      "viewPublicProfile": "Ver Perfil Público"
+    },
+    "kennelSetup": {
+      "page": {
+        "heading": "Configure Seu Canil",
+        "subheading": "Estas informações alimentam seu perfil público — você pode atualizá-las depois."
+      },
+      "form": {
+        "nameLabel": "Nome do Canil",
+        "namePlaceholder": "ex.: Canil Campos Dourados",
+        "slugLabel": "Endereço Público (Slug)",
+        "slugPrefix": "kennelos.com/kennel/",
+        "slugPlaceholder": "campos-dourados",
+        "slugHelp": "Este é o endereço do seu perfil público — apenas letras minúsculas, números e hifens.",
+        "cityLabel": "Cidade",
+        "cityPlaceholder": "ex.: Curitiba",
+        "stateLabel": "Estado",
+        "statePlaceholder": "ex.: PR",
+        "descriptionLabel": "Bio / Descrição",
+        "descriptionPlaceholder": "Conte aos compradores a história do seu canil, sua filosofia de criação e o que torna seus cachorros especiais...",
+        "breedsLabel": "Principais Raças Criadas",
+        "breedSearchPlaceholder": "Buscar raças...",
+        "noBreedMatch": "Nenhuma raça corresponde a \"{query}\"",
+        "submit": "Criar Seu Canil",
+        "submitting": "Criando seu canil...",
+        "errors": {
+          "failed": "Não foi possível criar seu canil.",
+          "network": "Ocorreu um erro de conexão."
+        }
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "subheading": "Entre para gerenciar seu canil",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "canil@exemplo.com",
+      "passwordLabel": "Senha",
+      "submit": "Entrar",
+      "submitting": "Entrando...",
+      "noAccount": "Ainda não tem uma conta?",
+      "registerLink": "Cadastre-se aqui",
+      "errors": {
+        "generic": "Algo deu errado.",
+        "network": "Não foi possível conectar ao servidor."
+      }
+    },
+    "divider": "ou",
+    "google": {
+      "button": "Entrar com o Google",
+      "comingSoon": "O login com o Google estará disponível em breve — por enquanto, use e-mail e senha."
+    },
+    "signup": {
+      "subheading": "Crie sua conta de criador",
+      "fullNameLabel": "Nome Completo",
+      "fullNamePlaceholder": "Maria Criadora",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "canil@exemplo.com",
+      "phoneLabel": "Telefone",
+      "optional": "(opcional)",
+      "phonePlaceholder": "(11) 91234-5678",
+      "passwordLabel": "Senha",
+      "confirmLabel": "Confirmar",
+      "submit": "Criar Conta",
+      "submitting": "Criando conta...",
+      "haveAccount": "Já tem uma conta?",
+      "loginLink": "Entrar",
+      "errors": {
+        "mismatch": "As senhas não coincidem.",
+        "generic": "Algo deu errado.",
+        "network": "Não foi possível conectar ao servidor."
+      }
+    }
+  },
+  "public": {
+    "home": {
+      "metadata": {
+        "title": "KennelOS | Encontre Canis e Criadores de Cães Confiáveis",
+        "description": "Pesquise um diretório selecionado de criadores profissionais e verificados. Explore canis por raça e localização e encontre seu próximo filhote em uma fonte confiável.",
+        "ogDescription": "Pesquise um diretório selecionado de criadores profissionais e verificados e encontre seu próximo filhote em uma fonte confiável."
+      },
+      "nav": {
+        "breederLogin": "Login do Criador"
+      },
+      "hero": {
+        "imageAlt": "Um filhote conhecendo sua nova família em casa",
+        "badge": "Aprovado por famílias em todo o país",
+        "headingLine1": "Encontre seu novo melhor amigo",
+        "headingLine2": "com criadores de confiança.",
+        "subheading": "Pesquise canis profissionais e verificados perto de você — criadores reais, fotos reais, sem adivinhações."
+      },
+      "search": {
+        "placeholder": "Qual raça você procura?",
+        "submit": "Buscar"
+      },
+      "trust": {
+        "verified": {
+          "title": "Canis Verificados",
+          "description": "Todo perfil de criador está ligado a um canil profissional e registrado — não a um anúncio anônimo."
+        },
+        "prestige": {
+          "title": "Ranking de Prestígio",
+          "description": "Os canis são exibidos por reputação e histórico, para que os melhores criadores apareçam primeiro."
+        },
+        "profiles": {
+          "title": "Perfis Elegantes",
+          "description": "Galerias de fotos ricas e layouts limpos substituem os sites de criadores ultrapassados aos quais você está acostumado."
+        }
+      },
+      "cta": {
+        "heading": "Tem um canil? Seja descoberto.",
+        "description": "Junte-se ao KennelOS para exibir seus cachorros em um perfil público elegante, alcançar compradores sérios e gerenciar seu plantel em um só lugar.",
+        "button": "Cadastre Seu Canil"
+      }
+    },
+    "kennels": {
+      "metadata": {
+        "title": "Explorar Canis | KennelOS",
+        "description": "Explore canis profissionais e verificados. Filtre por raça, ninhadas disponíveis e popularidade para encontrar seu próximo filhote com um criador de confiança."
+      },
+      "heading": {
+        "all": "Todos os Canis",
+        "breed": "Criadores de {breed}"
+      },
+      "count": "{count, plural, one {# canil encontrado} other {# canis encontrados}}",
+      "filters": {
+        "allBreeds": "Todas as Raças",
+        "hasLitters": "Com Ninhadas Disponíveis",
+        "sortPrestige": "Mais Populares",
+        "sortNewest": "Mais Recentes",
+        "clear": "Limpar"
+      },
+      "emptyState": {
+        "headingBreed": "Nenhum canil encontrado para \"{breed}\" ainda",
+        "heading": "Nenhum canil encontrado",
+        "description": "Tente outra raça ou limpe os filtros — novos canis entram no KennelOS toda semana.",
+        "cta": "Ver Todos os Canis"
+      },
+      "card": {
+        "puppiesAvailable": "Filhotes Disponíveis",
+        "prestige": "{score} de prestígio",
+        "photoAlt": "{name} - foto do cachorro {index}",
+        "logoAlt": "Logo de {name}",
+        "locationUnavailable": "Localização indisponível"
+      }
+    },
+    "kennel": {
+      "metadata": {
+        "notFound": "Canil Não Encontrado | KennelOS",
+        "title": "{name} | KennelOS",
+        "fallbackDescription": "Conheça {name}, criador verificado no KennelOS em {location}."
+      },
+      "locationUnavailable": "Localização indisponível",
+      "logoAlt": "Logo de {name}",
+      "prestige": "{score} de Prestígio",
+      "verified": "Canil Verificado",
+      "about": {
+        "heading": "Sobre {name}",
+        "empty": "{name} ainda não contou sua história — volte em breve para saber mais sobre este canil.",
+        "breeds": "Raças"
+      },
+      "litters": {
+        "heading": "Ninhadas Disponíveis e Futuras",
+        "empty": "Nenhuma ninhada planejada no momento — volte em breve ou entre em contato com o criador para perguntar sobre disponibilidade futura.",
+        "status": {
+          "AVAILABLE": "Disponível Agora",
+          "RESERVED": "Reservada",
+          "PLANNED": "Em Breve",
+          "SOLD_OUT": "Esgotada"
+        },
+        "unknownDam": "Matriz Desconhecida",
+        "unknownSire": "Reprodutor Desconhecido",
+        "puppyCount": "{count, plural, one {# filhote} other {# filhotes}}",
+        "dateTbd": "Data a definir"
+      },
+      "dogs": {
+        "heading": "Conheça Nossos Cachorros",
+        "empty": "Este canil ainda não cadastrou seus reprodutores.",
+        "sire": "Reprodutor",
+        "dam": "Matriz"
+      },
+      "contact": {
+        "heading": "Interessado em um filhote?",
+        "description": "Entre em contato diretamente com {name} para perguntar sobre disponibilidade, valores e próximos passos.",
+        "theBreeder": "o criador",
+        "responseTime": "Costuma responder em até 24 horas",
+        "button": "Contatar Criador",
+        "unavailable": "Contato indisponível",
+        "footer": "Canil profissional verificado no KennelOS"
+      }
+    }
+  }
+}
