@@ -1,63 +1,120 @@
-import { redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect, Link } from "@/i18n/navigation";
+import { Dog, Baby, Store, ExternalLink, Plus, type LucideIcon } from "lucide-react";
 import { verifyKennelSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import DogCard from "@/components/DogCard";
-import AddDogModal from "@/components/AddDogModal";
 
 export default async function DashboardPage() {
+    const t = await getTranslations("dashboard.overview");
+
     const payload = await verifyKennelSession();
-    if (!payload) redirect("/login");
+    if (!payload) {
+        redirect({ href: "/login", locale: await getLocale() });
+        return;
+    }
 
     const ownerId = payload.userID as string;
-    const [kennel, breeds] = await Promise.all([
-        prisma.kennel.findUnique({
-            where: { ownerId: ownerId },
-            include: { dogs: { orderBy: { createdAt: "desc" } } }
-        }),
-        prisma.breed.findMany({
-            orderBy: { name: 'asc' } // Alphabetical order for the dropdown
-        })
-    ]);
 
+    const kennel = await prisma.kennel.findUnique({
+        where: { ownerId },
+        select: {
+            id: true,
+            name: true,
+            slug: true,
+            _count: { select: { dogs: true } },
+        },
+    });
+
+    // STATE A: No kennel linked yet — friendly onboarding hero.
     if (!kennel) {
         return (
-            <div className="flex items-center justify-center h-full">
-                <div className="bg-white p-10 rounded-2xl shadow-sm border border-slate-100 max-w-md text-center">
-                    <h1 className="text-2xl font-bold text-slate-900 mb-2">Setup Your Kennel</h1>
-                    <p className="text-slate-500">Complete your profile to unlock the dashboard.</p>
+            <div className="p-8 flex items-center justify-center min-h-[80vh]">
+                <div className="text-center bg-white rounded-2xl border border-slate-200 shadow-sm p-10 sm:p-12 max-w-lg w-full">
+                    <div className="mx-auto mb-5 h-16 w-16 rounded-2xl bg-indigo-50 flex items-center justify-center">
+                        <Dog className="text-indigo-600" size={30} />
+                    </div>
+                    <h1 className="text-2xl font-extrabold text-slate-900">
+                        {t("onboarding.title")}
+                    </h1>
+                    <p className="text-slate-500 mt-3 font-medium">
+                        {t("onboarding.description")}
+                    </p>
+                    <Link
+                        href="/dashboard/kennel/setup"
+                        className="mt-7 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3.5 rounded-xl transition-colors shadow-sm shadow-indigo-200"
+                    >
+                        <Plus size={18} />
+                        {t("onboarding.cta")}
+                    </Link>
                 </div>
             </div>
         );
     }
 
-    const dogs = kennel.dogs;
+    // STATE B: Kennel linked — standard overview.
+    const activeLitterCount = await prisma.litter.count({
+        where: { kennelId: kennel.id, status: { not: "SOLD_OUT" } },
+    });
 
     return (
         <div className="p-8 max-w-7xl mx-auto">
-            {/* Page Header */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-10 gap-4">
-                <div>
-                    <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Overview</h2>
-                    <p className="text-slate-500 mt-2 font-medium text-sm">
-                        Welcome back to {kennel.name}
-                    </p>
-                </div>
-                <AddDogModal availableBreeds={breeds} />
+            <div className="mb-10">
+                <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                    {t("heading")}
+                </h2>
+                <p className="text-slate-500 mt-2 font-medium text-sm">
+                    {t("welcome", { kennelName: kennel.name })}
+                </p>
             </div>
 
-            {/* Dashboard Grid */}
-            {dogs.length === 0 ? (
-                <div className="text-center py-32 bg-white rounded-2xl border border-dashed border-slate-300 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900">No dogs found</h3>
-                    <p className="text-slate-500 font-medium mt-1">Get started by creating your first dog profile.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <MetricCard icon={Dog} label={t("metrics.totalDogs")} value={kennel._count.dogs} />
+                <MetricCard icon={Baby} label={t("metrics.activeLitters")} value={activeLitterCount} />
+
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                            <Store className="text-indigo-600" size={18} />
+                        </div>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                            {t("metrics.publicProfile")}
+                        </span>
+                    </div>
+                    <Link
+                        href={`/kennel/${kennel.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 font-semibold text-sm break-all"
+                    >
+                        /kennel/{kennel.slug}
+                        <ExternalLink size={14} className="shrink-0" />
+                    </Link>
                 </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {dogs.map((dog) => (
-                        <DogCard key={dog.id} dog={dog} />
-                    ))}
+            </div>
+        </div>
+    );
+}
+
+function MetricCard({
+    icon: Icon,
+    label,
+    value,
+}: {
+    icon: LucideIcon;
+    label: string;
+    value: number;
+}) {
+    return (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <div className="flex items-center gap-3 mb-4">
+                <div className="h-10 w-10 rounded-xl bg-indigo-50 flex items-center justify-center">
+                    <Icon className="text-indigo-600" size={18} />
                 </div>
-            )}
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                    {label}
+                </span>
+            </div>
+            <p className="text-3xl font-extrabold text-slate-900">{value}</p>
         </div>
     );
 }
