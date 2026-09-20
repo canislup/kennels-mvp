@@ -1,10 +1,28 @@
-import { PrismaClient, DogStatus } from "@/prisma/generated/client";
+import { PrismaClient, DogStatus, LitterStatus } from "@/prisma/generated/client";
 import { PrismaPg} from "@prisma/adapter-pg";
+import { slugify } from "@/lib/slug";
 
 const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
 });
 export const prisma = new PrismaClient({ adapter });
+
+// Placeholder photo generator (place.dog serves stable stock dog photos by id).
+// Used only to populate demo/seed data — real kennels upload via Cloudinary.
+let placeholderId = 1;
+function dogPhotos(count: number): string[] {
+    return Array.from({ length: count }, () => `https://place.dog/500/400?id=${placeholderId++}`);
+}
+function logoPhoto(): string {
+    return `https://place.dog/200/200?id=${placeholderId++}`;
+}
+
+// Returns a Date offset from today — used for Litter.expectedGoHomeDate.
+function daysFromNow(days: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    return date;
+}
 
 async function main() {
     console.log('🌱 Starting database seed...')
@@ -27,10 +45,20 @@ async function main() {
                     city: 'Rio de Janeiro',
                     state: 'RJ',
                     cbkcRegistration: 'CBKC-2001',
+                    slug: slugify('Carioca Frenchies'),
+                    location: 'Rio de Janeiro, RJ',
+                    prestigeScore: 92,
+                    logoUrl: logoPhoto(),
+                    description: 'Carioca Frenchies has been raising healthy, well-socialized French Bulldogs in Rio de Janeiro for over a decade. Every puppy leaves us vet-checked, microchipped, and already comfortable with city life.',
                     dogs: {
                         create: [
-                            { name: 'Stitch', breed: 'French Bulldog', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'Blue Frenchies BR' },
-                            { name: 'Lola', breed: 'French Bulldog', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY }
+                            { name: 'Stitch', breed: 'French Bulldog', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'Blue Frenchies BR', photoUrls: dogPhotos(3) },
+                            { name: 'Lola', breed: 'French Bulldog', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(3) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'French Bulldog', puppyCount: 4, expectedGoHomeDate: daysFromNow(21), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -48,10 +76,20 @@ async function main() {
                     city: 'Belo Horizonte',
                     state: 'MG',
                     cbkcRegistration: 'CBKC-2002',
+                    slug: slugify('Guardiões de Minas'),
+                    location: 'Belo Horizonte, MG',
+                    prestigeScore: 68,
+                    logoUrl: logoPhoto(),
+                    description: 'Nestled in the hills of Belo Horizonte, Guardiões de Minas specializes in companion-quality Pugs raised underfoot in a family home. Health testing and temperament come first, always.',
                     dogs: {
                         create: [
-                            { name: 'Thor', breed: 'Pug', gender: 'Male', status: DogStatus.BREEDING_STOCK },
-                            { name: 'Mel', breed: 'Pug', gender: 'Female', status: DogStatus.RESERVED }
+                            { name: 'Thor', breed: 'Pug', gender: 'Male', status: DogStatus.BREEDING_STOCK, photoUrls: dogPhotos(2) },
+                            { name: 'Mel', breed: 'Pug', gender: 'Female', status: DogStatus.RESERVED, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Pug', puppyCount: 2, expectedGoHomeDate: daysFromNow(10), status: LitterStatus.RESERVED }
                         ]
                     }
                 }
@@ -69,11 +107,22 @@ async function main() {
                     city: 'Porto Alegre',
                     state: 'RS',
                     cbkcRegistration: 'CBKC-2003',
+                    slug: slugify('Pampa Roots'),
+                    location: 'Porto Alegre, RS',
+                    prestigeScore: 77,
+                    logoUrl: logoPhoto(),
+                    description: 'Pampa Roots breeds working-line Rottweilers on an open pasture outside Porto Alegre, with imported German bloodlines and a strong focus on structure, drive, and stable temperament.',
                     dogs: {
                         create: [
-                            { name: 'Zeus', breed: 'Rottweiler', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'German Import' },
-                            { name: 'Atena', breed: 'Rottweiler', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY },
-                            { name: 'Ares', breed: 'Rottweiler', gender: 'Male', status: DogStatus.SOLD }
+                            { name: 'Zeus', breed: 'Rottweiler', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'German Import', photoUrls: dogPhotos(3) },
+                            { name: 'Atena', breed: 'Rottweiler', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) },
+                            { name: 'Ares', breed: 'Rottweiler', gender: 'Male', status: DogStatus.SOLD, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Rottweiler', puppyCount: 5, expectedGoHomeDate: daysFromNow(14), status: LitterStatus.AVAILABLE },
+                            { breed: 'Rottweiler', puppyCount: 3, expectedGoHomeDate: daysFromNow(-30), status: LitterStatus.SOLD_OUT }
                         ]
                     }
                 }
@@ -91,10 +140,20 @@ async function main() {
                     city: 'Goiânia',
                     state: 'GO',
                     cbkcRegistration: 'CBKC-2004',
+                    slug: slugify('Cerrado Poms'),
+                    location: 'Goiânia, GO',
+                    prestigeScore: 54,
+                    logoUrl: logoPhoto(),
+                    description: 'Cerrado Poms is a small home-based kennel in Goiânia dedicated to the Spitz Alemão (Pomeranian). We keep litters small so every puppy gets one-on-one attention before going home.',
                     dogs: {
                         create: [
-                            { name: 'Snow', breed: 'Spitz Alemão', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY },
-                            { name: 'Chanel', breed: 'Spitz Alemão', gender: 'Female', status: DogStatus.BREEDING_STOCK, lineage: 'Chiao Li Ya Bloodline' }
+                            { name: 'Snow', breed: 'Spitz Alemão', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) },
+                            { name: 'Chanel', breed: 'Spitz Alemão', gender: 'Female', status: DogStatus.BREEDING_STOCK, lineage: 'Chiao Li Ya Bloodline', photoUrls: dogPhotos(3) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Spitz Alemão', puppyCount: 3, expectedGoHomeDate: daysFromNow(18), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -112,10 +171,20 @@ async function main() {
                     city: 'Campinas',
                     state: 'SP',
                     cbkcRegistration: 'CBKC-2005',
+                    slug: slugify('Agility Brasil'),
+                    location: 'Campinas, SP',
+                    prestigeScore: 88,
+                    logoUrl: logoPhoto(),
+                    description: 'Agility Brasil breeds Border Collies for sport and companionship alike, with ISDS-registered working lines out of Campinas. Our dogs are raised with early agility exposure and structured socialization.',
                     dogs: {
                         create: [
-                            { name: 'Flash', breed: 'Border Collie', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'ISDS Registered' },
-                            { name: 'Lassie', breed: 'Border Collie', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY }
+                            { name: 'Flash', breed: 'Border Collie', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'ISDS Registered', photoUrls: dogPhotos(3) },
+                            { name: 'Lassie', breed: 'Border Collie', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Border Collie', puppyCount: 4, expectedGoHomeDate: daysFromNow(28), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -133,10 +202,20 @@ async function main() {
                     city: 'Curitiba',
                     state: 'PR',
                     cbkcRegistration: 'CBKC-2006',
+                    slug: slugify('Pequenos Nobres'),
+                    location: 'Curitiba, PR',
+                    prestigeScore: 41,
+                    logoUrl: logoPhoto(),
+                    description: 'Pequenos Nobres is a boutique Shih Tzu kennel in Curitiba, breeding a handful of litters a year with an emphasis on temperament, coat quality, and lifelong breeder support for new owners.',
                     dogs: {
                         create: [
-                            { name: 'Sushi', breed: 'Shih Tzu', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY },
-                            { name: 'Kiwi', breed: 'Shih Tzu', gender: 'Female', status: DogStatus.RESERVED }
+                            { name: 'Sushi', breed: 'Shih Tzu', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) },
+                            { name: 'Kiwi', breed: 'Shih Tzu', gender: 'Female', status: DogStatus.RESERVED, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Shih Tzu', puppyCount: 2, expectedGoHomeDate: daysFromNow(35), status: LitterStatus.PLANNED }
                         ]
                     }
                 }
@@ -154,10 +233,20 @@ async function main() {
                     city: 'Brasília',
                     state: 'DF',
                     cbkcRegistration: 'CBKC-2007',
+                    slug: slugify('Capital Dobes'),
+                    location: 'Brasília, DF',
+                    prestigeScore: 73,
+                    logoUrl: logoPhoto(),
+                    description: 'Capital Dobes raises European-line Dobermans in Brasília, prioritizing sound temperament and health clearances over show trophies. Puppies come home leash-trained and confident.',
                     dogs: {
                         create: [
-                            { name: 'Hades', breed: 'Doberman', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'Altobello' },
-                            { name: 'Hera', breed: 'Doberman', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY }
+                            { name: 'Hades', breed: 'Doberman', gender: 'Male', status: DogStatus.BREEDING_STOCK, lineage: 'Altobello', photoUrls: dogPhotos(3) },
+                            { name: 'Hera', breed: 'Doberman', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Doberman', puppyCount: 6, expectedGoHomeDate: daysFromNow(7), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -175,10 +264,20 @@ async function main() {
                     city: 'Salvador',
                     state: 'BA',
                     cbkcRegistration: 'CBKC-2008',
+                    slug: slugify('Maré Labs'),
+                    location: 'Salvador, BA',
+                    prestigeScore: 85,
+                    logoUrl: logoPhoto(),
+                    description: 'Maré Labs is a coastal kennel in Salvador specializing in Chocolate and Yellow Labrador Retrievers, bred for the easygoing, people-loving temperament the breed is known for.',
                     dogs: {
                         create: [
-                            { name: 'Marley', breed: 'Labrador Retriever', gender: 'Male', status: DogStatus.BREEDING_STOCK },
-                            { name: 'Nala', breed: 'Labrador Retriever', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, lineage: 'Chocolate Labs BR' }
+                            { name: 'Marley', breed: 'Labrador Retriever', gender: 'Male', status: DogStatus.BREEDING_STOCK, photoUrls: dogPhotos(3) },
+                            { name: 'Nala', breed: 'Labrador Retriever', gender: 'Female', status: DogStatus.AVAILABLE_PUPPY, lineage: 'Chocolate Labs BR', photoUrls: dogPhotos(3) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Labrador Retriever', puppyCount: 5, expectedGoHomeDate: daysFromNow(12), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -196,10 +295,20 @@ async function main() {
                     city: 'Ribeirão Preto',
                     state: 'SP',
                     cbkcRegistration: 'CBKC-2009',
+                    slug: slugify('Sertãozinho Kennel'),
+                    location: 'Ribeirão Preto, SP',
+                    prestigeScore: 36,
+                    logoUrl: logoPhoto(),
+                    description: 'Sertãozinho Kennel is a newer breeder in Ribeirão Preto raising Miniature Schnauzers in a family setting, with puppies socialized around children and other pets from day one.',
                     dogs: {
                         create: [
-                            { name: 'Bidu', breed: 'Schnauzer', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY },
-                            { name: 'Nina', breed: 'Schnauzer', gender: 'Female', status: DogStatus.BREEDING_STOCK }
+                            { name: 'Bidu', breed: 'Schnauzer', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(2) },
+                            { name: 'Nina', breed: 'Schnauzer', gender: 'Female', status: DogStatus.BREEDING_STOCK, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Schnauzer', puppyCount: 3, expectedGoHomeDate: daysFromNow(24), status: LitterStatus.AVAILABLE }
                         ]
                     }
                 }
@@ -217,11 +326,22 @@ async function main() {
                     city: 'Joinville',
                     state: 'SC',
                     cbkcRegistration: 'CBKC-2010',
+                    slug: slugify('Royal Goldens SC'),
+                    location: 'Joinville, SC',
+                    prestigeScore: 97,
+                    logoUrl: logoPhoto(),
+                    description: "Royal Goldens SC is southern Brazil's top-rated Golden Retriever kennel, with three generations of champion bloodlines out of Joinville. Every litter is health-tested and raised with early neurological stimulation.",
                     dogs: {
                         create: [
-                            { name: 'Simba', breed: 'Golden Retriever', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY },
-                            { name: 'Kyra', breed: 'Golden Retriever', gender: 'Female', status: DogStatus.BREEDING_STOCK, lineage: 'Golden Rush' },
-                            { name: 'Buddy', breed: 'Golden Retriever', gender: 'Male', status: DogStatus.SOLD }
+                            { name: 'Simba', breed: 'Golden Retriever', gender: 'Male', status: DogStatus.AVAILABLE_PUPPY, photoUrls: dogPhotos(3) },
+                            { name: 'Kyra', breed: 'Golden Retriever', gender: 'Female', status: DogStatus.BREEDING_STOCK, lineage: 'Golden Rush', photoUrls: dogPhotos(3) },
+                            { name: 'Buddy', breed: 'Golden Retriever', gender: 'Male', status: DogStatus.SOLD, photoUrls: dogPhotos(2) }
+                        ]
+                    },
+                    litters: {
+                        create: [
+                            { breed: 'Golden Retriever', puppyCount: 6, expectedGoHomeDate: daysFromNow(5), status: LitterStatus.AVAILABLE },
+                            { breed: 'Golden Retriever', puppyCount: 0, expectedGoHomeDate: daysFromNow(90), status: LitterStatus.PLANNED }
                         ]
                     }
                 }

@@ -20,14 +20,23 @@ model Owner {
 model Kennel {
   id               String   @id @default(uuid())
   name             String
-  cnpj             String   @unique
+  cnpj             String?  @unique // Legal business registration — collected later, not required at onboarding
   city             String
   state            String
-  cbkcRegistration String
+  cbkcRegistration String? // Kennel club registration — collected later, not required at onboarding
   ownerId          String   @unique
   createdAt        DateTime @default(now())
   dogs             Dog[]
   owner            Owner    @relation(fields: [ownerId], references: [id])
+
+  // --- Public Marketplace fields ---
+  slug          String   @unique // URL-friendly identifier, e.g. /kennel/golden-meadows
+  logoUrl       String? // Cloudinary URL for the kennel's public logo
+  location      String   @default("") // Display string (city/state) for public cards, e.g. "Denver, CO"
+  prestigeScore Int      @default(0) // Ranking signal for directory sort/popularity
+  description   String? // "About Us" story shown on the public kennel profile
+  primaryBreeds String[] @default([]) // Breeds this kennel specializes in, set during onboarding
+  litters       Litter[]
 }
 
 model Dog {
@@ -42,6 +51,10 @@ model Dog {
   kennelId    String
   createdAt   DateTime  @default(now())
   kennel      Kennel    @relation(fields: [kennelId], references: [id])
+
+  // Litters where this dog is listed as the mother/father (both optional/nullable)
+  damLitters  Litter[] @relation("LitterDam")
+  sireLitters Litter[] @relation("LitterSire")
 }
 
 enum DogStatus {
@@ -49,6 +62,32 @@ enum DogStatus {
   AVAILABLE_PUPPY
   RESERVED
   SOLD
+}
+
+// Public-facing litter/waitlist entry for a kennel — the backing data for the
+// "Available & Upcoming Litters" section on a kennel's public profile.
+model Litter {
+  id                 String       @id @default(uuid())
+  breed              String
+  puppyCount         Int          @default(0)
+  expectedGoHomeDate DateTime?
+  status             LitterStatus @default(PLANNED)
+  createdAt          DateTime     @default(now())
+
+  kennelId String
+  kennel   Kennel @relation(fields: [kennelId], references: [id])
+
+  damId String?
+  dam   Dog?    @relation("LitterDam", fields: [damId], references: [id])
+  sireId String?
+  sire   Dog?   @relation("LitterSire", fields: [sireId], references: [id])
+}
+
+enum LitterStatus {
+  PLANNED
+  AVAILABLE
+  RESERVED
+  SOLD_OUT
 }
 
 model Breed {

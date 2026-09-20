@@ -1,100 +1,113 @@
-import { cookies } from "next/headers";
-import {NextRequest, NextResponse} from "next/server";
-import { jwtVerify } from "jose";
+import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@/prisma/generated/client";
 import { prisma } from "@/lib/db";
 import { verifyKennelSession } from "@/lib/auth";
+import { slugify } from "@/lib/slug";
 
 export const PATCH = async (request: NextRequest) => {
-
     try {
         console.log("*******************************");
         console.log("🧔‍♂️ Starting Kennel PATCH Method Now!");
         console.log("*******************************");
 
-        // 1) Extracting Cookie Session Information
-        const cookieStore = await cookies();
-        const cookieSession = cookieStore.get("kennel_session");
-
-        // 2) Check if there is a cookies session
-        if(!cookieSession) {
-            console.log("Cookie session not found");
-
+        // 1) Verify session
+        const payload = await verifyKennelSession();
+        if (!payload) {
             return NextResponse.json(
-                {message: "Cookie not found."},
-                {status: 401}
-            )
+                { message: "Unauthorized. Please log in again." },
+                { status: 401 }
+            );
         }
 
-        // 3) Generate Master key to evaluate session with
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-        console.log("Secret: ", secret);
-
-        let payload;
-        try {
-            // 4) Verify if tokens match and return payload
-            const verifiedToken = await jwtVerify(cookieSession.value, secret);
-            payload = verifiedToken.payload;
-
-            console.log("✅ Token verified successfully.", payload);
-        } catch (err) {
-            console.error("❌ Token verification failed (Expired or Invalid)", err);
-            return NextResponse.json(
-                {message: "Invalid or Expired Token"},
-                {status: 401}
-            )
-        }
-
-        // 4) Extract the owner id and relevant date from body object
         const ownerId = payload.userID as string;
-        const body = await request.json()
+        const body = await request.json();
 
-        // 5) Search if kennel exists in the database
+        // 2) Check if a kennel already exists for this owner
         const existingKennel = await prisma.kennel.findUnique({
-            where: { ownerId: ownerId }
+            where: { ownerId },
         });
 
         let savedKennel;
 
         if (!existingKennel) {
-            // SCENARIO A: The kennel doesn't exist yet.
-            if (!body.name || !body.cnpj || !body.city || !body.state || !body.cbkcRegistration) {
+            // SCENARIO A: Onboarding — the kennel doesn't exist yet.
+            const { name, slug, city, state, description, breeds } = body;
+
+            if (!name || !slug || !city || !state) {
                 return NextResponse.json(
-                    { message: "Missing required fields to create a new kennel." },
-                    { status: 400 } // 400 Bad Request
+                    { message: "Name, slug, city, and state are required to create a kennel." },
+                    { status: 400 }
                 );
             }
-            // Create the new kennel
+
             savedKennel = await prisma.kennel.create({
                 data: {
-                    ...body,
-                    ownerId: ownerId,
-                }
+                    name,
+                    slug: slugify(slug),
+                    city,
+                    state,
+                    location: `${city}, ${state}`,
+                    description: description || null,
+                    primaryBreeds: Array.isArray(breeds) ? breeds : [],
+                    ownerId,
+                },
             });
-
         } else {
-            // SCENARIO B: The kennel already exists
+            // SCENARIO B: The kennel already exists — apply a partial update.
+            const { name, slug, city, state, description, breeds } = body;
+            const nextCity = city ?? existingKennel.city;
+            const nextState = state ?? existingKennel.state;
+
             savedKennel = await prisma.kennel.update({
-                where: { ownerId: ownerId },
-                data: body
+                where: { ownerId },
+                data: {
+                    ...(name !== undefined && { name }),
+                    ...(slug !== undefined && { slug: slugify(slug) }),
+                    ...(city !== undefined && { city }),
+                    ...(state !== undefined && { state }),
+                    ...((city !== undefined || state !== undefined) && {
+                        location: `${nextCity}, ${nextState}`,
+                    }),
+                    ...(description !== undefined && { description }),
+                    ...(Array.isArray(breeds) && { primaryBreeds: breeds }),
+                },
             });
         }
 
-        // 6) Return the freshly saved Kennel
+        // 3) Return the freshly saved Kennel
         return NextResponse.json(
             { message: "Kennel Profile Saved!", data: savedKennel },
             { status: 200 }
         );
-
-
-
-
-        // console.log("Session: ", cookieSession);
-
     } catch (error) {
-        console.error("❌ Something went wrong",error);
+        // A unique constraint failure most likely means the slug is already taken.
+        if (
+            error instanceof Prisma.PrismaClientKnownRequestError &&
+            error.code === "P2002"
+        ) {
+            // With the pg driver adapter the violated fields live under
+            // driverAdapterError.cause.constraint.fields instead of meta.target.
+            const meta = error.meta as
+                | {
+                      target?: string[];
+                      driverAdapterError?: { cause?: { constraint?: { fields?: string[] } } };
+                  }
+                | undefined;
+            const fields = meta?.target ?? meta?.driverAdapterError?.cause?.constraint?.fields;
+            return NextResponse.json(
+                {
+                    message: fields?.includes("slug")
+                        ? "That kennel URL is already taken — please choose another slug."
+                        : "A kennel with those details already exists.",
+                },
+                { status: 409 }
+            );
+        }
+
+        console.error("❌ Something went wrong", error);
         return NextResponse.json(
-            {error: error},
-            {status: 500}
-        )
+            { message: "Internal Server Error" },
+            { status: 500 }
+        );
     }
-}
+};
