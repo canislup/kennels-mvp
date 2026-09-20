@@ -20,8 +20,18 @@ export type KennelModel = runtime.Types.Result.DefaultSelection<Prisma.$KennelPa
 
 export type AggregateKennel = {
   _count: KennelCountAggregateOutputType | null
+  _avg: KennelAvgAggregateOutputType | null
+  _sum: KennelSumAggregateOutputType | null
   _min: KennelMinAggregateOutputType | null
   _max: KennelMaxAggregateOutputType | null
+}
+
+export type KennelAvgAggregateOutputType = {
+  prestigeScore: number | null
+}
+
+export type KennelSumAggregateOutputType = {
+  prestigeScore: number | null
 }
 
 export type KennelMinAggregateOutputType = {
@@ -33,6 +43,11 @@ export type KennelMinAggregateOutputType = {
   cbkcRegistration: string | null
   ownerId: string | null
   createdAt: Date | null
+  slug: string | null
+  logoUrl: string | null
+  location: string | null
+  prestigeScore: number | null
+  description: string | null
 }
 
 export type KennelMaxAggregateOutputType = {
@@ -44,6 +59,11 @@ export type KennelMaxAggregateOutputType = {
   cbkcRegistration: string | null
   ownerId: string | null
   createdAt: Date | null
+  slug: string | null
+  logoUrl: string | null
+  location: string | null
+  prestigeScore: number | null
+  description: string | null
 }
 
 export type KennelCountAggregateOutputType = {
@@ -55,9 +75,23 @@ export type KennelCountAggregateOutputType = {
   cbkcRegistration: number
   ownerId: number
   createdAt: number
+  slug: number
+  logoUrl: number
+  location: number
+  prestigeScore: number
+  description: number
+  primaryBreeds: number
   _all: number
 }
 
+
+export type KennelAvgAggregateInputType = {
+  prestigeScore?: true
+}
+
+export type KennelSumAggregateInputType = {
+  prestigeScore?: true
+}
 
 export type KennelMinAggregateInputType = {
   id?: true
@@ -68,6 +102,11 @@ export type KennelMinAggregateInputType = {
   cbkcRegistration?: true
   ownerId?: true
   createdAt?: true
+  slug?: true
+  logoUrl?: true
+  location?: true
+  prestigeScore?: true
+  description?: true
 }
 
 export type KennelMaxAggregateInputType = {
@@ -79,6 +118,11 @@ export type KennelMaxAggregateInputType = {
   cbkcRegistration?: true
   ownerId?: true
   createdAt?: true
+  slug?: true
+  logoUrl?: true
+  location?: true
+  prestigeScore?: true
+  description?: true
 }
 
 export type KennelCountAggregateInputType = {
@@ -90,6 +134,12 @@ export type KennelCountAggregateInputType = {
   cbkcRegistration?: true
   ownerId?: true
   createdAt?: true
+  slug?: true
+  logoUrl?: true
+  location?: true
+  prestigeScore?: true
+  description?: true
+  primaryBreeds?: true
   _all?: true
 }
 
@@ -131,6 +181,18 @@ export type KennelAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: KennelAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: KennelSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: KennelMinAggregateInputType
@@ -161,6 +223,8 @@ export type KennelGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: KennelCountAggregateInputType | true
+  _avg?: KennelAvgAggregateInputType
+  _sum?: KennelSumAggregateInputType
   _min?: KennelMinAggregateInputType
   _max?: KennelMaxAggregateInputType
 }
@@ -168,13 +232,21 @@ export type KennelGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type KennelGroupByOutputType = {
   id: string
   name: string
-  cnpj: string
+  cnpj: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration: string | null
   ownerId: string
   createdAt: Date
+  slug: string
+  logoUrl: string | null
+  location: string
+  prestigeScore: number
+  description: string | null
+  primaryBreeds: string[]
   _count: KennelCountAggregateOutputType | null
+  _avg: KennelAvgAggregateOutputType | null
+  _sum: KennelSumAggregateOutputType | null
   _min: KennelMinAggregateOutputType | null
   _max: KennelMaxAggregateOutputType | null
 }
@@ -200,57 +272,86 @@ export type KennelWhereInput = {
   NOT?: Prisma.KennelWhereInput | Prisma.KennelWhereInput[]
   id?: Prisma.StringFilter<"Kennel"> | string
   name?: Prisma.StringFilter<"Kennel"> | string
-  cnpj?: Prisma.StringFilter<"Kennel"> | string
+  cnpj?: Prisma.StringNullableFilter<"Kennel"> | string | null
   city?: Prisma.StringFilter<"Kennel"> | string
   state?: Prisma.StringFilter<"Kennel"> | string
-  cbkcRegistration?: Prisma.StringFilter<"Kennel"> | string
+  cbkcRegistration?: Prisma.StringNullableFilter<"Kennel"> | string | null
   ownerId?: Prisma.StringFilter<"Kennel"> | string
   createdAt?: Prisma.DateTimeFilter<"Kennel"> | Date | string
+  slug?: Prisma.StringFilter<"Kennel"> | string
+  logoUrl?: Prisma.StringNullableFilter<"Kennel"> | string | null
+  location?: Prisma.StringFilter<"Kennel"> | string
+  prestigeScore?: Prisma.IntFilter<"Kennel"> | number
+  description?: Prisma.StringNullableFilter<"Kennel"> | string | null
+  primaryBreeds?: Prisma.StringNullableListFilter<"Kennel">
   dogs?: Prisma.DogListRelationFilter
   owner?: Prisma.XOR<Prisma.OwnerScalarRelationFilter, Prisma.OwnerWhereInput>
+  litters?: Prisma.LitterListRelationFilter
 }
 
 export type KennelOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  cnpj?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
-  cbkcRegistration?: Prisma.SortOrder
+  cbkcRegistration?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrder
+  prestigeScore?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryBreeds?: Prisma.SortOrder
   dogs?: Prisma.DogOrderByRelationAggregateInput
   owner?: Prisma.OwnerOrderByWithRelationInput
+  litters?: Prisma.LitterOrderByRelationAggregateInput
 }
 
 export type KennelWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   cnpj?: string
   ownerId?: string
+  slug?: string
   AND?: Prisma.KennelWhereInput | Prisma.KennelWhereInput[]
   OR?: Prisma.KennelWhereInput[]
   NOT?: Prisma.KennelWhereInput | Prisma.KennelWhereInput[]
   name?: Prisma.StringFilter<"Kennel"> | string
   city?: Prisma.StringFilter<"Kennel"> | string
   state?: Prisma.StringFilter<"Kennel"> | string
-  cbkcRegistration?: Prisma.StringFilter<"Kennel"> | string
+  cbkcRegistration?: Prisma.StringNullableFilter<"Kennel"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Kennel"> | Date | string
+  logoUrl?: Prisma.StringNullableFilter<"Kennel"> | string | null
+  location?: Prisma.StringFilter<"Kennel"> | string
+  prestigeScore?: Prisma.IntFilter<"Kennel"> | number
+  description?: Prisma.StringNullableFilter<"Kennel"> | string | null
+  primaryBreeds?: Prisma.StringNullableListFilter<"Kennel">
   dogs?: Prisma.DogListRelationFilter
   owner?: Prisma.XOR<Prisma.OwnerScalarRelationFilter, Prisma.OwnerWhereInput>
-}, "id" | "cnpj" | "ownerId">
+  litters?: Prisma.LitterListRelationFilter
+}, "id" | "cnpj" | "ownerId" | "slug">
 
 export type KennelOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  cnpj?: Prisma.SortOrder
+  cnpj?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
-  cbkcRegistration?: Prisma.SortOrder
+  cbkcRegistration?: Prisma.SortOrderInput | Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrder
+  prestigeScore?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  primaryBreeds?: Prisma.SortOrder
   _count?: Prisma.KennelCountOrderByAggregateInput
+  _avg?: Prisma.KennelAvgOrderByAggregateInput
   _max?: Prisma.KennelMaxOrderByAggregateInput
   _min?: Prisma.KennelMinOrderByAggregateInput
+  _sum?: Prisma.KennelSumOrderByAggregateInput
 }
 
 export type KennelScalarWhereWithAggregatesInput = {
@@ -259,97 +360,157 @@ export type KennelScalarWhereWithAggregatesInput = {
   NOT?: Prisma.KennelScalarWhereWithAggregatesInput | Prisma.KennelScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
   name?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
-  cnpj?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
+  cnpj?: Prisma.StringNullableWithAggregatesFilter<"Kennel"> | string | null
   city?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
   state?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
-  cbkcRegistration?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
+  cbkcRegistration?: Prisma.StringNullableWithAggregatesFilter<"Kennel"> | string | null
   ownerId?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Kennel"> | Date | string
+  slug?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
+  logoUrl?: Prisma.StringNullableWithAggregatesFilter<"Kennel"> | string | null
+  location?: Prisma.StringWithAggregatesFilter<"Kennel"> | string
+  prestigeScore?: Prisma.IntWithAggregatesFilter<"Kennel"> | number
+  description?: Prisma.StringNullableWithAggregatesFilter<"Kennel"> | string | null
+  primaryBreeds?: Prisma.StringNullableListFilter<"Kennel">
 }
 
 export type KennelCreateInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
   dogs?: Prisma.DogCreateNestedManyWithoutKennelInput
   owner: Prisma.OwnerCreateNestedOneWithoutKennelInput
+  litters?: Prisma.LitterCreateNestedManyWithoutKennelInput
 }
 
 export type KennelUncheckedCreateInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   ownerId: string
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUncheckedCreateNestedManyWithoutKennelInput
+  litters?: Prisma.LitterUncheckedCreateNestedManyWithoutKennelInput
 }
 
 export type KennelUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUpdateManyWithoutKennelNestedInput
   owner?: Prisma.OwnerUpdateOneRequiredWithoutKennelNestedInput
+  litters?: Prisma.LitterUpdateManyWithoutKennelNestedInput
 }
 
 export type KennelUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUncheckedUpdateManyWithoutKennelNestedInput
+  litters?: Prisma.LitterUncheckedUpdateManyWithoutKennelNestedInput
 }
 
 export type KennelCreateManyInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   ownerId: string
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
 }
 
 export type KennelUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
 }
 
 export type KennelUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
 }
 
 export type KennelNullableScalarRelationFilter = {
   is?: Prisma.KennelWhereInput | null
   isNot?: Prisma.KennelWhereInput | null
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type KennelCountOrderByAggregateInput = {
@@ -361,6 +522,16 @@ export type KennelCountOrderByAggregateInput = {
   cbkcRegistration?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  prestigeScore?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  primaryBreeds?: Prisma.SortOrder
+}
+
+export type KennelAvgOrderByAggregateInput = {
+  prestigeScore?: Prisma.SortOrder
 }
 
 export type KennelMaxOrderByAggregateInput = {
@@ -372,6 +543,11 @@ export type KennelMaxOrderByAggregateInput = {
   cbkcRegistration?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  prestigeScore?: Prisma.SortOrder
+  description?: Prisma.SortOrder
 }
 
 export type KennelMinOrderByAggregateInput = {
@@ -383,6 +559,15 @@ export type KennelMinOrderByAggregateInput = {
   cbkcRegistration?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  slug?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  prestigeScore?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+}
+
+export type KennelSumOrderByAggregateInput = {
+  prestigeScore?: Prisma.SortOrder
 }
 
 export type KennelScalarRelationFilter = {
@@ -422,6 +607,23 @@ export type KennelUncheckedUpdateOneWithoutOwnerNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.KennelUpdateToOneWithWhereWithoutOwnerInput, Prisma.KennelUpdateWithoutOwnerInput>, Prisma.KennelUncheckedUpdateWithoutOwnerInput>
 }
 
+export type KennelCreateprimaryBreedsInput = {
+  set: string[]
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type KennelUpdateprimaryBreedsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type KennelCreateNestedOneWithoutDogsInput = {
   create?: Prisma.XOR<Prisma.KennelCreateWithoutDogsInput, Prisma.KennelUncheckedCreateWithoutDogsInput>
   connectOrCreate?: Prisma.KennelCreateOrConnectWithoutDogsInput
@@ -436,26 +638,54 @@ export type KennelUpdateOneRequiredWithoutDogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.KennelUpdateToOneWithWhereWithoutDogsInput, Prisma.KennelUpdateWithoutDogsInput>, Prisma.KennelUncheckedUpdateWithoutDogsInput>
 }
 
+export type KennelCreateNestedOneWithoutLittersInput = {
+  create?: Prisma.XOR<Prisma.KennelCreateWithoutLittersInput, Prisma.KennelUncheckedCreateWithoutLittersInput>
+  connectOrCreate?: Prisma.KennelCreateOrConnectWithoutLittersInput
+  connect?: Prisma.KennelWhereUniqueInput
+}
+
+export type KennelUpdateOneRequiredWithoutLittersNestedInput = {
+  create?: Prisma.XOR<Prisma.KennelCreateWithoutLittersInput, Prisma.KennelUncheckedCreateWithoutLittersInput>
+  connectOrCreate?: Prisma.KennelCreateOrConnectWithoutLittersInput
+  upsert?: Prisma.KennelUpsertWithoutLittersInput
+  connect?: Prisma.KennelWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.KennelUpdateToOneWithWhereWithoutLittersInput, Prisma.KennelUpdateWithoutLittersInput>, Prisma.KennelUncheckedUpdateWithoutLittersInput>
+}
+
 export type KennelCreateWithoutOwnerInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
   dogs?: Prisma.DogCreateNestedManyWithoutKennelInput
+  litters?: Prisma.LitterCreateNestedManyWithoutKennelInput
 }
 
 export type KennelUncheckedCreateWithoutOwnerInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUncheckedCreateNestedManyWithoutKennelInput
+  litters?: Prisma.LitterUncheckedCreateNestedManyWithoutKennelInput
 }
 
 export type KennelCreateOrConnectWithoutOwnerInput = {
@@ -477,45 +707,73 @@ export type KennelUpdateToOneWithWhereWithoutOwnerInput = {
 export type KennelUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUpdateManyWithoutKennelNestedInput
+  litters?: Prisma.LitterUpdateManyWithoutKennelNestedInput
 }
 
 export type KennelUncheckedUpdateWithoutOwnerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
   dogs?: Prisma.DogUncheckedUpdateManyWithoutKennelNestedInput
+  litters?: Prisma.LitterUncheckedUpdateManyWithoutKennelNestedInput
 }
 
 export type KennelCreateWithoutDogsInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
   owner: Prisma.OwnerCreateNestedOneWithoutKennelInput
+  litters?: Prisma.LitterCreateNestedManyWithoutKennelInput
 }
 
 export type KennelUncheckedCreateWithoutDogsInput = {
   id?: string
   name: string
-  cnpj: string
+  cnpj?: string | null
   city: string
   state: string
-  cbkcRegistration: string
+  cbkcRegistration?: string | null
   ownerId: string
   createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
+  litters?: Prisma.LitterUncheckedCreateNestedManyWithoutKennelInput
 }
 
 export type KennelCreateOrConnectWithoutDogsInput = {
@@ -537,23 +795,125 @@ export type KennelUpdateToOneWithWhereWithoutDogsInput = {
 export type KennelUpdateWithoutDogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
   owner?: Prisma.OwnerUpdateOneRequiredWithoutKennelNestedInput
+  litters?: Prisma.LitterUpdateManyWithoutKennelNestedInput
 }
 
 export type KennelUncheckedUpdateWithoutDogsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  cnpj?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.StringFieldUpdateOperationsInput | string
   state?: Prisma.StringFieldUpdateOperationsInput | string
-  cbkcRegistration?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
+  litters?: Prisma.LitterUncheckedUpdateManyWithoutKennelNestedInput
+}
+
+export type KennelCreateWithoutLittersInput = {
+  id?: string
+  name: string
+  cnpj?: string | null
+  city: string
+  state: string
+  cbkcRegistration?: string | null
+  createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
+  dogs?: Prisma.DogCreateNestedManyWithoutKennelInput
+  owner: Prisma.OwnerCreateNestedOneWithoutKennelInput
+}
+
+export type KennelUncheckedCreateWithoutLittersInput = {
+  id?: string
+  name: string
+  cnpj?: string | null
+  city: string
+  state: string
+  cbkcRegistration?: string | null
+  ownerId: string
+  createdAt?: Date | string
+  slug: string
+  logoUrl?: string | null
+  location?: string
+  prestigeScore?: number
+  description?: string | null
+  primaryBreeds?: Prisma.KennelCreateprimaryBreedsInput | string[]
+  dogs?: Prisma.DogUncheckedCreateNestedManyWithoutKennelInput
+}
+
+export type KennelCreateOrConnectWithoutLittersInput = {
+  where: Prisma.KennelWhereUniqueInput
+  create: Prisma.XOR<Prisma.KennelCreateWithoutLittersInput, Prisma.KennelUncheckedCreateWithoutLittersInput>
+}
+
+export type KennelUpsertWithoutLittersInput = {
+  update: Prisma.XOR<Prisma.KennelUpdateWithoutLittersInput, Prisma.KennelUncheckedUpdateWithoutLittersInput>
+  create: Prisma.XOR<Prisma.KennelCreateWithoutLittersInput, Prisma.KennelUncheckedCreateWithoutLittersInput>
+  where?: Prisma.KennelWhereInput
+}
+
+export type KennelUpdateToOneWithWhereWithoutLittersInput = {
+  where?: Prisma.KennelWhereInput
+  data: Prisma.XOR<Prisma.KennelUpdateWithoutLittersInput, Prisma.KennelUncheckedUpdateWithoutLittersInput>
+}
+
+export type KennelUpdateWithoutLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
+  dogs?: Prisma.DogUpdateManyWithoutKennelNestedInput
+  owner?: Prisma.OwnerUpdateOneRequiredWithoutKennelNestedInput
+}
+
+export type KennelUncheckedUpdateWithoutLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  cnpj?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  state?: Prisma.StringFieldUpdateOperationsInput | string
+  cbkcRegistration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.StringFieldUpdateOperationsInput | string
+  prestigeScore?: Prisma.IntFieldUpdateOperationsInput | number
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryBreeds?: Prisma.KennelUpdateprimaryBreedsInput | string[]
+  dogs?: Prisma.DogUncheckedUpdateManyWithoutKennelNestedInput
 }
 
 
@@ -563,10 +923,12 @@ export type KennelUncheckedUpdateWithoutDogsInput = {
 
 export type KennelCountOutputType = {
   dogs: number
+  litters: number
 }
 
 export type KennelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dogs?: boolean | KennelCountOutputTypeCountDogsArgs
+  litters?: boolean | KennelCountOutputTypeCountLittersArgs
 }
 
 /**
@@ -586,6 +948,13 @@ export type KennelCountOutputTypeCountDogsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.DogWhereInput
 }
 
+/**
+ * KennelCountOutputType without action
+ */
+export type KennelCountOutputTypeCountLittersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LitterWhereInput
+}
+
 
 export type KennelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -596,8 +965,15 @@ export type KennelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   cbkcRegistration?: boolean
   ownerId?: boolean
   createdAt?: boolean
+  slug?: boolean
+  logoUrl?: boolean
+  location?: boolean
+  prestigeScore?: boolean
+  description?: boolean
+  primaryBreeds?: boolean
   dogs?: boolean | Prisma.Kennel$dogsArgs<ExtArgs>
   owner?: boolean | Prisma.OwnerDefaultArgs<ExtArgs>
+  litters?: boolean | Prisma.Kennel$littersArgs<ExtArgs>
   _count?: boolean | Prisma.KennelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kennel"]>
 
@@ -610,6 +986,12 @@ export type KennelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   cbkcRegistration?: boolean
   ownerId?: boolean
   createdAt?: boolean
+  slug?: boolean
+  logoUrl?: boolean
+  location?: boolean
+  prestigeScore?: boolean
+  description?: boolean
+  primaryBreeds?: boolean
   owner?: boolean | Prisma.OwnerDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kennel"]>
 
@@ -622,6 +1004,12 @@ export type KennelSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   cbkcRegistration?: boolean
   ownerId?: boolean
   createdAt?: boolean
+  slug?: boolean
+  logoUrl?: boolean
+  location?: boolean
+  prestigeScore?: boolean
+  description?: boolean
+  primaryBreeds?: boolean
   owner?: boolean | Prisma.OwnerDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["kennel"]>
 
@@ -634,12 +1022,19 @@ export type KennelSelectScalar = {
   cbkcRegistration?: boolean
   ownerId?: boolean
   createdAt?: boolean
+  slug?: boolean
+  logoUrl?: boolean
+  location?: boolean
+  prestigeScore?: boolean
+  description?: boolean
+  primaryBreeds?: boolean
 }
 
-export type KennelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "cnpj" | "city" | "state" | "cbkcRegistration" | "ownerId" | "createdAt", ExtArgs["result"]["kennel"]>
+export type KennelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "cnpj" | "city" | "state" | "cbkcRegistration" | "ownerId" | "createdAt" | "slug" | "logoUrl" | "location" | "prestigeScore" | "description" | "primaryBreeds", ExtArgs["result"]["kennel"]>
 export type KennelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dogs?: boolean | Prisma.Kennel$dogsArgs<ExtArgs>
   owner?: boolean | Prisma.OwnerDefaultArgs<ExtArgs>
+  litters?: boolean | Prisma.Kennel$littersArgs<ExtArgs>
   _count?: boolean | Prisma.KennelCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type KennelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -654,16 +1049,23 @@ export type $KennelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     dogs: Prisma.$DogPayload<ExtArgs>[]
     owner: Prisma.$OwnerPayload<ExtArgs>
+    litters: Prisma.$LitterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    cnpj: string
+    cnpj: string | null
     city: string
     state: string
-    cbkcRegistration: string
+    cbkcRegistration: string | null
     ownerId: string
     createdAt: Date
+    slug: string
+    logoUrl: string | null
+    location: string
+    prestigeScore: number
+    description: string | null
+    primaryBreeds: string[]
   }, ExtArgs["result"]["kennel"]>
   composites: {}
 }
@@ -1060,6 +1462,7 @@ export interface Prisma__KennelClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dogs<T extends Prisma.Kennel$dogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kennel$dogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   owner<T extends Prisma.OwnerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OwnerDefaultArgs<ExtArgs>>): Prisma.Prisma__OwnerClient<runtime.Types.Result.GetResult<Prisma.$OwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  litters<T extends Prisma.Kennel$littersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Kennel$littersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LitterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1097,6 +1500,12 @@ export interface KennelFieldRefs {
   readonly cbkcRegistration: Prisma.FieldRef<"Kennel", 'String'>
   readonly ownerId: Prisma.FieldRef<"Kennel", 'String'>
   readonly createdAt: Prisma.FieldRef<"Kennel", 'DateTime'>
+  readonly slug: Prisma.FieldRef<"Kennel", 'String'>
+  readonly logoUrl: Prisma.FieldRef<"Kennel", 'String'>
+  readonly location: Prisma.FieldRef<"Kennel", 'String'>
+  readonly prestigeScore: Prisma.FieldRef<"Kennel", 'Int'>
+  readonly description: Prisma.FieldRef<"Kennel", 'String'>
+  readonly primaryBreeds: Prisma.FieldRef<"Kennel", 'String[]'>
 }
     
 
@@ -1519,6 +1928,30 @@ export type Kennel$dogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.DogScalarFieldEnum | Prisma.DogScalarFieldEnum[]
+}
+
+/**
+ * Kennel.litters
+ */
+export type Kennel$littersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Litter
+   */
+  select?: Prisma.LitterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Litter
+   */
+  omit?: Prisma.LitterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LitterInclude<ExtArgs> | null
+  where?: Prisma.LitterWhereInput
+  orderBy?: Prisma.LitterOrderByWithRelationInput | Prisma.LitterOrderByWithRelationInput[]
+  cursor?: Prisma.LitterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LitterScalarFieldEnum | Prisma.LitterScalarFieldEnum[]
 }
 
 /**

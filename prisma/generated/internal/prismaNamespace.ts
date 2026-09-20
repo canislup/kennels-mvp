@@ -387,6 +387,7 @@ export const ModelName = {
   Owner: 'Owner',
   Kennel: 'Kennel',
   Dog: 'Dog',
+  Litter: 'Litter',
   Breed: 'Breed'
 } as const
 
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "owner" | "kennel" | "dog" | "breed"
+    modelProps: "owner" | "kennel" | "dog" | "litter" | "breed"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -629,6 +630,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Litter: {
+      payload: Prisma.$LitterPayload<ExtArgs>
+      fields: Prisma.LitterFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LitterFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LitterFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        findFirst: {
+          args: Prisma.LitterFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LitterFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        findMany: {
+          args: Prisma.LitterFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>[]
+        }
+        create: {
+          args: Prisma.LitterCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        createMany: {
+          args: Prisma.LitterCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LitterCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>[]
+        }
+        delete: {
+          args: Prisma.LitterDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        update: {
+          args: Prisma.LitterUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        deleteMany: {
+          args: Prisma.LitterDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LitterUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LitterUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>[]
+        }
+        upsert: {
+          args: Prisma.LitterUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LitterPayload>
+        }
+        aggregate: {
+          args: Prisma.LitterAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLitter>
+        }
+        groupBy: {
+          args: Prisma.LitterGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LitterGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LitterCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LitterCountAggregateOutputType> | number
+        }
+      }
+    }
     Breed: {
       payload: Prisma.$BreedPayload<ExtArgs>
       fields: Prisma.BreedFieldRefs
@@ -762,7 +837,13 @@ export const KennelScalarFieldEnum = {
   state: 'state',
   cbkcRegistration: 'cbkcRegistration',
   ownerId: 'ownerId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  location: 'location',
+  prestigeScore: 'prestigeScore',
+  description: 'description',
+  primaryBreeds: 'primaryBreeds'
 } as const
 
 export type KennelScalarFieldEnum = (typeof KennelScalarFieldEnum)[keyof typeof KennelScalarFieldEnum]
@@ -782,6 +863,21 @@ export const DogScalarFieldEnum = {
 } as const
 
 export type DogScalarFieldEnum = (typeof DogScalarFieldEnum)[keyof typeof DogScalarFieldEnum]
+
+
+export const LitterScalarFieldEnum = {
+  id: 'id',
+  breed: 'breed',
+  puppyCount: 'puppyCount',
+  expectedGoHomeDate: 'expectedGoHomeDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  kennelId: 'kennelId',
+  damId: 'damId',
+  sireId: 'sireId'
+} as const
+
+export type LitterScalarFieldEnum = (typeof LitterScalarFieldEnum)[keyof typeof LitterScalarFieldEnum]
 
 
 export const BreedScalarFieldEnum = {
@@ -852,6 +948,20 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'DogStatus'
  */
 export type EnumDogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DogStatus'>
@@ -866,16 +976,30 @@ export type ListEnumDogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'LitterStatus'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type EnumLitterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LitterStatus'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'LitterStatus[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListEnumLitterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LitterStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -991,6 +1115,7 @@ export type GlobalOmitConfig = {
   owner?: Prisma.OwnerOmit
   kennel?: Prisma.KennelOmit
   dog?: Prisma.DogOmit
+  litter?: Prisma.LitterOmit
   breed?: Prisma.BreedOmit
 }
 

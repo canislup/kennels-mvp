@@ -219,6 +219,8 @@ export type DogWhereInput = {
   kennelId?: Prisma.StringFilter<"Dog"> | string
   createdAt?: Prisma.DateTimeFilter<"Dog"> | Date | string
   kennel?: Prisma.XOR<Prisma.KennelScalarRelationFilter, Prisma.KennelWhereInput>
+  damLitters?: Prisma.LitterListRelationFilter
+  sireLitters?: Prisma.LitterListRelationFilter
 }
 
 export type DogOrderByWithRelationInput = {
@@ -233,6 +235,8 @@ export type DogOrderByWithRelationInput = {
   kennelId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   kennel?: Prisma.KennelOrderByWithRelationInput
+  damLitters?: Prisma.LitterOrderByRelationAggregateInput
+  sireLitters?: Prisma.LitterOrderByRelationAggregateInput
 }
 
 export type DogWhereUniqueInput = Prisma.AtLeast<{
@@ -250,6 +254,8 @@ export type DogWhereUniqueInput = Prisma.AtLeast<{
   kennelId?: Prisma.StringFilter<"Dog"> | string
   createdAt?: Prisma.DateTimeFilter<"Dog"> | Date | string
   kennel?: Prisma.XOR<Prisma.KennelScalarRelationFilter, Prisma.KennelWhereInput>
+  damLitters?: Prisma.LitterListRelationFilter
+  sireLitters?: Prisma.LitterListRelationFilter
 }, "id">
 
 export type DogOrderByWithAggregationInput = {
@@ -295,6 +301,8 @@ export type DogCreateInput = {
   photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
   createdAt?: Date | string
   kennel: Prisma.KennelCreateNestedOneWithoutDogsInput
+  damLitters?: Prisma.LitterCreateNestedManyWithoutDamInput
+  sireLitters?: Prisma.LitterCreateNestedManyWithoutSireInput
 }
 
 export type DogUncheckedCreateInput = {
@@ -308,6 +316,8 @@ export type DogUncheckedCreateInput = {
   photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
   kennelId: string
   createdAt?: Date | string
+  damLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutDamInput
+  sireLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutSireInput
 }
 
 export type DogUpdateInput = {
@@ -321,6 +331,8 @@ export type DogUpdateInput = {
   photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   kennel?: Prisma.KennelUpdateOneRequiredWithoutDogsNestedInput
+  damLitters?: Prisma.LitterUpdateManyWithoutDamNestedInput
+  sireLitters?: Prisma.LitterUpdateManyWithoutSireNestedInput
 }
 
 export type DogUncheckedUpdateInput = {
@@ -334,6 +346,8 @@ export type DogUncheckedUpdateInput = {
   photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  damLitters?: Prisma.LitterUncheckedUpdateManyWithoutDamNestedInput
+  sireLitters?: Prisma.LitterUncheckedUpdateManyWithoutSireNestedInput
 }
 
 export type DogCreateManyInput = {
@@ -384,14 +398,6 @@ export type DogOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type DogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
@@ -427,6 +433,11 @@ export type DogMinOrderByAggregateInput = {
   lineage?: Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type DogNullableScalarRelationFilter = {
+  is?: Prisma.DogWhereInput | null
+  isNot?: Prisma.DogWhereInput | null
 }
 
 export type DogCreateNestedManyWithoutKennelInput = {
@@ -484,6 +495,38 @@ export type DogUpdatephotoUrlsInput = {
   push?: string | string[]
 }
 
+export type DogCreateNestedOneWithoutDamLittersInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutDamLittersInput, Prisma.DogUncheckedCreateWithoutDamLittersInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutDamLittersInput
+  connect?: Prisma.DogWhereUniqueInput
+}
+
+export type DogCreateNestedOneWithoutSireLittersInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutSireLittersInput, Prisma.DogUncheckedCreateWithoutSireLittersInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutSireLittersInput
+  connect?: Prisma.DogWhereUniqueInput
+}
+
+export type DogUpdateOneWithoutDamLittersNestedInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutDamLittersInput, Prisma.DogUncheckedCreateWithoutDamLittersInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutDamLittersInput
+  upsert?: Prisma.DogUpsertWithoutDamLittersInput
+  disconnect?: Prisma.DogWhereInput | boolean
+  delete?: Prisma.DogWhereInput | boolean
+  connect?: Prisma.DogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DogUpdateToOneWithWhereWithoutDamLittersInput, Prisma.DogUpdateWithoutDamLittersInput>, Prisma.DogUncheckedUpdateWithoutDamLittersInput>
+}
+
+export type DogUpdateOneWithoutSireLittersNestedInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutSireLittersInput, Prisma.DogUncheckedCreateWithoutSireLittersInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutSireLittersInput
+  upsert?: Prisma.DogUpsertWithoutSireLittersInput
+  disconnect?: Prisma.DogWhereInput | boolean
+  delete?: Prisma.DogWhereInput | boolean
+  connect?: Prisma.DogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DogUpdateToOneWithWhereWithoutSireLittersInput, Prisma.DogUpdateWithoutSireLittersInput>, Prisma.DogUncheckedUpdateWithoutSireLittersInput>
+}
+
 export type DogCreateWithoutKennelInput = {
   id?: string
   name: string
@@ -494,6 +537,8 @@ export type DogCreateWithoutKennelInput = {
   lineage?: string | null
   photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
   createdAt?: Date | string
+  damLitters?: Prisma.LitterCreateNestedManyWithoutDamInput
+  sireLitters?: Prisma.LitterCreateNestedManyWithoutSireInput
 }
 
 export type DogUncheckedCreateWithoutKennelInput = {
@@ -506,6 +551,8 @@ export type DogUncheckedCreateWithoutKennelInput = {
   lineage?: string | null
   photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
   createdAt?: Date | string
+  damLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutDamInput
+  sireLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutSireInput
 }
 
 export type DogCreateOrConnectWithoutKennelInput = {
@@ -550,6 +597,150 @@ export type DogScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Dog"> | Date | string
 }
 
+export type DogCreateWithoutDamLittersInput = {
+  id?: string
+  name: string
+  breed: string
+  gender: string
+  status?: $Enums.DogStatus
+  pedigreeUrl?: string | null
+  lineage?: string | null
+  photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
+  createdAt?: Date | string
+  kennel: Prisma.KennelCreateNestedOneWithoutDogsInput
+  sireLitters?: Prisma.LitterCreateNestedManyWithoutSireInput
+}
+
+export type DogUncheckedCreateWithoutDamLittersInput = {
+  id?: string
+  name: string
+  breed: string
+  gender: string
+  status?: $Enums.DogStatus
+  pedigreeUrl?: string | null
+  lineage?: string | null
+  photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
+  kennelId: string
+  createdAt?: Date | string
+  sireLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutSireInput
+}
+
+export type DogCreateOrConnectWithoutDamLittersInput = {
+  where: Prisma.DogWhereUniqueInput
+  create: Prisma.XOR<Prisma.DogCreateWithoutDamLittersInput, Prisma.DogUncheckedCreateWithoutDamLittersInput>
+}
+
+export type DogCreateWithoutSireLittersInput = {
+  id?: string
+  name: string
+  breed: string
+  gender: string
+  status?: $Enums.DogStatus
+  pedigreeUrl?: string | null
+  lineage?: string | null
+  photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
+  createdAt?: Date | string
+  kennel: Prisma.KennelCreateNestedOneWithoutDogsInput
+  damLitters?: Prisma.LitterCreateNestedManyWithoutDamInput
+}
+
+export type DogUncheckedCreateWithoutSireLittersInput = {
+  id?: string
+  name: string
+  breed: string
+  gender: string
+  status?: $Enums.DogStatus
+  pedigreeUrl?: string | null
+  lineage?: string | null
+  photoUrls?: Prisma.DogCreatephotoUrlsInput | string[]
+  kennelId: string
+  createdAt?: Date | string
+  damLitters?: Prisma.LitterUncheckedCreateNestedManyWithoutDamInput
+}
+
+export type DogCreateOrConnectWithoutSireLittersInput = {
+  where: Prisma.DogWhereUniqueInput
+  create: Prisma.XOR<Prisma.DogCreateWithoutSireLittersInput, Prisma.DogUncheckedCreateWithoutSireLittersInput>
+}
+
+export type DogUpsertWithoutDamLittersInput = {
+  update: Prisma.XOR<Prisma.DogUpdateWithoutDamLittersInput, Prisma.DogUncheckedUpdateWithoutDamLittersInput>
+  create: Prisma.XOR<Prisma.DogCreateWithoutDamLittersInput, Prisma.DogUncheckedCreateWithoutDamLittersInput>
+  where?: Prisma.DogWhereInput
+}
+
+export type DogUpdateToOneWithWhereWithoutDamLittersInput = {
+  where?: Prisma.DogWhereInput
+  data: Prisma.XOR<Prisma.DogUpdateWithoutDamLittersInput, Prisma.DogUncheckedUpdateWithoutDamLittersInput>
+}
+
+export type DogUpdateWithoutDamLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  pedigreeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennel?: Prisma.KennelUpdateOneRequiredWithoutDogsNestedInput
+  sireLitters?: Prisma.LitterUpdateManyWithoutSireNestedInput
+}
+
+export type DogUncheckedUpdateWithoutDamLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  pedigreeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
+  kennelId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sireLitters?: Prisma.LitterUncheckedUpdateManyWithoutSireNestedInput
+}
+
+export type DogUpsertWithoutSireLittersInput = {
+  update: Prisma.XOR<Prisma.DogUpdateWithoutSireLittersInput, Prisma.DogUncheckedUpdateWithoutSireLittersInput>
+  create: Prisma.XOR<Prisma.DogCreateWithoutSireLittersInput, Prisma.DogUncheckedCreateWithoutSireLittersInput>
+  where?: Prisma.DogWhereInput
+}
+
+export type DogUpdateToOneWithWhereWithoutSireLittersInput = {
+  where?: Prisma.DogWhereInput
+  data: Prisma.XOR<Prisma.DogUpdateWithoutSireLittersInput, Prisma.DogUncheckedUpdateWithoutSireLittersInput>
+}
+
+export type DogUpdateWithoutSireLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  pedigreeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennel?: Prisma.KennelUpdateOneRequiredWithoutDogsNestedInput
+  damLitters?: Prisma.LitterUpdateManyWithoutDamNestedInput
+}
+
+export type DogUncheckedUpdateWithoutSireLittersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  gender?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  pedigreeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
+  kennelId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  damLitters?: Prisma.LitterUncheckedUpdateManyWithoutDamNestedInput
+}
+
 export type DogCreateManyKennelInput = {
   id?: string
   name: string
@@ -572,6 +763,8 @@ export type DogUpdateWithoutKennelInput = {
   lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  damLitters?: Prisma.LitterUpdateManyWithoutDamNestedInput
+  sireLitters?: Prisma.LitterUpdateManyWithoutSireNestedInput
 }
 
 export type DogUncheckedUpdateWithoutKennelInput = {
@@ -584,6 +777,8 @@ export type DogUncheckedUpdateWithoutKennelInput = {
   lineage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrls?: Prisma.DogUpdatephotoUrlsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  damLitters?: Prisma.LitterUncheckedUpdateManyWithoutDamNestedInput
+  sireLitters?: Prisma.LitterUncheckedUpdateManyWithoutSireNestedInput
 }
 
 export type DogUncheckedUpdateManyWithoutKennelInput = {
@@ -599,6 +794,44 @@ export type DogUncheckedUpdateManyWithoutKennelInput = {
 }
 
 
+/**
+ * Count Type DogCountOutputType
+ */
+
+export type DogCountOutputType = {
+  damLitters: number
+  sireLitters: number
+}
+
+export type DogCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  damLitters?: boolean | DogCountOutputTypeCountDamLittersArgs
+  sireLitters?: boolean | DogCountOutputTypeCountSireLittersArgs
+}
+
+/**
+ * DogCountOutputType without action
+ */
+export type DogCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DogCountOutputType
+   */
+  select?: Prisma.DogCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DogCountOutputType without action
+ */
+export type DogCountOutputTypeCountDamLittersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LitterWhereInput
+}
+
+/**
+ * DogCountOutputType without action
+ */
+export type DogCountOutputTypeCountSireLittersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LitterWhereInput
+}
+
 
 export type DogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -612,6 +845,9 @@ export type DogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   kennelId?: boolean
   createdAt?: boolean
   kennel?: boolean | Prisma.KennelDefaultArgs<ExtArgs>
+  damLitters?: boolean | Prisma.Dog$damLittersArgs<ExtArgs>
+  sireLitters?: boolean | Prisma.Dog$sireLittersArgs<ExtArgs>
+  _count?: boolean | Prisma.DogCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dog"]>
 
 export type DogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -658,6 +894,9 @@ export type DogSelectScalar = {
 export type DogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "breed" | "gender" | "status" | "pedigreeUrl" | "lineage" | "photoUrls" | "kennelId" | "createdAt", ExtArgs["result"]["dog"]>
 export type DogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kennel?: boolean | Prisma.KennelDefaultArgs<ExtArgs>
+  damLitters?: boolean | Prisma.Dog$damLittersArgs<ExtArgs>
+  sireLitters?: boolean | Prisma.Dog$sireLittersArgs<ExtArgs>
+  _count?: boolean | Prisma.DogCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kennel?: boolean | Prisma.KennelDefaultArgs<ExtArgs>
@@ -670,6 +909,8 @@ export type $DogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name: "Dog"
   objects: {
     kennel: Prisma.$KennelPayload<ExtArgs>
+    damLitters: Prisma.$LitterPayload<ExtArgs>[]
+    sireLitters: Prisma.$LitterPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1077,6 +1318,8 @@ readonly fields: DogFieldRefs;
 export interface Prisma__DogClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   kennel<T extends Prisma.KennelDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.KennelDefaultArgs<ExtArgs>>): Prisma.Prisma__KennelClient<runtime.Types.Result.GetResult<Prisma.$KennelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  damLitters<T extends Prisma.Dog$damLittersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$damLittersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LitterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sireLitters<T extends Prisma.Dog$sireLittersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$sireLittersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LitterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1514,6 +1757,54 @@ export type DogDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Limit how many Dogs to delete.
    */
   limit?: number
+}
+
+/**
+ * Dog.damLitters
+ */
+export type Dog$damLittersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Litter
+   */
+  select?: Prisma.LitterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Litter
+   */
+  omit?: Prisma.LitterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LitterInclude<ExtArgs> | null
+  where?: Prisma.LitterWhereInput
+  orderBy?: Prisma.LitterOrderByWithRelationInput | Prisma.LitterOrderByWithRelationInput[]
+  cursor?: Prisma.LitterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LitterScalarFieldEnum | Prisma.LitterScalarFieldEnum[]
+}
+
+/**
+ * Dog.sireLitters
+ */
+export type Dog$sireLittersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Litter
+   */
+  select?: Prisma.LitterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Litter
+   */
+  omit?: Prisma.LitterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LitterInclude<ExtArgs> | null
+  where?: Prisma.LitterWhereInput
+  orderBy?: Prisma.LitterOrderByWithRelationInput | Prisma.LitterOrderByWithRelationInput[]
+  cursor?: Prisma.LitterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LitterScalarFieldEnum | Prisma.LitterScalarFieldEnum[]
 }
 
 /**

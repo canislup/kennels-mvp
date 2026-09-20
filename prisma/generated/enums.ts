@@ -17,3 +17,13 @@ export const DogStatus = {
 } as const
 
 export type DogStatus = (typeof DogStatus)[keyof typeof DogStatus]
+
+
+export const LitterStatus = {
+  PLANNED: 'PLANNED',
+  AVAILABLE: 'AVAILABLE',
+  RESERVED: 'RESERVED',
+  SOLD_OUT: 'SOLD_OUT'
+} as const
+
+export type LitterStatus = (typeof LitterStatus)[keyof typeof LitterStatus]

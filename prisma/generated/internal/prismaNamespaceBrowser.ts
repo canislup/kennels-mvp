@@ -54,6 +54,7 @@ export const ModelName = {
   Owner: 'Owner',
   Kennel: 'Kennel',
   Dog: 'Dog',
+  Litter: 'Litter',
   Breed: 'Breed'
 } as const
 
@@ -93,7 +94,13 @@ export const KennelScalarFieldEnum = {
   state: 'state',
   cbkcRegistration: 'cbkcRegistration',
   ownerId: 'ownerId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  location: 'location',
+  prestigeScore: 'prestigeScore',
+  description: 'description',
+  primaryBreeds: 'primaryBreeds'
 } as const
 
 export type KennelScalarFieldEnum = (typeof KennelScalarFieldEnum)[keyof typeof KennelScalarFieldEnum]
@@ -113,6 +120,21 @@ export const DogScalarFieldEnum = {
 } as const
 
 export type DogScalarFieldEnum = (typeof DogScalarFieldEnum)[keyof typeof DogScalarFieldEnum]
+
+
+export const LitterScalarFieldEnum = {
+  id: 'id',
+  breed: 'breed',
+  puppyCount: 'puppyCount',
+  expectedGoHomeDate: 'expectedGoHomeDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  kennelId: 'kennelId',
+  damId: 'damId',
+  sireId: 'sireId'
+} as const
+
+export type LitterScalarFieldEnum = (typeof LitterScalarFieldEnum)[keyof typeof LitterScalarFieldEnum]
 
 
 export const BreedScalarFieldEnum = {
