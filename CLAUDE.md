@@ -45,10 +45,16 @@ KennelOS is a dual-sided B2B2C platform.
 
 - **Internal Dashboard Vibe:** Clean, modern SaaS combined with pet-centric warmth.
 - **Public Profile Vibe:** Premium, elegant, and highly trustworthy. Use clean typography, warm accent tones, and high-quality image galleries to ensure kennels look highly professional.
-- **Color Palette:**
-  - Neutrals: `slate-50` through `slate-900`.
-  - Primary Action/Brand: `indigo-600` (hover: `indigo-700`).
-  - Destructive: `red-50` background, `red-600` text.
+- **Color Palette (warm stone — canonical; use these exact hex values, e.g. `text-[#1C1917]`):**
+  - Background: `#FFFFFF`.
+  - Text — primary: `#1C1917`; secondary: `#57534E`; muted: `#78716C` / `#A8A29E`.
+  - Borders: `#E7E2DA`.
+  - Accent / primary action: `#4F46E5` (hover: `#4338CA`).
+  - Success / verified: text `#166534` on background `#DCFCE7` (solid badge variant: white text on `#166534`).
+  - Warning / prestige badge: text `#92400E` on background `#FEF3C7`.
+  - Soft card backgrounds: `#F5F1EA`, `#F0ECE3`.
+  - Dark surfaces (footer, CTA banners): background `#1C1917`, text `#FBF9F6`.
+  - Destructive: background `#FEF2F2`, text `#DC2626`.
 - **Shapes & Shadows:** Use generous border radiuses (`rounded-xl`, `rounded-2xl`) and soft shadows (`shadow-sm`, `shadow-md`).
 
 ### 6. Environment Variables

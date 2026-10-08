@@ -151,114 +151,272 @@
         "description": "Pesquise um diretório selecionado de criadores profissionais e verificados. Explore canis por raça e localização e encontre seu próximo filhote em uma fonte confiável.",
         "ogDescription": "Pesquise um diretório selecionado de criadores profissionais e verificados e encontre seu próximo filhote em uma fonte confiável."
       },
-      "nav": {
-        "breederLogin": "Login do Criador"
-      },
       "hero": {
-        "imageAlt": "Um filhote conhecendo sua nova família em casa",
-        "badge": "Aprovado por famílias em todo o país",
-        "headingLine1": "Encontre seu novo melhor amigo",
-        "headingLine2": "com criadores de confiança.",
-        "subheading": "Pesquise canis profissionais e verificados perto de você — criadores reais, fotos reais, sem adivinhações."
+        "badge": "Criadores verificados em todo o país",
+        "heading": "Encontre o próximo companheiro da sua família, de um criador em quem você pode confiar.",
+        "subheading": "Um diretório selecionado de canis profissionais — fotos reais, registros de saúde reais, sem a incerteza dos classificados."
       },
       "search": {
-        "placeholder": "Qual raça você procura?",
+        "breedLabel": "Raça",
+        "breedPlaceholder": "Qualquer raça",
+        "locationLabel": "Localização",
+        "locationPlaceholder": "Cidade ou estado",
         "submit": "Buscar"
+      },
+      "popular": {
+        "label": "Populares:"
       },
       "trust": {
         "verified": {
-          "title": "Canis Verificados",
-          "description": "Todo perfil de criador está ligado a um canil profissional e registrado — não a um anúncio anônimo."
+          "title": "Apenas canis verificados",
+          "description": "Cada perfil pertence a um canil profissional registrado — nunca a um anúncio anônimo."
         },
-        "prestige": {
-          "title": "Ranking de Prestígio",
-          "description": "Os canis são exibidos por reputação e histórico, para que os melhores criadores apareçam primeiro."
+        "reputation": {
+          "title": "Reputação à vista",
+          "description": "Os canis são classificados pelo histórico, para que os criadores mais confiáveis fiquem no topo."
         },
-        "profiles": {
-          "title": "Perfis Elegantes",
-          "description": "Galerias de fotos ricas e layouts limpos substituem os sites de criadores ultrapassados aos quais você está acostumado."
+        "records": {
+          "title": "Fotos reais, registros reais",
+          "description": "Galerias completas das ninhadas e informações de saúde, nenhuma foto de banco de imagens."
         }
       },
+      "featured": {
+        "heading": "Destaques da semana",
+        "browseAll": "Ver todos os canis",
+        "puppiesAvailable": "Filhotes disponíveis",
+        "prestige": "{score} de prestígio",
+        "photoAlt": "Cão de {name}",
+        "locationUnavailable": "Localização indisponível"
+      },
       "cta": {
-        "heading": "Tem um canil? Seja descoberto.",
-        "description": "Junte-se ao KennelOS para exibir seus cachorros em um perfil público elegante, alcançar compradores sérios e gerenciar seu plantel em um só lugar.",
-        "button": "Cadastre Seu Canil"
+        "heading": "Tem um canil? Seu site merece mais do que um modelo pronto.",
+        "description": "Tenha um perfil público bonito, uma lista de espera que os compradores realmente usam e um painel para gerenciar todo o seu plantel.",
+        "button": "Cadastre seu canil"
       }
+    },
+    "nav": {
+      "home": "Página inicial do KennelOS",
+      "browse": "Explorar canis",
+      "forBreeders": "Para criadores",
+      "howItWorks": "Como funciona",
+      "signIn": "Entrar",
+      "listKennel": "Cadastre seu canil",
+      "menu": "Abrir menu"
+    },
+    "footer": {
+      "rights": "© {year} KennelOS. Todos os direitos reservados.",
+      "rightsShort": "© {year} KennelOS"
     },
     "kennels": {
       "metadata": {
         "title": "Explorar Canis | KennelOS",
         "description": "Explore canis profissionais e verificados. Filtre por raça, ninhadas disponíveis e popularidade para encontrar seu próximo filhote com um criador de confiança."
       },
-      "heading": {
-        "all": "Todos os Canis",
-        "breed": "Criadores de {breed}"
+      "header": {
+        "count": "{count, plural, one {# canil encontrado} other {# canis encontrados}}",
+        "headingBreedLocation": "Canis de {breed} perto de {location}",
+        "headingBreed": "Canis de {breed}",
+        "headingLocation": "Canis perto de {location}",
+        "headingAll": "Todos os canis"
       },
-      "count": "{count, plural, one {# canil encontrado} other {# canis encontrados}}",
+      "search": {
+        "breedLabel": "Raça",
+        "anyBreed": "Qualquer raça",
+        "locationLabel": "Localização",
+        "locationPlaceholder": "Cidade ou estado",
+        "submit": "Buscar",
+        "mobileEdit": "Editar busca",
+        "mobileEmpty": "Busque por raça ou localização"
+      },
       "filters": {
-        "allBreeds": "Todas as Raças",
-        "hasLitters": "Com Ninhadas Disponíveis",
-        "sortPrestige": "Mais Populares",
-        "sortNewest": "Mais Recentes",
-        "clear": "Limpar"
+        "label": "Filtrar canis",
+        "puppies": "Filhotes disponíveis",
+        "verified": "Canis verificados",
+        "moreFilters": "Mais filtros",
+        "sortLabel": "Ordenar:",
+        "sortAria": "Ordenar canis",
+        "sort": {
+          "prestige": "Prestígio",
+          "distance": "Distância",
+          "newest": "Mais recentes"
+        },
+        "view": "Visualização dos resultados",
+        "viewList": "Lista",
+        "viewMap": "Mapa",
+        "mobileFilters": "Filtros",
+        "mobileSort": "Ordenar",
+        "activeCount": "{count, plural, one {# filtro ativo} other {# filtros ativos}}"
       },
-      "emptyState": {
-        "headingBreed": "Nenhum canil encontrado para \"{breed}\" ainda",
-        "heading": "Nenhum canil encontrado",
-        "description": "Tente outra raça ou limpe os filtros — novos canis entram no KennelOS toda semana.",
-        "cta": "Ver Todos os Canis"
+      "sheet": {
+        "title": "Filtros",
+        "close": "Fechar filtros",
+        "filtersHeading": "Mostrar apenas",
+        "sortHeading": "Ordenar por",
+        "clear": "Limpar tudo",
+        "apply": "Ver resultados"
+      },
+      "saveSearch": {
+        "banner": "Ainda não encontrou o canil ideal? Salve esta busca e avisaremos sobre novos canis compatíveis.",
+        "bannerMobile": "Não encontrou o ideal? Avisaremos sobre novos resultados.",
+        "button": "Salvar busca",
+        "buttonMobile": "Salvar esta busca"
       },
       "card": {
-        "puppiesAvailable": "Filhotes Disponíveis",
-        "prestige": "{score} de prestígio",
-        "photoAlt": "{name} - foto do cachorro {index}",
-        "logoAlt": "Logo de {name}",
+        "topRated": "Mais bem avaliado perto de você",
+        "puppiesAvailable": "Filhotes disponíveis",
+        "verified": "Verificado",
+        "prestigeAria": "Pontuação de prestígio {score}",
+        "photoAlt": "Cão de {name}",
         "locationUnavailable": "Localização indisponível"
+      },
+      "loading": {
+        "more": "Carregando mais canis…",
+        "error": "Não foi possível carregar mais canis.",
+        "retry": "Tentar novamente"
+      },
+      "emptyState": {
+        "heading": "Nenhum canil corresponde à sua busca",
+        "descriptionBreedLocation": "Não encontramos canis de {breed} perto de {location}. Tente ampliar a área de busca ou deixe que avisaremos quando um novo canil entrar.",
+        "descriptionBreed": "Não encontramos canis de {breed}. Tente ampliar sua busca ou deixe que avisaremos quando um novo canil entrar.",
+        "descriptionLocation": "Não encontramos canis perto de {location}. Tente ampliar a área de busca ou deixe que avisaremos quando um novo canil entrar.",
+        "description": "Não encontramos canis com esses filtros. Tente remover um filtro ou deixe que avisaremos quando um novo canil entrar.",
+        "clear": "Limpar filtros",
+        "notify": "Salvar busca e me avisar"
       }
     },
     "kennel": {
       "metadata": {
-        "notFound": "Canil Não Encontrado | KennelOS",
+        "notFound": "Canil não encontrado | KennelOS",
         "title": "{name} | KennelOS",
-        "fallbackDescription": "Conheça {name}, criador verificado no KennelOS em {location}."
+        "fallbackDescription": "Conheça {name}, um criador no KennelOS localizado em {location}."
       },
       "locationUnavailable": "Localização indisponível",
       "logoAlt": "Logo de {name}",
-      "prestige": "{score} de Prestígio",
-      "verified": "Canil Verificado",
+      "verified": "Canil verificado",
+      "specialists": "Especialistas em {breeds}",
+      "memberSince": "Membro desde {year}",
+      "breadcrumb": {
+        "label": "Navegação estrutural",
+        "browse": "Explorar canis"
+      },
+      "share": {
+        "label": "Compartilhar o perfil deste canil",
+        "copied": "Link copiado",
+        "failed": "Não foi possível copiar o link"
+      },
+      "stats": {
+        "rating": "Avaliação ({count})",
+        "littersRaised": "Ninhadas criadas",
+        "yearsActive": "Anos de atividade",
+        "lessThanOneYear": "<1"
+      },
+      "tabs": {
+        "label": "Raças"
+      },
       "about": {
-        "heading": "Sobre {name}",
-        "empty": "{name} ainda não contou sua história — volte em breve para saber mais sobre este canil.",
-        "breeds": "Raças"
+        "heading": "Sobre o canil",
+        "empty": "{name} ainda não contou sua história — volte em breve para conhecer melhor este canil."
       },
       "litters": {
-        "heading": "Ninhadas Disponíveis e Futuras",
-        "empty": "Nenhuma ninhada planejada no momento — volte em breve ou entre em contato com o criador para perguntar sobre disponibilidade futura.",
-        "status": {
-          "AVAILABLE": "Disponível Agora",
-          "RESERVED": "Reservada",
-          "PLANNED": "Em Breve",
-          "SOLD_OUT": "Esgotada"
-        },
-        "unknownDam": "Matriz Desconhecida",
-        "unknownSire": "Reprodutor Desconhecido",
-        "puppyCount": "{count, plural, one {# filhote} other {# filhotes}}",
-        "dateTbd": "Data a definir"
+        "heading": "Ninhadas disponíveis",
+        "headingBreed": "Ninhadas de {breed} disponíveis",
+        "availableNow": "Disponível agora",
+        "fallbackName": "Ninhada de {breed}",
+        "born": "Nascida em {date}",
+        "puppies": "{count, plural, one {# filhote} other {# filhotes}}",
+        "available": "{count, plural, one {# disponível} other {# disponíveis}}",
+        "view": "Ver ninhada",
+        "none": "Nenhuma ninhada disponível no momento — entre na lista de espera para ser avisado quando houver uma."
+      },
+      "photos": {
+        "heading": "Fotos",
+        "headingBreed": "Fotos de {breed}",
+        "alt": "Foto de {name}"
+      },
+      "videos": {
+        "heading": "Vídeos",
+        "headingBreed": "Vídeos de {breed}",
+        "play": "Reproduzir vídeo"
       },
       "dogs": {
-        "heading": "Conheça Nossos Cachorros",
-        "empty": "Este canil ainda não cadastrou seus reprodutores.",
-        "sire": "Reprodutor",
-        "dam": "Matriz"
+        "heading": "Nossos cães",
+        "headingBreed": "Cães {breed}",
+        "filterLabel": "Filtrar cães",
+        "filters": {
+          "all": "Todos",
+          "males": "Machos",
+          "females": "Fêmeas",
+          "puppies": "Filhotes"
+        },
+        "sire": "Padreador",
+        "dam": "Matriz",
+        "puppy": "Filhote",
+        "ageWeeks": "{count, plural, one {# sem.} other {# sem.}}",
+        "ageMonths": "{count, plural, one {# mês} other {# meses}}",
+        "ageYears": "{count, plural, one {# ano} other {# anos}}",
+        "empty": "Este canil ainda não cadastrou nenhum cão.",
+        "emptyFilter": "Nenhum cão corresponde a este filtro."
+      },
+      "reviews": {
+        "heading": "O que dizem os compradores",
+        "stars": "{count} de 5 estrelas"
       },
       "contact": {
         "heading": "Interessado em um filhote?",
-        "description": "Entre em contato diretamente com {name} para perguntar sobre disponibilidade, valores e próximos passos.",
-        "theBreeder": "o criador",
-        "responseTime": "Costuma responder em até 24 horas",
-        "button": "Contatar Criador",
-        "unavailable": "Contato indisponível",
-        "footer": "Canil profissional verificado no KennelOS"
+        "headingNoLitters": "Nenhuma ninhada disponível agora",
+        "nextLitter": "Próxima ninhada prevista para {date}",
+        "waitlistOpen": "Lista de espera aberta para as próximas ninhadas",
+        "responseTime": "Responde em até 1 dia",
+        "contactKennel": "Falar com o canil",
+        "joinWaitlist": "Entrar na lista de espera"
+      },
+      "rail": {
+        "heading": "Mais canis de {breed}",
+        "rating": "Avaliação {rating}"
+      }
+    },
+    "dog": {
+      "metadata": {
+        "notFound": "Cão não encontrado | KennelOS",
+        "title": "{name} · {kennel} | KennelOS",
+        "fallbackDescription": "Conheça {name}, {breed} do canil {kennel} no KennelOS."
+      },
+      "breadcrumb": {
+        "label": "Navegação estrutural",
+        "browse": "Explorar canis"
+      },
+      "photoAlt": "Foto de {name}",
+      "sex": {
+        "female": "Fêmea",
+        "male": "Macho"
+      },
+      "role": {
+        "sire": "Padreador",
+        "dam": "Matriz",
+        "puppy": "Filhote"
+      },
+      "age": {
+        "weeks": "{count, plural, one {# semana} other {# semanas}}",
+        "months": "{count, plural, one {# mês} other {# meses}}",
+        "years": "{count, plural, one {# ano} other {# anos}}"
+      },
+      "about": {
+        "heading": "Sobre {name}"
+      },
+      "photos": {
+        "heading": "Fotos de {name}"
+      },
+      "parentage": {
+        "heading": "Ascendência",
+        "sire": "Pai",
+        "dam": "Mãe"
+      },
+      "contact": {
+        "heading": "Do canil {kennel}",
+        "bodyAdult": "Interessado em um filhote da próxima ninhada de {name}?",
+        "bodyPuppy": "Interessado em {name} ou em um dos irmãos de ninhada?",
+        "contactKennel": "Falar com o canil",
+        "back": "Voltar para {kennel}"
       }
     }
   }

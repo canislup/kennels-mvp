@@ -388,7 +388,9 @@ export const ModelName = {
   Kennel: 'Kennel',
   Dog: 'Dog',
   Litter: 'Litter',
-  Breed: 'Breed'
+  Breed: 'Breed',
+  KennelBreed: 'KennelBreed',
+  Media: 'Media'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "owner" | "kennel" | "dog" | "litter" | "breed"
+    modelProps: "owner" | "kennel" | "dog" | "litter" | "breed" | "kennelBreed" | "media"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -778,6 +780,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    KennelBreed: {
+      payload: Prisma.$KennelBreedPayload<ExtArgs>
+      fields: Prisma.KennelBreedFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.KennelBreedFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.KennelBreedFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        findFirst: {
+          args: Prisma.KennelBreedFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.KennelBreedFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        findMany: {
+          args: Prisma.KennelBreedFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>[]
+        }
+        create: {
+          args: Prisma.KennelBreedCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        createMany: {
+          args: Prisma.KennelBreedCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.KennelBreedCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>[]
+        }
+        delete: {
+          args: Prisma.KennelBreedDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        update: {
+          args: Prisma.KennelBreedUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        deleteMany: {
+          args: Prisma.KennelBreedDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.KennelBreedUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.KennelBreedUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>[]
+        }
+        upsert: {
+          args: Prisma.KennelBreedUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KennelBreedPayload>
+        }
+        aggregate: {
+          args: Prisma.KennelBreedAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateKennelBreed>
+        }
+        groupBy: {
+          args: Prisma.KennelBreedGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KennelBreedGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.KennelBreedCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KennelBreedCountAggregateOutputType> | number
+        }
+      }
+    }
+    Media: {
+      payload: Prisma.$MediaPayload<ExtArgs>
+      fields: Prisma.MediaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MediaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MediaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        findFirst: {
+          args: Prisma.MediaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MediaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        findMany: {
+          args: Prisma.MediaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>[]
+        }
+        create: {
+          args: Prisma.MediaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        createMany: {
+          args: Prisma.MediaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MediaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>[]
+        }
+        delete: {
+          args: Prisma.MediaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        update: {
+          args: Prisma.MediaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        deleteMany: {
+          args: Prisma.MediaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MediaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MediaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>[]
+        }
+        upsert: {
+          args: Prisma.MediaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MediaPayload>
+        }
+        aggregate: {
+          args: Prisma.MediaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMedia>
+        }
+        groupBy: {
+          args: Prisma.MediaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MediaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MediaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MediaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -843,7 +993,10 @@ export const KennelScalarFieldEnum = {
   location: 'location',
   prestigeScore: 'prestigeScore',
   description: 'description',
-  primaryBreeds: 'primaryBreeds'
+  primaryBreeds: 'primaryBreeds',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  isVerified: 'isVerified'
 } as const
 
 export type KennelScalarFieldEnum = (typeof KennelScalarFieldEnum)[keyof typeof KennelScalarFieldEnum]
@@ -859,7 +1012,14 @@ export const DogScalarFieldEnum = {
   lineage: 'lineage',
   photoUrls: 'photoUrls',
   kennelId: 'kennelId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  slug: 'slug',
+  lifeStage: 'lifeStage',
+  birthDate: 'birthDate',
+  registry: 'registry',
+  bio: 'bio',
+  sireName: 'sireName',
+  damName: 'damName'
 } as const
 
 export type DogScalarFieldEnum = (typeof DogScalarFieldEnum)[keyof typeof DogScalarFieldEnum]
@@ -872,6 +1032,9 @@ export const LitterScalarFieldEnum = {
   expectedGoHomeDate: 'expectedGoHomeDate',
   status: 'status',
   createdAt: 'createdAt',
+  name: 'name',
+  bornAt: 'bornAt',
+  availableCount: 'availableCount',
   kennelId: 'kennelId',
   damId: 'damId',
   sireId: 'sireId'
@@ -887,6 +1050,28 @@ export const BreedScalarFieldEnum = {
 } as const
 
 export type BreedScalarFieldEnum = (typeof BreedScalarFieldEnum)[keyof typeof BreedScalarFieldEnum]
+
+
+export const KennelBreedScalarFieldEnum = {
+  kennelId: 'kennelId',
+  breedId: 'breedId',
+  createdAt: 'createdAt'
+} as const
+
+export type KennelBreedScalarFieldEnum = (typeof KennelBreedScalarFieldEnum)[keyof typeof KennelBreedScalarFieldEnum]
+
+
+export const MediaScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  url: 'url',
+  createdAt: 'createdAt',
+  kennelId: 'kennelId',
+  breedId: 'breedId',
+  dogId: 'dogId'
+} as const
+
+export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -962,6 +1147,27 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'DogStatus'
  */
 export type EnumDogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DogStatus'>
@@ -972,6 +1178,20 @@ export type EnumDogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'DogStatus[]'
  */
 export type ListEnumDogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DogStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DogLifeStage'
+ */
+export type EnumDogLifeStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DogLifeStage'>
+    
+
+
+/**
+ * Reference to a field of type 'DogLifeStage[]'
+ */
+export type ListEnumDogLifeStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DogLifeStage[]'>
     
 
 
@@ -990,16 +1210,16 @@ export type ListEnumLitterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'Float'
+ * Reference to a field of type 'MediaType'
  */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+export type EnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType'>
     
 
 
 /**
- * Reference to a field of type 'Float[]'
+ * Reference to a field of type 'MediaType[]'
  */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+export type ListEnumMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaType[]'>
     
 
 /**
@@ -1117,6 +1337,8 @@ export type GlobalOmitConfig = {
   dog?: Prisma.DogOmit
   litter?: Prisma.LitterOmit
   breed?: Prisma.BreedOmit
+  kennelBreed?: Prisma.KennelBreedOmit
+  media?: Prisma.MediaOmit
 }
 
 /* Types for Logging */

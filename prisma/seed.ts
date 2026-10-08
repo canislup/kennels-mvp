@@ -1,6 +1,9 @@
 import { PrismaClient, DogStatus, LitterStatus } from "@/prisma/generated/client";
 import { PrismaPg} from "@prisma/adapter-pg";
-import { slugify } from "@/lib/slug";
+import { nextAvailableSlug, slugify } from "@/lib/slug";
+import { backfillKennelBreeds, seedPlaceholderMedia } from "@/prisma/backfills/profile-schema";
+import { seedDogDetails, seedMultiBreedDemo, seedProfileDetails } from "@/prisma/backfills/profile-details";
+import { lifeStageFromStatus } from "@/lib/dog-life-stage";
 
 const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
@@ -27,6 +30,9 @@ function daysFromNow(days: number): Date {
 async function main() {
     console.log('🌱 Starting database seed...')
 
+    // Media and KennelBreed rows cascade with their kennel/dog. Litters don't,
+    // so they're cleared first or the kennel delete hits a foreign key.
+    await prisma.litter.deleteMany()
     await prisma.dog.deleteMany()
     await prisma.kennel.deleteMany()
     await prisma.owner.deleteMany()
@@ -352,12 +358,42 @@ async function main() {
     // 2. Loop through the array and insert them sequentially
     console.log(`Injecting ${seedData.length} kennels into the database...`)
 
-    for (const ownerData of seedData) {
+    // Dog.slug is required: derive it from the name, unique within each kennel.
+    // lifeStage follows the sales status (puppies vs breeding stock).
+    const withDogSlugs = <A extends { name: string; status: DogStatus }[]>(dogs: A) => {
+        const taken = new Set<string>();
+        return dogs.map((dog: A[number]) => {
+            const slug = nextAvailableSlug(slugify(dog.name), taken);
+            taken.add(slug);
+            return { ...dog, slug, lifeStage: lifeStageFromStatus(dog.status) };
+        });
+    };
+    const ownersToCreate = seedData.map((owner) => ({
+        ...owner,
+        kennel: {
+            create: {
+                ...owner.kennel.create,
+                dogs: { create: withDogSlugs(owner.kennel.create.dogs.create) },
+            },
+        },
+    }));
+
+    for (const ownerData of ownersToCreate) {
         const createdOwner = await prisma.owner.create({
             data: ownerData
         })
         console.log(`✅ Created ${createdOwner.fullName}`)
     }
+
+    const breeds = await backfillKennelBreeds(prisma)
+    console.log(`✅ Linked ${breeds.inserted} kennel breeds (${breeds.unmatched.length} unmatched)`)
+    const media = await seedPlaceholderMedia(prisma)
+    console.log(`✅ Created ${media.created} placeholder media rows`)
+    const details = await seedProfileDetails(prisma)
+    console.log(`✅ Filled profile details for ${details.dogs} dogs and ${details.litters} litters`)
+    console.log('✅ Multi-breed demo:', await seedMultiBreedDemo(prisma))
+    const dogDetails = await seedDogDetails(prisma)
+    console.log(`✅ Filled detail pages for ${dogDetails.dogs} dogs (${dogDetails.photos} gallery photos)`)
 
     console.log('🎉 All dummy data seeded successfully!')
 }

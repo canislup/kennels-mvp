@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const DogLifeStage = {
+  PUPPY: 'PUPPY',
+  ADULT: 'ADULT'
+} as const
+
+export type DogLifeStage = (typeof DogLifeStage)[keyof typeof DogLifeStage]
+
+
 export const DogStatus = {
   BREEDING_STOCK: 'BREEDING_STOCK',
   AVAILABLE_PUPPY: 'AVAILABLE_PUPPY',
@@ -27,3 +35,11 @@ export const LitterStatus = {
 } as const
 
 export type LitterStatus = (typeof LitterStatus)[keyof typeof LitterStatus]
+
+
+export const MediaType = {
+  PHOTO: 'PHOTO',
+  VIDEO: 'VIDEO'
+} as const
+
+export type MediaType = (typeof MediaType)[keyof typeof MediaType]

@@ -104,12 +104,14 @@ export const PATCH = async (request: NextRequest, { params } : { params: Promise
         }
 
         // 7) Update the dog data
+        // Slug is immutable once generated so dog URLs stay stable.
+        const { slug: _ignoredSlug, ...updates } = body;
         const updatedDogData = await prisma.dog.update({
             where: {
                 id: dogId
             },
             data: {
-                ...body
+                ...updates
             }
         })
 

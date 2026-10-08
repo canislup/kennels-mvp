@@ -151,114 +151,272 @@
         "description": "Search a curated directory of professional, verified dog breeders. Browse kennels by breed and location, and find your next puppy from a trusted source.",
         "ogDescription": "Search a curated directory of professional, verified dog breeders and find your next puppy from a trusted source."
       },
-      "nav": {
-        "breederLogin": "Breeder Login"
-      },
       "hero": {
-        "imageAlt": "A puppy meeting its new family at home",
-        "badge": "Trusted by families across the country",
-        "headingLine1": "Find your new best friend",
-        "headingLine2": "from trusted breeders.",
-        "subheading": "Search verified, professional kennels near you — real breeders, real photos, no guesswork."
+        "badge": "Verified breeders across the U.S.",
+        "heading": "Find your family's next companion, from a breeder you can trust.",
+        "subheading": "A curated directory of professional kennels — real photos, real health records, no classified-ad guesswork."
       },
       "search": {
-        "placeholder": "Which breed are you looking for?",
+        "breedLabel": "Breed",
+        "breedPlaceholder": "Any breed",
+        "locationLabel": "Location",
+        "locationPlaceholder": "City or state",
         "submit": "Search"
+      },
+      "popular": {
+        "label": "Popular:"
       },
       "trust": {
         "verified": {
-          "title": "Verified Kennels",
-          "description": "Every breeder profile is tied to a registered, professional kennel — not an anonymous listing."
+          "title": "Verified kennels only",
+          "description": "Every profile belongs to a registered, professional kennel — never an anonymous listing."
         },
-        "prestige": {
-          "title": "Prestige Ranking",
-          "description": "Kennels are surfaced by reputation and track record, so the best breeders rise to the top."
+        "reputation": {
+          "title": "Reputation you can see",
+          "description": "Kennels are ranked by track record, so the most trusted breeders rise to the top."
         },
-        "profiles": {
-          "title": "Beautiful Profiles",
-          "description": "Rich photo galleries and clean layouts replace the outdated breeder websites you're used to."
+        "records": {
+          "title": "Real photos, real records",
+          "description": "Full litter galleries and health information, not a single stock photo."
         }
       },
+      "featured": {
+        "heading": "Featured this week",
+        "browseAll": "Browse all kennels",
+        "puppiesAvailable": "Puppies available",
+        "prestige": "{score} prestige",
+        "photoAlt": "Dog from {name}",
+        "locationUnavailable": "Location unavailable"
+      },
       "cta": {
-        "heading": "Run a kennel? Get discovered.",
-        "description": "Join KennelOS to showcase your dogs with a beautiful public profile, reach serious buyers, and manage your roster in one place.",
-        "button": "Add Your Kennel"
+        "heading": "Run a kennel? Your website deserves better than a template.",
+        "description": "Get a beautiful public profile, a waitlist buyers can actually use, and one dashboard to manage your whole roster.",
+        "button": "List Your Kennel"
       }
+    },
+    "nav": {
+      "home": "KennelOS home",
+      "browse": "Browse Kennels",
+      "forBreeders": "For Breeders",
+      "howItWorks": "How It Works",
+      "signIn": "Sign in",
+      "listKennel": "List Your Kennel",
+      "menu": "Open menu"
+    },
+    "footer": {
+      "rights": "© {year} KennelOS. All rights reserved.",
+      "rightsShort": "© {year} KennelOS"
     },
     "kennels": {
       "metadata": {
         "title": "Browse Kennels | KennelOS",
         "description": "Browse verified, professional dog kennels. Filter by breed, available litters, and popularity to find your next puppy from a trusted breeder."
       },
-      "heading": {
-        "all": "All Kennels",
-        "breed": "{breed} Breeders"
+      "header": {
+        "count": "{count, plural, one {# kennel} other {# kennels}} found",
+        "headingBreedLocation": "{breed} kennels near {location}",
+        "headingBreed": "{breed} kennels",
+        "headingLocation": "Kennels near {location}",
+        "headingAll": "All kennels"
       },
-      "count": "{count, plural, one {# kennel} other {# kennels}} found",
+      "search": {
+        "breedLabel": "Breed",
+        "anyBreed": "Any breed",
+        "locationLabel": "Location",
+        "locationPlaceholder": "City or state",
+        "submit": "Search",
+        "mobileEdit": "Edit search",
+        "mobileEmpty": "Search by breed or location"
+      },
       "filters": {
-        "allBreeds": "All Breeds",
-        "hasLitters": "Has Available Litters",
-        "sortPrestige": "Most Popular",
-        "sortNewest": "Newest",
-        "clear": "Clear"
+        "label": "Filter kennels",
+        "puppies": "Puppies available",
+        "verified": "Verified kennels",
+        "moreFilters": "More filters",
+        "sortLabel": "Sort:",
+        "sortAria": "Sort kennels",
+        "sort": {
+          "prestige": "Prestige",
+          "distance": "Distance",
+          "newest": "Newest"
+        },
+        "view": "Results view",
+        "viewList": "List",
+        "viewMap": "Map",
+        "mobileFilters": "Filters",
+        "mobileSort": "Sort",
+        "activeCount": "{count, plural, one {# active filter} other {# active filters}}"
       },
-      "emptyState": {
-        "headingBreed": "No kennels found for \"{breed}\" yet",
-        "heading": "No kennels found",
-        "description": "Try a different breed or clear your filters — new kennels join KennelOS every week.",
-        "cta": "Browse All Kennels"
+      "sheet": {
+        "title": "Filters",
+        "close": "Close filters",
+        "filtersHeading": "Show only",
+        "sortHeading": "Sort by",
+        "clear": "Clear all",
+        "apply": "Show results"
+      },
+      "saveSearch": {
+        "banner": "Don't see the right fit yet? Save this search and we'll notify you about new matching kennels.",
+        "bannerMobile": "Not finding the right fit? We'll notify you about new matches.",
+        "button": "Save search",
+        "buttonMobile": "Save this search"
       },
       "card": {
-        "puppiesAvailable": "Puppies Available",
-        "prestige": "{score} prestige",
-        "photoAlt": "{name} - dog photo {index}",
-        "logoAlt": "{name} logo",
+        "topRated": "Top rated near you",
+        "puppiesAvailable": "Puppies available",
+        "verified": "Verified",
+        "prestigeAria": "Prestige score {score}",
+        "photoAlt": "Dog from {name}",
         "locationUnavailable": "Location unavailable"
+      },
+      "loading": {
+        "more": "Loading more kennels…",
+        "error": "Couldn't load more kennels.",
+        "retry": "Try again"
+      },
+      "emptyState": {
+        "heading": "No kennels match your search",
+        "descriptionBreedLocation": "We couldn't find any {breed} kennels near {location}. Try widening your search area, or let us notify you when one joins.",
+        "descriptionBreed": "We couldn't find any {breed} kennels. Try widening your search, or let us notify you when one joins.",
+        "descriptionLocation": "We couldn't find any kennels near {location}. Try widening your search area, or let us notify you when one joins.",
+        "description": "We couldn't find any kennels matching these filters. Try removing a filter, or let us notify you when one joins.",
+        "clear": "Clear filters",
+        "notify": "Save search & notify me"
       }
     },
     "kennel": {
       "metadata": {
         "notFound": "Kennel Not Found | KennelOS",
         "title": "{name} | KennelOS",
-        "fallbackDescription": "Meet {name}, a verified breeder on KennelOS based in {location}."
+        "fallbackDescription": "Meet {name}, a breeder on KennelOS based in {location}."
       },
       "locationUnavailable": "Location unavailable",
       "logoAlt": "{name} logo",
-      "prestige": "{score} Prestige",
-      "verified": "Verified Kennel",
+      "verified": "Verified kennel",
+      "specialists": "{breeds} specialists",
+      "memberSince": "Member since {year}",
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "browse": "Browse Kennels"
+      },
+      "share": {
+        "label": "Share this kennel's profile",
+        "copied": "Link copied",
+        "failed": "Couldn't copy link"
+      },
+      "stats": {
+        "rating": "Rating ({count})",
+        "littersRaised": "Litters raised",
+        "yearsActive": "Years active",
+        "lessThanOneYear": "<1"
+      },
+      "tabs": {
+        "label": "Breeds"
+      },
       "about": {
-        "heading": "About {name}",
-        "empty": "{name} hasn't added their story yet — check back soon to learn more about this kennel.",
-        "breeds": "Breeds"
+        "heading": "About the kennel",
+        "empty": "{name} hasn't added their story yet — check back soon to learn more about this kennel."
       },
       "litters": {
-        "heading": "Available & Upcoming Litters",
-        "empty": "No litters planned right now — check back soon, or contact the breeder to ask about future availability.",
-        "status": {
-          "AVAILABLE": "Available Now",
-          "RESERVED": "Reserved",
-          "PLANNED": "Upcoming",
-          "SOLD_OUT": "Sold Out"
-        },
-        "unknownDam": "Unknown Dam",
-        "unknownSire": "Unknown Sire",
-        "puppyCount": "{count, plural, one {# puppy} other {# puppies}}",
-        "dateTbd": "Date TBD"
+        "heading": "Available litters",
+        "headingBreed": "Available {breed} litters",
+        "availableNow": "Available now",
+        "fallbackName": "{breed} litter",
+        "born": "Born {date}",
+        "puppies": "{count, plural, one {# puppy} other {# puppies}}",
+        "available": "{count} available",
+        "view": "View litter",
+        "none": "No litters currently available — join the waitlist to be notified when one opens."
+      },
+      "photos": {
+        "heading": "Photos",
+        "headingBreed": "{breed} photos",
+        "alt": "Photo from {name}"
+      },
+      "videos": {
+        "heading": "Videos",
+        "headingBreed": "{breed} videos",
+        "play": "Play video"
       },
       "dogs": {
-        "heading": "Meet Our Dogs",
-        "empty": "This kennel hasn't listed their breeding dogs yet.",
+        "heading": "Our Dogs",
+        "headingBreed": "{breed} dogs",
+        "filterLabel": "Filter dogs",
+        "filters": {
+          "all": "All",
+          "males": "Males",
+          "females": "Females",
+          "puppies": "Puppies"
+        },
+        "sire": "Sire",
+        "dam": "Dam",
+        "puppy": "Puppy",
+        "ageWeeks": "{count, plural, one {# wk} other {# wks}}",
+        "ageMonths": "{count, plural, one {# mo} other {# mos}}",
+        "ageYears": "{count, plural, one {# yr} other {# yrs}}",
+        "empty": "This kennel hasn't listed any dogs yet.",
+        "emptyFilter": "No dogs match this filter."
+      },
+      "reviews": {
+        "heading": "What buyers are saying",
+        "stars": "{count} out of 5 stars"
+      },
+      "contact": {
+        "heading": "Interested in a puppy?",
+        "headingNoLitters": "No litters available right now",
+        "nextLitter": "Next litter expected {date}",
+        "waitlistOpen": "Waitlist open for upcoming litters",
+        "responseTime": "Responds within 1 day",
+        "contactKennel": "Contact kennel",
+        "joinWaitlist": "Join waitlist"
+      },
+      "rail": {
+        "heading": "More {breed} kennels",
+        "rating": "Rating {rating}"
+      }
+    },
+    "dog": {
+      "metadata": {
+        "notFound": "Dog Not Found | KennelOS",
+        "title": "{name} · {kennel} | KennelOS",
+        "fallbackDescription": "Meet {name}, a {breed} at {kennel} on KennelOS."
+      },
+      "breadcrumb": {
+        "label": "Breadcrumb",
+        "browse": "Browse Kennels"
+      },
+      "photoAlt": "Photo of {name}",
+      "sex": {
+        "female": "Female",
+        "male": "Male"
+      },
+      "role": {
+        "sire": "Sire",
+        "dam": "Dam",
+        "puppy": "Puppy"
+      },
+      "age": {
+        "weeks": "{count, plural, one {# week old} other {# weeks old}}",
+        "months": "{count, plural, one {# month old} other {# months old}}",
+        "years": "{count, plural, one {# year old} other {# years old}}"
+      },
+      "about": {
+        "heading": "About {name}"
+      },
+      "photos": {
+        "heading": "Photos of {name}"
+      },
+      "parentage": {
+        "heading": "Parentage",
         "sire": "Sire",
         "dam": "Dam"
       },
       "contact": {
-        "heading": "Interested in a puppy?",
-        "description": "Reach out directly to {name} to ask about availability, pricing, and next steps.",
-        "theBreeder": "the breeder",
-        "responseTime": "Usually responds within 24 hours",
-        "button": "Contact Breeder",
-        "unavailable": "Contact info unavailable",
-        "footer": "Verified professional kennel on KennelOS"
+        "heading": "From {kennel}",
+        "bodyAdult": "Interested in a puppy from {name}'s next litter?",
+        "bodyPuppy": "Interested in {name} or one of {name}'s littermates?",
+        "contactKennel": "Contact kennel",
+        "back": "Back to {kennel}"
       }
     }
   }

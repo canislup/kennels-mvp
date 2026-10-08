@@ -27,11 +27,19 @@ export const PATCH = async (request: NextRequest) => {
             where: { ownerId },
         });
 
+        // Expand phase of the KennelBreed migration: breeds are dual-written to
+        // the legacy primaryBreeds column and the KennelBreed join table until
+        // readers move to the join table and primaryBreeds is dropped.
+        const breedNames: string[] | undefined = Array.isArray(body.breeds) ? body.breeds : undefined;
+        const breedIds = breedNames
+            ? (await prisma.breed.findMany({ where: { name: { in: breedNames } }, select: { id: true } })).map((b) => b.id)
+            : undefined;
+
         let savedKennel;
 
         if (!existingKennel) {
             // SCENARIO A: Onboarding — the kennel doesn't exist yet.
-            const { name, slug, city, state, description, breeds } = body;
+            const { name, slug, city, state, description } = body;
 
             if (!name || !slug || !city || !state) {
                 return NextResponse.json(
@@ -48,13 +56,14 @@ export const PATCH = async (request: NextRequest) => {
                     state,
                     location: `${city}, ${state}`,
                     description: description || null,
-                    primaryBreeds: Array.isArray(breeds) ? breeds : [],
+                    primaryBreeds: breedNames ?? [],
+                    breeds: { create: (breedIds ?? []).map((breedId) => ({ breedId })) },
                     ownerId,
                 },
             });
         } else {
             // SCENARIO B: The kennel already exists — apply a partial update.
-            const { name, slug, city, state, description, breeds } = body;
+            const { name, slug, city, state, description } = body;
             const nextCity = city ?? existingKennel.city;
             const nextState = state ?? existingKennel.state;
 
@@ -69,7 +78,10 @@ export const PATCH = async (request: NextRequest) => {
                         location: `${nextCity}, ${nextState}`,
                     }),
                     ...(description !== undefined && { description }),
-                    ...(Array.isArray(breeds) && { primaryBreeds: breeds }),
+                    ...(breedNames && {
+                        primaryBreeds: breedNames,
+                        breeds: { deleteMany: {}, create: breedIds!.map((breedId) => ({ breedId })) },
+                    }),
                 },
             });
         }

@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Horizontally scrollable row with a hidden scrollbar (kennel profile breed tabs).
+   Stays scrollable — never switch this to overflow-x: hidden. */
+.tab-scroll {
+  overflow-x: auto;
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* old Edge/IE */
+}
+.tab-scroll::-webkit-scrollbar {
+  display: none;              /* Chrome, Safari */
+}

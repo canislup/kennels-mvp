@@ -28,10 +28,12 @@ export type AggregateLitter = {
 
 export type LitterAvgAggregateOutputType = {
   puppyCount: number | null
+  availableCount: number | null
 }
 
 export type LitterSumAggregateOutputType = {
   puppyCount: number | null
+  availableCount: number | null
 }
 
 export type LitterMinAggregateOutputType = {
@@ -41,6 +43,9 @@ export type LitterMinAggregateOutputType = {
   expectedGoHomeDate: Date | null
   status: $Enums.LitterStatus | null
   createdAt: Date | null
+  name: string | null
+  bornAt: Date | null
+  availableCount: number | null
   kennelId: string | null
   damId: string | null
   sireId: string | null
@@ -53,6 +58,9 @@ export type LitterMaxAggregateOutputType = {
   expectedGoHomeDate: Date | null
   status: $Enums.LitterStatus | null
   createdAt: Date | null
+  name: string | null
+  bornAt: Date | null
+  availableCount: number | null
   kennelId: string | null
   damId: string | null
   sireId: string | null
@@ -65,6 +73,9 @@ export type LitterCountAggregateOutputType = {
   expectedGoHomeDate: number
   status: number
   createdAt: number
+  name: number
+  bornAt: number
+  availableCount: number
   kennelId: number
   damId: number
   sireId: number
@@ -74,10 +85,12 @@ export type LitterCountAggregateOutputType = {
 
 export type LitterAvgAggregateInputType = {
   puppyCount?: true
+  availableCount?: true
 }
 
 export type LitterSumAggregateInputType = {
   puppyCount?: true
+  availableCount?: true
 }
 
 export type LitterMinAggregateInputType = {
@@ -87,6 +100,9 @@ export type LitterMinAggregateInputType = {
   expectedGoHomeDate?: true
   status?: true
   createdAt?: true
+  name?: true
+  bornAt?: true
+  availableCount?: true
   kennelId?: true
   damId?: true
   sireId?: true
@@ -99,6 +115,9 @@ export type LitterMaxAggregateInputType = {
   expectedGoHomeDate?: true
   status?: true
   createdAt?: true
+  name?: true
+  bornAt?: true
+  availableCount?: true
   kennelId?: true
   damId?: true
   sireId?: true
@@ -111,6 +130,9 @@ export type LitterCountAggregateInputType = {
   expectedGoHomeDate?: true
   status?: true
   createdAt?: true
+  name?: true
+  bornAt?: true
+  availableCount?: true
   kennelId?: true
   damId?: true
   sireId?: true
@@ -210,6 +232,9 @@ export type LitterGroupByOutputType = {
   expectedGoHomeDate: Date | null
   status: $Enums.LitterStatus
   createdAt: Date
+  name: string | null
+  bornAt: Date | null
+  availableCount: number | null
   kennelId: string
   damId: string | null
   sireId: string | null
@@ -245,6 +270,9 @@ export type LitterWhereInput = {
   expectedGoHomeDate?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
   status?: Prisma.EnumLitterStatusFilter<"Litter"> | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFilter<"Litter"> | Date | string
+  name?: Prisma.StringNullableFilter<"Litter"> | string | null
+  bornAt?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
+  availableCount?: Prisma.IntNullableFilter<"Litter"> | number | null
   kennelId?: Prisma.StringFilter<"Litter"> | string
   damId?: Prisma.StringNullableFilter<"Litter"> | string | null
   sireId?: Prisma.StringNullableFilter<"Litter"> | string | null
@@ -260,6 +288,9 @@ export type LitterOrderByWithRelationInput = {
   expectedGoHomeDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  bornAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  availableCount?: Prisma.SortOrderInput | Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   damId?: Prisma.SortOrderInput | Prisma.SortOrder
   sireId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -278,6 +309,9 @@ export type LitterWhereUniqueInput = Prisma.AtLeast<{
   expectedGoHomeDate?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
   status?: Prisma.EnumLitterStatusFilter<"Litter"> | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFilter<"Litter"> | Date | string
+  name?: Prisma.StringNullableFilter<"Litter"> | string | null
+  bornAt?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
+  availableCount?: Prisma.IntNullableFilter<"Litter"> | number | null
   kennelId?: Prisma.StringFilter<"Litter"> | string
   damId?: Prisma.StringNullableFilter<"Litter"> | string | null
   sireId?: Prisma.StringNullableFilter<"Litter"> | string | null
@@ -293,6 +327,9 @@ export type LitterOrderByWithAggregationInput = {
   expectedGoHomeDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  bornAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  availableCount?: Prisma.SortOrderInput | Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   damId?: Prisma.SortOrderInput | Prisma.SortOrder
   sireId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -313,6 +350,9 @@ export type LitterScalarWhereWithAggregatesInput = {
   expectedGoHomeDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Litter"> | Date | string | null
   status?: Prisma.EnumLitterStatusWithAggregatesFilter<"Litter"> | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Litter"> | Date | string
+  name?: Prisma.StringNullableWithAggregatesFilter<"Litter"> | string | null
+  bornAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Litter"> | Date | string | null
+  availableCount?: Prisma.IntNullableWithAggregatesFilter<"Litter"> | number | null
   kennelId?: Prisma.StringWithAggregatesFilter<"Litter"> | string
   damId?: Prisma.StringNullableWithAggregatesFilter<"Litter"> | string | null
   sireId?: Prisma.StringNullableWithAggregatesFilter<"Litter"> | string | null
@@ -325,6 +365,9 @@ export type LitterCreateInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennel: Prisma.KennelCreateNestedOneWithoutLittersInput
   dam?: Prisma.DogCreateNestedOneWithoutDamLittersInput
   sire?: Prisma.DogCreateNestedOneWithoutSireLittersInput
@@ -337,6 +380,9 @@ export type LitterUncheckedCreateInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   damId?: string | null
   sireId?: string | null
@@ -349,6 +395,9 @@ export type LitterUpdateInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennel?: Prisma.KennelUpdateOneRequiredWithoutLittersNestedInput
   dam?: Prisma.DogUpdateOneWithoutDamLittersNestedInput
   sire?: Prisma.DogUpdateOneWithoutSireLittersNestedInput
@@ -361,6 +410,9 @@ export type LitterUncheckedUpdateInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -373,6 +425,9 @@ export type LitterCreateManyInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   damId?: string | null
   sireId?: string | null
@@ -385,6 +440,9 @@ export type LitterUpdateManyMutationInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type LitterUncheckedUpdateManyInput = {
@@ -394,6 +452,9 @@ export type LitterUncheckedUpdateManyInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -416,6 +477,9 @@ export type LitterCountOrderByAggregateInput = {
   expectedGoHomeDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  bornAt?: Prisma.SortOrder
+  availableCount?: Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   damId?: Prisma.SortOrder
   sireId?: Prisma.SortOrder
@@ -423,6 +487,7 @@ export type LitterCountOrderByAggregateInput = {
 
 export type LitterAvgOrderByAggregateInput = {
   puppyCount?: Prisma.SortOrder
+  availableCount?: Prisma.SortOrder
 }
 
 export type LitterMaxOrderByAggregateInput = {
@@ -432,6 +497,9 @@ export type LitterMaxOrderByAggregateInput = {
   expectedGoHomeDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  bornAt?: Prisma.SortOrder
+  availableCount?: Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   damId?: Prisma.SortOrder
   sireId?: Prisma.SortOrder
@@ -444,6 +512,9 @@ export type LitterMinOrderByAggregateInput = {
   expectedGoHomeDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  bornAt?: Prisma.SortOrder
+  availableCount?: Prisma.SortOrder
   kennelId?: Prisma.SortOrder
   damId?: Prisma.SortOrder
   sireId?: Prisma.SortOrder
@@ -451,6 +522,7 @@ export type LitterMinOrderByAggregateInput = {
 
 export type LitterSumOrderByAggregateInput = {
   puppyCount?: Prisma.SortOrder
+  availableCount?: Prisma.SortOrder
 }
 
 export type LitterCreateNestedManyWithoutKennelInput = {
@@ -579,12 +651,16 @@ export type LitterUncheckedUpdateManyWithoutSireNestedInput = {
   deleteMany?: Prisma.LitterScalarWhereInput | Prisma.LitterScalarWhereInput[]
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type EnumLitterStatusFieldUpdateOperationsInput = {
   set?: $Enums.LitterStatus
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type LitterCreateWithoutKennelInput = {
@@ -594,6 +670,9 @@ export type LitterCreateWithoutKennelInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   dam?: Prisma.DogCreateNestedOneWithoutDamLittersInput
   sire?: Prisma.DogCreateNestedOneWithoutSireLittersInput
 }
@@ -605,6 +684,9 @@ export type LitterUncheckedCreateWithoutKennelInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   damId?: string | null
   sireId?: string | null
 }
@@ -645,6 +727,9 @@ export type LitterScalarWhereInput = {
   expectedGoHomeDate?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
   status?: Prisma.EnumLitterStatusFilter<"Litter"> | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFilter<"Litter"> | Date | string
+  name?: Prisma.StringNullableFilter<"Litter"> | string | null
+  bornAt?: Prisma.DateTimeNullableFilter<"Litter"> | Date | string | null
+  availableCount?: Prisma.IntNullableFilter<"Litter"> | number | null
   kennelId?: Prisma.StringFilter<"Litter"> | string
   damId?: Prisma.StringNullableFilter<"Litter"> | string | null
   sireId?: Prisma.StringNullableFilter<"Litter"> | string | null
@@ -657,6 +742,9 @@ export type LitterCreateWithoutDamInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennel: Prisma.KennelCreateNestedOneWithoutLittersInput
   sire?: Prisma.DogCreateNestedOneWithoutSireLittersInput
 }
@@ -668,6 +756,9 @@ export type LitterUncheckedCreateWithoutDamInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   sireId?: string | null
 }
@@ -689,6 +780,9 @@ export type LitterCreateWithoutSireInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennel: Prisma.KennelCreateNestedOneWithoutLittersInput
   dam?: Prisma.DogCreateNestedOneWithoutDamLittersInput
 }
@@ -700,6 +794,9 @@ export type LitterUncheckedCreateWithoutSireInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   damId?: string | null
 }
@@ -753,6 +850,9 @@ export type LitterCreateManyKennelInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   damId?: string | null
   sireId?: string | null
 }
@@ -764,6 +864,9 @@ export type LitterUpdateWithoutKennelInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dam?: Prisma.DogUpdateOneWithoutDamLittersNestedInput
   sire?: Prisma.DogUpdateOneWithoutSireLittersNestedInput
 }
@@ -775,6 +878,9 @@ export type LitterUncheckedUpdateWithoutKennelInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -786,6 +892,9 @@ export type LitterUncheckedUpdateManyWithoutKennelInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -797,6 +906,9 @@ export type LitterCreateManyDamInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   sireId?: string | null
 }
@@ -808,6 +920,9 @@ export type LitterCreateManySireInput = {
   expectedGoHomeDate?: Date | string | null
   status?: $Enums.LitterStatus
   createdAt?: Date | string
+  name?: string | null
+  bornAt?: Date | string | null
+  availableCount?: number | null
   kennelId: string
   damId?: string | null
 }
@@ -819,6 +934,9 @@ export type LitterUpdateWithoutDamInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennel?: Prisma.KennelUpdateOneRequiredWithoutLittersNestedInput
   sire?: Prisma.DogUpdateOneWithoutSireLittersNestedInput
 }
@@ -830,6 +948,9 @@ export type LitterUncheckedUpdateWithoutDamInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -841,6 +962,9 @@ export type LitterUncheckedUpdateManyWithoutDamInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -852,6 +976,9 @@ export type LitterUpdateWithoutSireInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennel?: Prisma.KennelUpdateOneRequiredWithoutLittersNestedInput
   dam?: Prisma.DogUpdateOneWithoutDamLittersNestedInput
 }
@@ -863,6 +990,9 @@ export type LitterUncheckedUpdateWithoutSireInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -874,6 +1004,9 @@ export type LitterUncheckedUpdateManyWithoutSireInput = {
   expectedGoHomeDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bornAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  availableCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   kennelId?: Prisma.StringFieldUpdateOperationsInput | string
   damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -887,6 +1020,9 @@ export type LitterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   expectedGoHomeDate?: boolean
   status?: boolean
   createdAt?: boolean
+  name?: boolean
+  bornAt?: boolean
+  availableCount?: boolean
   kennelId?: boolean
   damId?: boolean
   sireId?: boolean
@@ -902,6 +1038,9 @@ export type LitterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   expectedGoHomeDate?: boolean
   status?: boolean
   createdAt?: boolean
+  name?: boolean
+  bornAt?: boolean
+  availableCount?: boolean
   kennelId?: boolean
   damId?: boolean
   sireId?: boolean
@@ -917,6 +1056,9 @@ export type LitterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   expectedGoHomeDate?: boolean
   status?: boolean
   createdAt?: boolean
+  name?: boolean
+  bornAt?: boolean
+  availableCount?: boolean
   kennelId?: boolean
   damId?: boolean
   sireId?: boolean
@@ -932,12 +1074,15 @@ export type LitterSelectScalar = {
   expectedGoHomeDate?: boolean
   status?: boolean
   createdAt?: boolean
+  name?: boolean
+  bornAt?: boolean
+  availableCount?: boolean
   kennelId?: boolean
   damId?: boolean
   sireId?: boolean
 }
 
-export type LitterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "breed" | "puppyCount" | "expectedGoHomeDate" | "status" | "createdAt" | "kennelId" | "damId" | "sireId", ExtArgs["result"]["litter"]>
+export type LitterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "breed" | "puppyCount" | "expectedGoHomeDate" | "status" | "createdAt" | "name" | "bornAt" | "availableCount" | "kennelId" | "damId" | "sireId", ExtArgs["result"]["litter"]>
 export type LitterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   kennel?: boolean | Prisma.KennelDefaultArgs<ExtArgs>
   dam?: boolean | Prisma.Litter$damArgs<ExtArgs>
@@ -968,6 +1113,9 @@ export type $LitterPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     expectedGoHomeDate: Date | null
     status: $Enums.LitterStatus
     createdAt: Date
+    name: string | null
+    bornAt: Date | null
+    availableCount: number | null
     kennelId: string
     damId: string | null
     sireId: string | null
@@ -1403,6 +1551,9 @@ export interface LitterFieldRefs {
   readonly expectedGoHomeDate: Prisma.FieldRef<"Litter", 'DateTime'>
   readonly status: Prisma.FieldRef<"Litter", 'LitterStatus'>
   readonly createdAt: Prisma.FieldRef<"Litter", 'DateTime'>
+  readonly name: Prisma.FieldRef<"Litter", 'String'>
+  readonly bornAt: Prisma.FieldRef<"Litter", 'DateTime'>
+  readonly availableCount: Prisma.FieldRef<"Litter", 'Int'>
   readonly kennelId: Prisma.FieldRef<"Litter", 'String'>
   readonly damId: Prisma.FieldRef<"Litter", 'String'>
   readonly sireId: Prisma.FieldRef<"Litter", 'String'>

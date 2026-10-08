@@ -55,7 +55,9 @@ export const ModelName = {
   Kennel: 'Kennel',
   Dog: 'Dog',
   Litter: 'Litter',
-  Breed: 'Breed'
+  Breed: 'Breed',
+  KennelBreed: 'KennelBreed',
+  Media: 'Media'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -100,7 +102,10 @@ export const KennelScalarFieldEnum = {
   location: 'location',
   prestigeScore: 'prestigeScore',
   description: 'description',
-  primaryBreeds: 'primaryBreeds'
+  primaryBreeds: 'primaryBreeds',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  isVerified: 'isVerified'
 } as const
 
 export type KennelScalarFieldEnum = (typeof KennelScalarFieldEnum)[keyof typeof KennelScalarFieldEnum]
@@ -116,7 +121,14 @@ export const DogScalarFieldEnum = {
   lineage: 'lineage',
   photoUrls: 'photoUrls',
   kennelId: 'kennelId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  slug: 'slug',
+  lifeStage: 'lifeStage',
+  birthDate: 'birthDate',
+  registry: 'registry',
+  bio: 'bio',
+  sireName: 'sireName',
+  damName: 'damName'
 } as const
 
 export type DogScalarFieldEnum = (typeof DogScalarFieldEnum)[keyof typeof DogScalarFieldEnum]
@@ -129,6 +141,9 @@ export const LitterScalarFieldEnum = {
   expectedGoHomeDate: 'expectedGoHomeDate',
   status: 'status',
   createdAt: 'createdAt',
+  name: 'name',
+  bornAt: 'bornAt',
+  availableCount: 'availableCount',
   kennelId: 'kennelId',
   damId: 'damId',
   sireId: 'sireId'
@@ -144,6 +159,28 @@ export const BreedScalarFieldEnum = {
 } as const
 
 export type BreedScalarFieldEnum = (typeof BreedScalarFieldEnum)[keyof typeof BreedScalarFieldEnum]
+
+
+export const KennelBreedScalarFieldEnum = {
+  kennelId: 'kennelId',
+  breedId: 'breedId',
+  createdAt: 'createdAt'
+} as const
+
+export type KennelBreedScalarFieldEnum = (typeof KennelBreedScalarFieldEnum)[keyof typeof KennelBreedScalarFieldEnum]
+
+
+export const MediaScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  url: 'url',
+  createdAt: 'createdAt',
+  kennelId: 'kennelId',
+  breedId: 'breedId',
+  dogId: 'dogId'
+} as const
+
+export type MediaScalarFieldEnum = (typeof MediaScalarFieldEnum)[keyof typeof MediaScalarFieldEnum]
 
 
 export const SortOrder = {

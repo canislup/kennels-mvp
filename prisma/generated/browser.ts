@@ -42,3 +42,13 @@ export type Litter = Prisma.LitterModel
  * 
  */
 export type Breed = Prisma.BreedModel
+/**
+ * Model KennelBreed
+ * 
+ */
+export type KennelBreed = Prisma.KennelBreedModel
+/**
+ * Model Media
+ * 
+ */
+export type Media = Prisma.MediaModel

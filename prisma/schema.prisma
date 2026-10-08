@@ -35,8 +35,13 @@ model Kennel {
   location      String   @default("") // Display string (city/state) for public cards, e.g. "Denver, CO"
   prestigeScore Int      @default(0) // Ranking signal for directory sort/popularity
   description   String? // "About Us" story shown on the public kennel profile
-  primaryBreeds String[] @default([]) // Breeds this kennel specializes in, set during onboarding
+  primaryBreeds String[] @default([]) // DEPRECATED — superseded by `breeds` (KennelBreed). Still dual-written by /api/kennel; drop once all readers move to `breeds`.
+  latitude      Float? // Kennel coordinates for directory distance sort — no geocoding pipeline yet, set manually
+  longitude     Float?
+  isVerified    Boolean  @default(false) // Drives the directory "Verified" badge/filter — no verification workflow yet, set manually
   litters       Litter[]
+  breeds        KennelBreed[]
+  media         Media[]
 }
 
 model Dog {
@@ -55,6 +60,31 @@ model Dog {
   // Litters where this dog is listed as the mother/father (both optional/nullable)
   damLitters  Litter[] @relation("LitterDam")
   sireLitters Litter[] @relation("LitterSire")
+
+  // URL identifier for the dog's detail page, unique within its kennel
+  // (/kennel/{kennelSlug}/dog/{slug}). Generated once from the name and never
+  // regenerated on rename, so links stay stable.
+  slug  String
+  media Media[]
+
+  // Life stage drives the public roster's Puppies filter. Separate from
+  // `status` (a sales status): a RESERVED dog can be a puppy or an adult.
+  lifeStage DogLifeStage @default(ADULT)
+  birthDate DateTime?
+  registry  String? // Registering kennel club shown on the profile, e.g. "AKC", "CBKC"
+
+  // Dog detail page. Parents are plain-text registered names (often dogs from
+  // other kennels), not relations — a linked multi-generation pedigree is future work.
+  bio      String?
+  sireName String?
+  damName  String?
+
+  @@unique([kennelId, slug])
+}
+
+enum DogLifeStage {
+  PUPPY
+  ADULT
 }
 
 enum DogStatus {
@@ -73,6 +103,9 @@ model Litter {
   expectedGoHomeDate DateTime?
   status             LitterStatus @default(PLANNED)
   createdAt          DateTime     @default(now())
+  name               String? // Display name, e.g. "Autumn litter"
+  bornAt             DateTime? // null until the litter is born (PLANNED)
+  availableCount     Int? // Puppies still available; null = not tracked
 
   kennelId String
   kennel   Kennel @relation(fields: [kennelId], references: [id])
@@ -91,7 +124,46 @@ enum LitterStatus {
 }
 
 model Breed {
-  id        String   @id @default(uuid())
-  name      String   @unique
+  id        String        @id @default(uuid())
+  name      String        @unique
+  createdAt DateTime      @default(now())
+  kennels   KennelBreed[]
+  media     Media[]
+}
+
+// Breeds a kennel raises (many-to-many). Replaces Kennel.primaryBreeds.
+model KennelBreed {
+  kennelId  String
+  breedId   String
   createdAt DateTime @default(now())
+  kennel    Kennel   @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  breed     Breed    @relation(fields: [breedId], references: [id])
+
+  @@id([kennelId, breedId])
+  @@index([breedId])
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+}
+
+// Kennel gallery content (profile Photos/Videos sections) and dog-specific
+// photo galleries. breedId null = applies to every breed the kennel raises;
+// dogId null = not tied to a specific dog.
+model Media {
+  id        String    @id @default(uuid())
+  type      MediaType
+  url       String
+  createdAt DateTime  @default(now())
+
+  kennelId String
+  kennel   Kennel  @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  breedId  String?
+  breed    Breed?  @relation(fields: [breedId], references: [id], onDelete: SetNull)
+  dogId    String?
+  dog      Dog?    @relation(fields: [dogId], references: [id], onDelete: Cascade)
+
+  @@index([kennelId, type])
+  @@index([dogId])
 }

@@ -166,12 +166,16 @@ export type BreedWhereInput = {
   id?: Prisma.StringFilter<"Breed"> | string
   name?: Prisma.StringFilter<"Breed"> | string
   createdAt?: Prisma.DateTimeFilter<"Breed"> | Date | string
+  kennels?: Prisma.KennelBreedListRelationFilter
+  media?: Prisma.MediaListRelationFilter
 }
 
 export type BreedOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  kennels?: Prisma.KennelBreedOrderByRelationAggregateInput
+  media?: Prisma.MediaOrderByRelationAggregateInput
 }
 
 export type BreedWhereUniqueInput = Prisma.AtLeast<{
@@ -181,6 +185,8 @@ export type BreedWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BreedWhereInput[]
   NOT?: Prisma.BreedWhereInput | Prisma.BreedWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"Breed"> | Date | string
+  kennels?: Prisma.KennelBreedListRelationFilter
+  media?: Prisma.MediaListRelationFilter
 }, "id" | "name">
 
 export type BreedOrderByWithAggregationInput = {
@@ -205,24 +211,32 @@ export type BreedCreateInput = {
   id?: string
   name: string
   createdAt?: Date | string
+  kennels?: Prisma.KennelBreedCreateNestedManyWithoutBreedInput
+  media?: Prisma.MediaCreateNestedManyWithoutBreedInput
 }
 
 export type BreedUncheckedCreateInput = {
   id?: string
   name: string
   createdAt?: Date | string
+  kennels?: Prisma.KennelBreedUncheckedCreateNestedManyWithoutBreedInput
+  media?: Prisma.MediaUncheckedCreateNestedManyWithoutBreedInput
 }
 
 export type BreedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennels?: Prisma.KennelBreedUpdateManyWithoutBreedNestedInput
+  media?: Prisma.MediaUpdateManyWithoutBreedNestedInput
 }
 
 export type BreedUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennels?: Prisma.KennelBreedUncheckedUpdateManyWithoutBreedNestedInput
+  media?: Prisma.MediaUncheckedUpdateManyWithoutBreedNestedInput
 }
 
 export type BreedCreateManyInput = {
@@ -261,12 +275,181 @@ export type BreedMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type BreedScalarRelationFilter = {
+  is?: Prisma.BreedWhereInput
+  isNot?: Prisma.BreedWhereInput
+}
+
+export type BreedNullableScalarRelationFilter = {
+  is?: Prisma.BreedWhereInput | null
+  isNot?: Prisma.BreedWhereInput | null
+}
+
+export type BreedCreateNestedOneWithoutKennelsInput = {
+  create?: Prisma.XOR<Prisma.BreedCreateWithoutKennelsInput, Prisma.BreedUncheckedCreateWithoutKennelsInput>
+  connectOrCreate?: Prisma.BreedCreateOrConnectWithoutKennelsInput
+  connect?: Prisma.BreedWhereUniqueInput
+}
+
+export type BreedUpdateOneRequiredWithoutKennelsNestedInput = {
+  create?: Prisma.XOR<Prisma.BreedCreateWithoutKennelsInput, Prisma.BreedUncheckedCreateWithoutKennelsInput>
+  connectOrCreate?: Prisma.BreedCreateOrConnectWithoutKennelsInput
+  upsert?: Prisma.BreedUpsertWithoutKennelsInput
+  connect?: Prisma.BreedWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BreedUpdateToOneWithWhereWithoutKennelsInput, Prisma.BreedUpdateWithoutKennelsInput>, Prisma.BreedUncheckedUpdateWithoutKennelsInput>
+}
+
+export type BreedCreateNestedOneWithoutMediaInput = {
+  create?: Prisma.XOR<Prisma.BreedCreateWithoutMediaInput, Prisma.BreedUncheckedCreateWithoutMediaInput>
+  connectOrCreate?: Prisma.BreedCreateOrConnectWithoutMediaInput
+  connect?: Prisma.BreedWhereUniqueInput
+}
+
+export type BreedUpdateOneWithoutMediaNestedInput = {
+  create?: Prisma.XOR<Prisma.BreedCreateWithoutMediaInput, Prisma.BreedUncheckedCreateWithoutMediaInput>
+  connectOrCreate?: Prisma.BreedCreateOrConnectWithoutMediaInput
+  upsert?: Prisma.BreedUpsertWithoutMediaInput
+  disconnect?: Prisma.BreedWhereInput | boolean
+  delete?: Prisma.BreedWhereInput | boolean
+  connect?: Prisma.BreedWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BreedUpdateToOneWithWhereWithoutMediaInput, Prisma.BreedUpdateWithoutMediaInput>, Prisma.BreedUncheckedUpdateWithoutMediaInput>
+}
+
+export type BreedCreateWithoutKennelsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  media?: Prisma.MediaCreateNestedManyWithoutBreedInput
+}
+
+export type BreedUncheckedCreateWithoutKennelsInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  media?: Prisma.MediaUncheckedCreateNestedManyWithoutBreedInput
+}
+
+export type BreedCreateOrConnectWithoutKennelsInput = {
+  where: Prisma.BreedWhereUniqueInput
+  create: Prisma.XOR<Prisma.BreedCreateWithoutKennelsInput, Prisma.BreedUncheckedCreateWithoutKennelsInput>
+}
+
+export type BreedUpsertWithoutKennelsInput = {
+  update: Prisma.XOR<Prisma.BreedUpdateWithoutKennelsInput, Prisma.BreedUncheckedUpdateWithoutKennelsInput>
+  create: Prisma.XOR<Prisma.BreedCreateWithoutKennelsInput, Prisma.BreedUncheckedCreateWithoutKennelsInput>
+  where?: Prisma.BreedWhereInput
+}
+
+export type BreedUpdateToOneWithWhereWithoutKennelsInput = {
+  where?: Prisma.BreedWhereInput
+  data: Prisma.XOR<Prisma.BreedUpdateWithoutKennelsInput, Prisma.BreedUncheckedUpdateWithoutKennelsInput>
+}
+
+export type BreedUpdateWithoutKennelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  media?: Prisma.MediaUpdateManyWithoutBreedNestedInput
+}
+
+export type BreedUncheckedUpdateWithoutKennelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  media?: Prisma.MediaUncheckedUpdateManyWithoutBreedNestedInput
+}
+
+export type BreedCreateWithoutMediaInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  kennels?: Prisma.KennelBreedCreateNestedManyWithoutBreedInput
+}
+
+export type BreedUncheckedCreateWithoutMediaInput = {
+  id?: string
+  name: string
+  createdAt?: Date | string
+  kennels?: Prisma.KennelBreedUncheckedCreateNestedManyWithoutBreedInput
+}
+
+export type BreedCreateOrConnectWithoutMediaInput = {
+  where: Prisma.BreedWhereUniqueInput
+  create: Prisma.XOR<Prisma.BreedCreateWithoutMediaInput, Prisma.BreedUncheckedCreateWithoutMediaInput>
+}
+
+export type BreedUpsertWithoutMediaInput = {
+  update: Prisma.XOR<Prisma.BreedUpdateWithoutMediaInput, Prisma.BreedUncheckedUpdateWithoutMediaInput>
+  create: Prisma.XOR<Prisma.BreedCreateWithoutMediaInput, Prisma.BreedUncheckedCreateWithoutMediaInput>
+  where?: Prisma.BreedWhereInput
+}
+
+export type BreedUpdateToOneWithWhereWithoutMediaInput = {
+  where?: Prisma.BreedWhereInput
+  data: Prisma.XOR<Prisma.BreedUpdateWithoutMediaInput, Prisma.BreedUncheckedUpdateWithoutMediaInput>
+}
+
+export type BreedUpdateWithoutMediaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennels?: Prisma.KennelBreedUpdateManyWithoutBreedNestedInput
+}
+
+export type BreedUncheckedUpdateWithoutMediaInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kennels?: Prisma.KennelBreedUncheckedUpdateManyWithoutBreedNestedInput
+}
+
+
+/**
+ * Count Type BreedCountOutputType
+ */
+
+export type BreedCountOutputType = {
+  kennels: number
+  media: number
+}
+
+export type BreedCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  kennels?: boolean | BreedCountOutputTypeCountKennelsArgs
+  media?: boolean | BreedCountOutputTypeCountMediaArgs
+}
+
+/**
+ * BreedCountOutputType without action
+ */
+export type BreedCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BreedCountOutputType
+   */
+  select?: Prisma.BreedCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * BreedCountOutputType without action
+ */
+export type BreedCountOutputTypeCountKennelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KennelBreedWhereInput
+}
+
+/**
+ * BreedCountOutputType without action
+ */
+export type BreedCountOutputTypeCountMediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MediaWhereInput
+}
 
 
 export type BreedSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   createdAt?: boolean
+  kennels?: boolean | Prisma.Breed$kennelsArgs<ExtArgs>
+  media?: boolean | Prisma.Breed$mediaArgs<ExtArgs>
+  _count?: boolean | Prisma.BreedCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["breed"]>
 
 export type BreedSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -288,10 +471,20 @@ export type BreedSelectScalar = {
 }
 
 export type BreedOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt", ExtArgs["result"]["breed"]>
+export type BreedInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  kennels?: boolean | Prisma.Breed$kennelsArgs<ExtArgs>
+  media?: boolean | Prisma.Breed$mediaArgs<ExtArgs>
+  _count?: boolean | Prisma.BreedCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type BreedIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type BreedIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $BreedPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Breed"
-  objects: {}
+  objects: {
+    kennels: Prisma.$KennelBreedPayload<ExtArgs>[]
+    media: Prisma.$MediaPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
@@ -690,6 +883,8 @@ readonly fields: BreedFieldRefs;
  */
 export interface Prisma__BreedClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  kennels<T extends Prisma.Breed$kennelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breed$kennelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KennelBreedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  media<T extends Prisma.Breed$mediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breed$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -739,6 +934,10 @@ export type BreedFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * Filter, which Breed to fetch.
    */
   where: Prisma.BreedWhereUniqueInput
@@ -757,6 +956,10 @@ export type BreedFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * Filter, which Breed to fetch.
    */
   where: Prisma.BreedWhereUniqueInput
@@ -774,6 +977,10 @@ export type BreedFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Breed
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
   /**
    * Filter, which Breed to fetch.
    */
@@ -823,6 +1030,10 @@ export type BreedFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * Filter, which Breed to fetch.
    */
   where?: Prisma.BreedWhereInput
@@ -870,6 +1081,10 @@ export type BreedFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the Breed
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
   /**
    * Filter, which Breeds to fetch.
    */
@@ -919,6 +1134,10 @@ export type BreedCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * The data needed to create a Breed.
    */
   data: Prisma.XOR<Prisma.BreedCreateInput, Prisma.BreedUncheckedCreateInput>
@@ -966,6 +1185,10 @@ export type BreedUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the Breed
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
   /**
    * The data needed to update a Breed.
    */
@@ -1033,6 +1256,10 @@ export type BreedUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * The filter to search for the Breed to update in case it exists.
    */
   where: Prisma.BreedWhereUniqueInput
@@ -1059,6 +1286,10 @@ export type BreedDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
+  /**
    * Filter which Breed to delete.
    */
   where: Prisma.BreedWhereUniqueInput
@@ -1079,6 +1310,54 @@ export type BreedDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
+ * Breed.kennels
+ */
+export type Breed$kennelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KennelBreed
+   */
+  select?: Prisma.KennelBreedSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KennelBreed
+   */
+  omit?: Prisma.KennelBreedOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KennelBreedInclude<ExtArgs> | null
+  where?: Prisma.KennelBreedWhereInput
+  orderBy?: Prisma.KennelBreedOrderByWithRelationInput | Prisma.KennelBreedOrderByWithRelationInput[]
+  cursor?: Prisma.KennelBreedWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KennelBreedScalarFieldEnum | Prisma.KennelBreedScalarFieldEnum[]
+}
+
+/**
+ * Breed.media
+ */
+export type Breed$mediaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Media
+   */
+  select?: Prisma.MediaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Media
+   */
+  omit?: Prisma.MediaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MediaInclude<ExtArgs> | null
+  where?: Prisma.MediaWhereInput
+  orderBy?: Prisma.MediaOrderByWithRelationInput | Prisma.MediaOrderByWithRelationInput[]
+  cursor?: Prisma.MediaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MediaScalarFieldEnum | Prisma.MediaScalarFieldEnum[]
+}
+
+/**
  * Breed without action
  */
 export type BreedDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1090,4 +1369,8 @@ export type BreedDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the Breed
    */
   omit?: Prisma.BreedOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BreedInclude<ExtArgs> | null
 }

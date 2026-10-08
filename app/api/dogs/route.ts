@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse} from "next/server";
 import { verifyKennelSession } from "@/lib/auth";
+import { nextAvailableSlug, slugify } from "@/lib/slug";
+import { lifeStageFromStatus } from "@/lib/dog-life-stage";
 
 // Creating a dog in the database
 export const POST = async(request: NextRequest) => {
@@ -40,12 +42,33 @@ export const POST = async(request: NextRequest) => {
         const body = await request.json()
         console.log("body: ", body);
 
-        const createdDog = await prisma.dog.create({
-            data: {
-                ...body,
-                kennelId: kennel.id
+        // Slug is server-generated (unique per kennel) and never taken from the
+        // client. Retry on the rare race where two same-named dogs are created
+        // at once and both pick the same slug.
+        let createdDog;
+        for (let attempt = 0; ; attempt++) {
+            const existing = await prisma.dog.findMany({
+                where: { kennelId: kennel.id },
+                select: { slug: true },
+            });
+            const taken = new Set(existing.map((d) => d.slug));
+            const slug = nextAvailableSlug(slugify(String(body.name ?? "")), taken);
+            try {
+                createdDog = await prisma.dog.create({
+                    data: {
+                        // Older clients don't send lifeStage; infer it from the sales status.
+                        lifeStage: lifeStageFromStatus(body.status),
+                        ...body,
+                        slug,
+                        kennelId: kennel.id
+                    }
+                })
+                break;
+            } catch (error) {
+                const isSlugConflict = (error as { code?: string }).code === "P2002";
+                if (!isSlugConflict || attempt >= 2) throw error;
             }
-        })
+        }
 
         // 3) Send Success response and return dog data
         return NextResponse.json(
