@@ -5,28 +5,153 @@
     }
   },
   "dashboard": {
-    "sidebar": {
-      "nav": {
-        "overview": "Overview",
-        "roster": "Roster",
-        "litters": "Litters",
-        "profile": "Profile",
-        "settings": "Settings"
+    "shell": {
+      "metadata": {
+        "titleTemplate": "%s · KennelOS",
+        "defaultTitle": "Dashboard · KennelOS"
       },
-      "signOut": "Sign Out"
+      "skipToContent": "Skip to content",
+      "nav": {
+        "label": "Dashboard",
+        "overview": "Overview",
+        "dogs": "Dogs",
+        "litters": "Litters",
+        "leads": "Leads",
+        "messages": "Messages",
+        "media": "Media",
+        "reviews": "Reviews",
+        "settings": "Settings",
+        "newLeadsBadge": "{count, plural, one {# new lead} other {# new leads}}",
+        "unreadMessagesBadge": "{count, plural, one {# unread message} other {# unread messages}}"
+      },
+      "viewPublicPage": "View public page",
+      "opensInNewTab": "(opens in a new tab)",
+      "signOut": "Sign out",
+      "mobileNav": {
+        "open": "Open menu",
+        "close": "Close menu",
+        "label": "Dashboard menu"
+      },
+      "notifications": {
+        "button": "Notifications",
+        "buttonUnread": "Notifications, {count} unread",
+        "title": "Notifications",
+        "unreadCount": "{count} unread",
+        "unread": "unread",
+        "empty": "You're all caught up."
+      }
+    },
+    "common": {
+      "time": {
+        "justNow": "Just now",
+        "yesterday": "Yesterday",
+        "daysAgo": "{count, plural, one {# day ago} other {# days ago}}"
+      },
+      "dogStatus": {
+        "BREEDING_STOCK": "Breeding stock",
+        "AVAILABLE_PUPPY": "Available",
+        "RESERVED": "Reserved",
+        "SOLD": "Sold"
+      },
+      "placeholder": {
+        "title": "This section is being redesigned",
+        "description": "We're rebuilding this part of the dashboard. It will be back soon.",
+        "back": "Back to Overview"
+      }
     },
     "overview": {
-      "heading": "Overview",
-      "welcome": "Welcome back to {kennelName}",
       "onboarding": {
         "title": "Welcome to KennelOS!",
         "description": "You haven't set up your kennel yet. Create your profile to start managing your dogs and litters, and get discovered by buyers.",
-        "cta": "Create Your Kennel"
+        "cta": "Create your kennel"
+      },
+      "greeting": {
+        "morning": "Good morning, {name}",
+        "afternoon": "Good afternoon, {name}",
+        "evening": "Good evening, {name}"
+      },
+      "subtitle": "Here is what is happening at {kennelName} today.",
+      "actions": {
+        "newLitter": "New litter",
+        "addDog": "Add dog"
+      },
+      "setup": {
+        "heading": "Finish setting up your kennel",
+        "summary": "{done} of {total} steps done. A complete profile ranks higher in the directory.",
+        "progressLabel": "Setup progress",
+        "percent": "{percent}%",
+        "steps": {
+          "kennelDetails": "Kennel details",
+          "logoAndCover": "Logo and cover",
+          "breeds": "Breeds",
+          "firstDog": "First dog",
+          "photos": "Photos",
+          "verification": "Request verification"
+        },
+        "state": {
+          "done": "done",
+          "next": "next step",
+          "todo": "not done yet"
+        }
       },
       "metrics": {
-        "totalDogs": "Total Dogs",
-        "activeLitters": "Active Litters",
-        "publicProfile": "Public Profile"
+        "label": "Key numbers",
+        "newLeads": {
+          "label": "New leads",
+          "note": "{count} since yesterday"
+        },
+        "unreadMessages": {
+          "label": "Unread messages",
+          "note": "{days, plural, =0 {Oldest waiting since today} one {Oldest waiting # day} other {Oldest waiting # days}}",
+          "noneWaiting": "All caught up"
+        },
+        "availablePuppies": {
+          "label": "Available puppies",
+          "note": "{count, plural, one {In # litter} other {Across # litters}}"
+        },
+        "activeLitters": {
+          "label": "Active litters",
+          "note": "{days, plural, =0 {Next go-home today} one {Next go-home tomorrow} other {Next go-home in # days}}",
+          "noneScheduled": "No go-homes scheduled"
+        }
+      },
+      "activity": {
+        "heading": "Recent activity",
+        "empty": "Nothing new yet. Leads, messages and litter updates will show up here.",
+        "newLead": {
+          "title": "New lead: {name}",
+          "detail": "Asked about {subject}"
+        },
+        "newMessage": {
+          "title": "{name} sent a message",
+          "detail": "“{excerpt}”"
+        },
+        "newReview": {
+          "title": "New {rating}-star review",
+          "detail": "{authorName} reviewed {kennelName}"
+        },
+        "dogStatusChanged": {
+          "title": "{dogName} marked {status}",
+          "detail": "Status changed by you"
+        },
+        "litterBorn": {
+          "title": "{damName}’s litter marked as born",
+          "detail": "{count, plural, one {# puppy, now listed as Available} other {# puppies, now listed as Available}}"
+        }
+      },
+      "upcoming": {
+        "heading": "Coming up",
+        "empty": "No follow-ups or go-home dates coming up.",
+        "seeAll": "See all follow-ups",
+        "followUp": {
+          "title": "Follow up with {leadName}",
+          "detail": "{days, plural, =0 {Lead, due today} =1 {Lead, due tomorrow} other {Lead, in # days}}",
+          "overdue": "Lead, overdue"
+        },
+        "goHome": {
+          "title": "Go-home: {litterName}",
+          "detail": "{puppies, plural, one {# puppy} other {# puppies}}, {reserved} reserved"
+        }
       }
     },
     "dogs": {
@@ -68,9 +193,6 @@
         "emptyTitle": "No dogs found",
         "emptyDescription": "Get started by creating your first dog profile."
       }
-    },
-    "layout": {
-      "viewPublicProfile": "View Public Profile"
     },
     "kennelSetup": {
       "page": {
@@ -160,7 +282,7 @@
         "breedLabel": "Breed",
         "breedPlaceholder": "Any breed",
         "locationLabel": "Location",
-        "locationPlaceholder": "City or state",
+        "locationPlaceholder": "City or state (optional)",
         "submit": "Search"
       },
       "popular": {

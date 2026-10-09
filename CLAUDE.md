@@ -57,6 +57,20 @@ KennelOS is a dual-sided B2B2C platform.
   - Destructive: background `#FEF2F2`, text `#DC2626`.
 - **Shapes & Shadows:** Use generous border radiuses (`rounded-xl`, `rounded-2xl`) and soft shadows (`shadow-sm`, `shadow-md`).
 
+#### Kennel-owner dashboard (`/[locale]/dashboard/*`): overrides the public rules above
+
+- **White backgrounds, border separation.** Page, sidebar, top bar, cards, popovers and drawer are all `bg-white`. Never use the off-white tint from the design files (#FAF8F4 / #F5F1EA): use white for large surfaces and `stone-50` for small inset surfaces and hover states. Separation comes from 1px borders (`border-line` on cards and dividers, `border-r` on the sidebar, `border-b` on the mobile top bar), never from shadows. Only floating layers (popovers, menus, the mobile drawer) get `shadow-md`.
+- **Tokens only, no arbitrary hex in components.** Tokens are defined in the `@theme` block of `app/globals.css`:
+  - Borders: `line` #E7E2DA (cards, dividers), `line-strong` #D6D0C4 (inputs, secondary buttons).
+  - Text: Tailwind's `stone` scale, pinned to exact hex values: `stone-900` #1C1917 primary, `stone-700` #44403C, `stone-600` #57534E secondary, `stone-500` #78716C muted, `stone-400` #A8A29E faint. Inset and hover surfaces: `stone-50`, `stone-100`.
+  - Accent: `accent` #4F46E5, `accent-hover` #4338CA, `accent-soft` #EEF2FF (active and selected tint). Re-theme by editing these three lines.
+  - Status, ink on tint: `status-green` #166534 / `status-green-bg` #DCFCE7 (`status-green-solid` #16A34A for filled checks); `status-amber` #92400E / `-bg` #FEF3C7; `status-blue` #1E40AF / `-bg` #DBEAFE; `status-pink` #9D174D / `-bg` #FCE7F3; `status-red` #B91C1C / `status-red-strong` #DC2626 / `-bg` #FEF2F2.
+  - Placeholder gradient: `sand-light` #E8D9C0 → `sand-dark` #C9A063.
+- **Fonts.** Two fonts, loaded with `next/font` (`lib/fonts.ts`) and applied only in the dashboard layout (`dashboardFontClasses`): `font-display` (Playfair Display) for headings and big numbers, `font-body` (Work Sans) for everything else.
+- **Shapes.** Cards `rounded-2xl`, controls `rounded-xl`, pills `rounded-full`.
+- **Building blocks.** Use the primitives in `components/dashboard/ui/` (Button, Card, Badge, PageHeader, ProgressBar, EmptyState) before writing new markup.
+- **Data.** Dashboard pages and components read and write only through the async functions in `lib/dashboard/*.ts`, never Prisma and never `lib/dashboard/mock/` directly. Each function's backend contract is listed in `lib/dashboard/ENDPOINTS.md`; keep it updated when adding functions.
+
 ### 6. Environment Variables
 
 - Keep server secrets (Database URL, Cloudinary Secret) hidden.

@@ -10,6 +10,55 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Dashboard typography (next/font variables from lib/fonts.ts, applied in
+     the dashboard layout): font-display = Playfair Display, font-body = Work Sans. */
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Dashboard design tokens (see CLAUDE.md sec. 5). Components use these
+   classes (text-stone-600, border-line, bg-accent, bg-status-green-bg…),
+   never arbitrary hex values. */
+@theme {
+  /* Neutral text/surface scale pinned to the exact warm-stone hex values. */
+  --color-stone-50: #FAFAF9;
+  --color-stone-100: #F5F5F4;
+  --color-stone-200: #E7E5E4;
+  --color-stone-300: #D6D3D1;
+  --color-stone-400: #A8A29E;
+  --color-stone-500: #78716C;
+  --color-stone-600: #57534E;
+  --color-stone-700: #44403C;
+  --color-stone-800: #292524;
+  --color-stone-900: #1C1917;
+
+  /* Borders: cards/dividers, and inputs. */
+  --color-line: #E7E2DA;
+  --color-line-strong: #D6D0C4;
+
+  /* Brand accent: change these three lines to re-theme the dashboard. */
+  --color-accent: #4F46E5;
+  --color-accent-hover: #4338CA;
+  --color-accent-soft: #EEF2FF;
+
+  /* Warm placeholder gradient for missing logos/photos. */
+  --color-sand-light: #E8D9C0;
+  --color-sand-dark: #C9A063;
+
+  /* Status tones: ink on its tinted background. */
+  --color-status-green: #166534;
+  --color-status-green-bg: #DCFCE7;
+  --color-status-green-solid: #16A34A;
+  --color-status-amber: #92400E;
+  --color-status-amber-bg: #FEF3C7;
+  --color-status-blue: #1E40AF;
+  --color-status-blue-bg: #DBEAFE;
+  --color-status-pink: #9D174D;
+  --color-status-pink-bg: #FCE7F3;
+  --color-status-red: #B91C1C;
+  --color-status-red-strong: #DC2626;
+  --color-status-red-bg: #FEF2F2;
 }
 
 @media (prefers-color-scheme: dark) {

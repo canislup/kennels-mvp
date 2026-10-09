@@ -1,42 +1,68 @@
-import { getTranslations } from "next-intl/server";
-import { ExternalLink } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import Sidebar from "@/components/Sidebar";
+import type { Metadata } from "next";
+import { getLocale, getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { verifyKennelSession } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { dashboardFontClasses } from "@/lib/fonts";
+import { getCurrentKennel } from "@/lib/dashboard/kennel";
+import { getNavCounts, getNotifications } from "@/lib/dashboard/shell";
+import type { DashboardNotification, NavCounts } from "@/lib/dashboard/types";
+import LocaleSwitcher from "@/components/LocaleSwitcher";
+import Sidebar from "@/components/dashboard/shell/Sidebar";
+import MobileNav from "@/components/dashboard/shell/MobileNav";
+import NotificationsBell from "@/components/dashboard/shell/NotificationsBell";
+import Wordmark from "@/components/dashboard/shell/Wordmark";
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("dashboard.shell.metadata");
+    return { title: { template: t("titleTemplate"), default: t("defaultTitle") }, robots: { index: false } };
+}
+
+const NO_COUNTS: NavCounts = { newLeads: 0, unreadMessages: 0 };
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-    // Best-effort lookup for the top bar's "View Public Profile" link — each
-    // page still independently guards the session/redirect on its own.
-    const t = await getTranslations("dashboard.layout");
-    const payload = await verifyKennelSession();
-    const kennel = payload
-        ? await prisma.kennel.findUnique({
-              where: { ownerId: payload.userID as string },
-              select: { slug: true },
-          })
-        : null;
+    const session = await verifyKennelSession();
+    if (!session) {
+        redirect({ href: "/login", locale: await getLocale() });
+    }
+
+    const t = await getTranslations("dashboard.shell");
+    // Null until the owner finishes kennel setup; the shell still renders so
+    // /dashboard/kennel/setup works inside it.
+    const kennel = await getCurrentKennel();
+    const [counts, notifications]: [NavCounts, DashboardNotification[]] = kennel
+        ? await Promise.all([getNavCounts(kennel.id), getNotifications(kennel.id)])
+        : [NO_COUNTS, []];
+
+    const sidebar = <Sidebar kennel={kennel} counts={counts} />;
 
     return (
-        <div className="flex min-h-screen bg-[#F8FAFC]">
-            <Sidebar />
+        <div className={`${dashboardFontClasses} flex min-h-screen flex-1 bg-white text-stone-900`}>
+            <a
+                href="#dashboard-main"
+                className="sr-only rounded-xl bg-white px-4 py-2 text-sm font-semibold text-accent focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:outline-2 focus:outline-accent"
+            >
+                {t("skipToContent")}
+            </a>
 
-            <div className="flex-1 flex flex-col">
-                <header className="h-16 flex items-center justify-end px-8 border-b border-slate-100 bg-white">
-                    {kennel && (
-                        <Link
-                            href={`/kennel/${kennel.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 border border-slate-200 hover:border-indigo-200 px-4 py-2 rounded-full transition-colors"
-                        >
-                            {t("viewPublicProfile")}
-                            <ExternalLink size={14} />
-                        </Link>
-                    )}
+            <aside className="sticky top-0 hidden h-screen w-62 shrink-0 overflow-y-auto border-r border-line bg-white lg:block">
+                {sidebar}
+            </aside>
+
+            <div className="flex min-w-0 flex-1 flex-col">
+                <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-line bg-white px-4 sm:px-6 lg:static lg:h-18 lg:border-b-0 lg:px-10">
+                    <div className="flex items-center gap-1.5 lg:hidden">
+                        <MobileNav>{sidebar}</MobileNav>
+                        <Wordmark className="text-xl" />
+                    </div>
+                    <div className="ml-auto flex items-center gap-3">
+                        <LocaleSwitcher tone="dashboard" />
+                        <NotificationsBell notifications={notifications} />
+                    </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto">{children}</main>
+                <main id="dashboard-main" className="min-w-0 flex-1 px-4 pt-6 pb-14 sm:px-6 lg:px-10 lg:pt-0">
+                    {children}
+                </main>
             </div>
         </div>
     );

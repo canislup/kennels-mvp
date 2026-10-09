@@ -100,9 +100,10 @@ export default function AddDogModal({ availableBreeds }: { availableBreeds: Bree
                                 {/* Cloudinary Widget */}
                                 <CldUploadWidget
                                     uploadPreset="kennel_app_preset" // 🚨 SEE STEP 2 BELOW
-                                    onSuccess={(result: any) => {
-                                        if (result.info?.secure_url) {
-                                            setPhotoUrls((prev) => [...prev, result.info.secure_url]);
+                                    onSuccess={(result) => {
+                                        const info = result.info;
+                                        if (typeof info === "object" && info?.secure_url) {
+                                            setPhotoUrls((prev) => [...prev, info.secure_url]);
                                         }
                                     }}
                                 >

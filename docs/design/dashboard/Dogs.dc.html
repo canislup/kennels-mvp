@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dogs</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:'Work Sans',sans-serif}
+button{cursor:pointer}
+.nav-link:hover{background:#F5F1EA}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:1260px;background:#FAF8F4;font-family:'Work Sans',sans-serif;color:#1C1917">
+
+  <aside style="flex:0 0 248px;box-sizing:border-box;background:#FFFFFF;border-right:1px solid #E7E2DA;padding:24px 16px;display:flex;flex-direction:column;gap:24px">
+    <a href="Overview.dc.html" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;padding:0 8px">Kennel<span style="color:{{accent}}">OS</span></a>
+    <nav aria-label="Dashboard" style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{navItems}}" as="item" hint-placeholder-count="8">
+        <a href="{{item.href}}" class="nav-link" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;background:{{item.bg}};color:{{item.color}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex:1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:999px;padding:2px 8px">{{item.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <div style="border:1px solid #E7E2DA;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8D9C0,#C9A063)"></div>
+        <div><div style="font-size:14px;font-weight:600">Maré Labs</div><div style="font-size:12px;color:#78716C">Salvador, BA</div></div>
+      </div>
+      <a href="#" style="font-size:13px;font-weight:500;color:{{accent}}">View public page</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 4px">
+      <div style="width:34px;height:34px;border-radius:999px;background:#1C1917;color:#FBF9F6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">JC</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">Juliana Carvalho</div><a href="#" style="font-size:12px;color:#78716C">Sign out</a></div>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 600px;min-width:0;padding:0 40px 56px;box-sizing:border-box">
+    <div style="height:72px;display:flex;align-items:center;justify-content:flex-end;gap:12px">
+      <div style="display:flex;border:1px solid #E7E2DA;border-radius:999px;background:#FFFFFF;font-size:12px;font-weight:600;overflow:hidden"><span style="padding:6px 12px;background:#1C1917;color:#FBF9F6">EN</span><span style="padding:6px 12px;color:#57534E">PT</span></div>
+      <button aria-label="Notifications, 4 unread" style="position:relative;width:40px;height:40px;border-radius:999px;border:1px solid #E7E2DA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#44403C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9zM13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+        <span style="position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:999px;background:#DC2626;border:2px solid #FFFFFF"></span>
+      </button>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px">
+      <div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin:0 0 6px">Dogs</h1>
+        <div style="font-size:15px;color:#57534E">Your roster: breeding stock, puppies and past sales.</div>
+      </div>
+      <a href="Dog-Edit.dc.html" style="font-size:14px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:10px;padding:11px 18px">Add dog</a>
+    </div>
+
+    <div role="tablist" aria-label="Filter by status" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+      <sc-for list="{{statusTabs}}" as="t" hint-placeholder-count="5">
+        <button role="tab" style="font-size:13px;font-weight:600;border-radius:999px;padding:8px 16px;border:1px solid {{t.border}};background:{{t.bg}};color:{{t.color}}">{{t.label}} <span style="opacity:0.7;font-weight:500">{{t.count}}</span></button>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:24px">
+      <div style="flex:1 1 260px;position:relative">
+        <label for="dog-search" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search dogs</label>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#78716C" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:14px;top:13px"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <input id="dog-search" type="text" placeholder="Search by name or registry" style="width:100%;box-sizing:border-box;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:11px 14px 11px 38px;font-size:14px;color:#1C1917">
+      </div>
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="3">
+        <button style="display:flex;align-items:center;gap:8px;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:11px 14px;font-size:14px;color:#44403C">{{f}}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+        </button>
+      </sc-for>
+      <div style="display:flex;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;overflow:hidden">
+        <button aria-label="Grid view" style="border:0;background:#EEF2FF;color:{{accent}};padding:10px 12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"></path></svg></button>
+        <button aria-label="Table view" style="border:0;background:#FFFFFF;color:#57534E;padding:10px 12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px">
+      <sc-for list="{{dogs}}" as="d" hint-placeholder-count="8">
+        <article style="position:relative;background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px">
+          <div style="height:170px;border-radius:15px 15px 0 0;background:{{d.photo}}"></div>
+          <div style="padding:16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+              <h3 style="font-family:'Playfair Display',serif;font-size:19px;margin:0">{{d.name}}</h3>
+              <span style="font-size:11px;font-weight:600;border-radius:999px;padding:3px 10px;background:{{d.sexBg}};color:{{d.sexColor}}">{{d.sex}}</span>
+            </div>
+            <div style="font-size:13px;color:#57534E;margin-bottom:14px">{{d.meta}}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <button aria-label="Change status" style="display:flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:6px 10px 6px 12px;font-size:12px;font-weight:600;background:{{d.statusBg}};color:{{d.statusColor}}">{{d.status}}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+              </button>
+              <a href="Dog-Edit.dc.html" style="font-size:13px;font-weight:600;color:{{accent}}">Edit</a>
+            </div>
+          </div>
+          <sc-if value="{{d.menu}}" hint-placeholder-val="{{ false }}">
+            <div role="menu" style="position:absolute;left:16px;bottom:-148px;z-index:2;width:200px;background:#FFFFFF;border:1px solid #E7E2DA;border-radius:12px;box-shadow:0 12px 28px rgba(28,25,23,0.14);padding:6px">
+              <div role="menuitem" style="padding:9px 12px;border-radius:8px;font-size:13px;color:#44403C">Breeding stock</div>
+              <div role="menuitem" style="padding:9px 12px;border-radius:8px;font-size:13px;color:#44403C">Available puppy</div>
+              <div role="menuitem" style="padding:9px 12px;border-radius:8px;font-size:13px;font-weight:600;background:#EEF2FF;color:{{accent}}">Reserved</div>
+              <div role="menuitem" style="padding:9px 12px;border-radius:8px;font-size:13px;color:#44403C">Sold</div>
+            </div>
+          </sc-if>
+        </article>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:40px">
+      <div style="font-size:13px;color:#78716C">Showing 8 of 24 dogs</div>
+      <div style="display:flex;gap:8px">
+        <button style="border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:9px 16px;font-size:13px;font-weight:500;color:#A8A29E">Previous</button>
+        <button style="border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:9px 16px;font-size:13px;font-weight:500;color:#44403C">Next</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#4F46E5","options":["#4F46E5","#0F766E","#B45309","#9D174D"]},"$preview":{"width":1440,"height":1260}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#4F46E5';
+    const nav = [
+      ['Overview', 'Overview.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+      ['Dogs', 'Dogs.dc.html', 'M12 11c-3 0-5 3-5 5.5 0 2 1.5 3 3 3 .8 0 1.3-.4 2-.4s1.2.4 2 .4c1.5 0 3-1 3-3 0-2.5-2-5.5-5-5.5zM5.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM18.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM15 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z', ''],
+      ['Litters', 'Litters.dc.html', 'M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z', ''],
+      ['Leads', 'Leads.dc.html', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8', '7'],
+      ['Messages', 'Messages.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', '3'],
+      ['Media', 'Media.dc.html', 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21', ''],
+      ['Reviews', 'Reviews.dc.html', 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z', ''],
+      ['Settings', 'Settings-Kennel.dc.html', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z', '']
+    ];
+    const active = 'Dogs';
+    const navItems = nav.map(([label, href, icon, badge]) => ({
+      label, href, icon, badge,
+      bg: label === active ? '#EEF2FF' : 'transparent',
+      color: label === active ? accent : '#44403C'
+    }));
+    const tabDefs = [['All', 24, true], ['Breeding stock', 9, false], ['Available puppies', 9, false], ['Reserved', 4, false], ['Sold', 2, false]];
+    const statusTabs = tabDefs.map(([label, count, on]) => ({
+      label, count,
+      bg: on ? '#1C1917' : '#FFFFFF',
+      color: on ? '#FBF9F6' : '#44403C',
+      border: on ? '#1C1917' : '#D6D0C4'
+    }));
+    const filters = ['All breeds', 'Any sex', 'Any life stage'];
+    const st = {
+      stock: ['Breeding stock', '#F5F1EA', '#44403C'],
+      avail: ['Available', '#DCFCE7', '#166534'],
+      res: ['Reserved', '#FEF3C7', '#92400E'],
+      sold: ['Sold', '#E7E5E4', '#57534E']
+    };
+    const male = ['Male', '#DBEAFE', '#1E40AF'];
+    const female = ['Female', '#FCE7F3', '#9D174D'];
+    const defs = [
+      ['Marley', 'Labrador Retriever · 5 years', male, st.stock, 'linear-gradient(135deg,#E3C98F,#B8924F)', false],
+      ['Pérola', 'Labrador Retriever · 4 years', female, st.stock, 'linear-gradient(135deg,#F0DCA8,#DDB877)', false],
+      ['Café', 'Labrador Retriever · 3 months · Puppy', female, st.res, 'linear-gradient(135deg,#C9A27A,#8B6240)', true],
+      ['Nala', 'Labrador Retriever · 2 years', female, st.stock, 'linear-gradient(135deg,#D4B896,#B89574)', false],
+      ['Mocha', 'Labrador Retriever · 3 months · Puppy', male, st.avail, 'linear-gradient(135deg,#B58B63,#7A5535)', false],
+      ['Biscoito', 'Labrador Retriever · 3 months · Puppy', male, st.avail, 'linear-gradient(135deg,#EAD7A8,#CFA966)', false],
+      ['Frida', 'Poodle · 3 years', female, st.stock, 'linear-gradient(135deg,#CFC9C2,#8E8880)', false],
+      ['Duque', 'Poodle · 6 years', male, st.stock, 'linear-gradient(135deg,#B9B3AB,#6F6A64)', false]
+    ];
+    const dogs = defs.map(([name, meta, sx, s, photo, menu]) => ({
+      name, meta, photo, menu,
+      sex: sx[0], sexBg: sx[1], sexColor: sx[2],
+      status: s[0], statusBg: s[1], statusColor: s[2]
+    }));
+    return { accent, navItems, statusTabs, filters, dogs };
+  }
+}
+</script>
+</body>
+</html>

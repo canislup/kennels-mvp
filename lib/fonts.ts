@@ -16,3 +16,8 @@ export const workSans = Work_Sans({
 
 // Apply to a public page's root element.
 export const publicFontClasses = `${playfair.variable} ${workSans.variable} font-(family-name:--font-work-sans)`;
+
+// Apply to the dashboard layout root. Body text uses Work Sans; headings and
+// numbers opt in with `font-display` (Playfair Display). Both are wired to
+// these variables in app/globals.css.
+export const dashboardFontClasses = `${playfair.variable} ${workSans.variable} font-body`;

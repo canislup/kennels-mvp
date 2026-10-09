@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lead detail</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:'Work Sans',sans-serif}
+button{cursor:pointer}
+.nav-link:hover{background:#F5F1EA}
+.card{background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px;padding:24px}
+.card h2{font-family:'Playfair Display',serif;font-size:20px;margin:0 0 16px}
+.k{font-size:12px;color:#78716C;margin-bottom:3px}
+.v{font-size:14px;font-weight:500}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:1200px;background:#FAF8F4;font-family:'Work Sans',sans-serif;color:#1C1917">
+
+  <aside style="flex:0 0 248px;box-sizing:border-box;background:#FFFFFF;border-right:1px solid #E7E2DA;padding:24px 16px;display:flex;flex-direction:column;gap:24px">
+    <a href="Overview.dc.html" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;padding:0 8px">Kennel<span style="color:{{accent}}">OS</span></a>
+    <nav aria-label="Dashboard" style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{navItems}}" as="item" hint-placeholder-count="8">
+        <a href="{{item.href}}" class="nav-link" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;background:{{item.bg}};color:{{item.color}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex:1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:999px;padding:2px 8px">{{item.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <div style="border:1px solid #E7E2DA;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8D9C0,#C9A063)"></div>
+        <div><div style="font-size:14px;font-weight:600">Maré Labs</div><div style="font-size:12px;color:#78716C">Salvador, BA</div></div>
+      </div>
+      <a href="#" style="font-size:13px;font-weight:500;color:{{accent}}">View public page</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 4px">
+      <div style="width:34px;height:34px;border-radius:999px;background:#1C1917;color:#FBF9F6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">JC</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">Juliana Carvalho</div><a href="#" style="font-size:12px;color:#78716C">Sign out</a></div>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 600px;min-width:0;padding:0 40px 56px;box-sizing:border-box">
+    <div style="height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-size:13px;color:#78716C"><a href="Leads.dc.html" style="color:#78716C">Leads</a><span style="margin:0 8px">/</span><span style="color:#1C1917;font-weight:500">Marina Costa</span></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="display:flex;border:1px solid #E7E2DA;border-radius:999px;background:#FFFFFF;font-size:12px;font-weight:600;overflow:hidden"><span style="padding:6px 12px;background:#1C1917;color:#FBF9F6">EN</span><span style="padding:6px 12px;color:#57534E">PT</span></div>
+        <button aria-label="Notifications, 4 unread" style="position:relative;width:40px;height:40px;border-radius:999px;border:1px solid #E7E2DA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#44403C">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9zM13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+          <span style="position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:999px;background:#DC2626;border:2px solid #FFFFFF"></span>
+        </button>
+      </div>
+    </div>
+
+    <section class="card" aria-label="Lead summary" style="margin-bottom:24px">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="width:56px;height:56px;border-radius:999px;background:#EEF2FF;color:{{accent}};display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700">MC</div>
+          <div>
+            <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin:0 0 4px">Marina Costa</h1>
+            <div style="font-size:14px;color:#57534E">Feira de Santana, BA · Lead since 06 Oct 2026</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <a href="Messages.dc.html" style="font-size:14px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:10px;padding:11px 18px">Send message</a>
+          <button style="font-size:14px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:10px 18px">Reserve a puppy</button>
+        </div>
+      </div>
+      <ol aria-label="Pipeline stage" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px">
+        <sc-for list="{{stages}}" as="s" hint-placeholder-count="6">
+          <li style="text-align:center">
+            <div style="height:6px;border-radius:999px;background:{{s.bar}};margin-bottom:8px"></div>
+            <div style="font-size:13px;font-weight:{{s.weight}};color:{{s.color}}">{{s.label}}</div>
+          </li>
+        </sc-for>
+      </ol>
+    </section>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+      <div style="flex:2 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+        <section class="card" aria-label="What they are looking for">
+          <h2>What Marina is looking for</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px">
+            <div><div class="k">Breed</div><div class="v">Labrador Retriever</div></div>
+            <div><div class="k">Preference</div><div class="v">Chocolate female</div></div>
+            <div><div class="k">Litter</div><a href="Litters.dc.html" class="v" style="color:{{accent}}">Autumn litter</a></div>
+            <div><div class="k">Source</div><div class="v">Public contact form</div></div>
+          </div>
+          <div style="margin-top:20px;padding:14px;border-radius:12px;background:#FAF8F4;font-size:14px;line-height:1.6;color:#44403C">
+            <div class="k">Her first message</div>
+            Hi! We have two kids and a fenced yard in Feira de Santana. We would love a calm chocolate female from the Autumn litter. Is anyone still available, and what is the process?
+          </div>
+        </section>
+
+        <section class="card" aria-label="Notes and timeline">
+          <h2>Notes and timeline</h2>
+          <label for="note" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Add a note</label>
+          <textarea id="note" rows="3" placeholder="Add a private note, like what she told you on the phone" style="width:100%;box-sizing:border-box;border:1px solid #D6D0C4;border-radius:10px;padding:12px 14px;font-size:14px;resize:vertical"></textarea>
+          <div style="display:flex;justify-content:flex-end;margin:10px 0 20px"><button style="font-size:13px;font-weight:600;color:#FFFFFF;background:#1C1917;border:0;border-radius:10px;padding:9px 16px">Save note</button></div>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{timeline}}" as="t" hint-placeholder-count="5">
+              <div style="display:flex;gap:14px;padding:14px 0;border-top:1px solid #F0EBE2">
+                <div style="flex:0 0 32px;height:32px;border-radius:10px;background:{{t.bg}};color:{{t.color}};display:flex;align-items:center;justify-content:center">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{t.icon}}"></path></svg>
+                </div>
+                <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">{{t.title}}</div><div style="font-size:13px;color:#57534E;margin-top:2px">{{t.detail}}</div></div>
+                <div style="font-size:12px;color:#A8A29E;white-space:nowrap">{{t.time}}</div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+        <section class="card" aria-label="Follow-up" style="border-color:#F5DFA3;background:#FFFBEB">
+          <h2 style="margin-bottom:10px">Follow-up</h2>
+          <div style="font-size:14px;color:#92400E;font-weight:600;margin-bottom:12px">Due today, 09 Oct</div>
+          <div style="display:flex;gap:8px">
+            <button style="flex:1;font-size:13px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:9px">Mark done</button>
+            <button style="flex:1;font-size:13px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:9px">Reschedule</button>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Contact">
+          <h2>Contact</h2>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div><div class="k">Email</div><div class="v">marina.costa@example.com</div></div>
+            <div><div class="k">Phone</div><div class="v">+55 75 99123 4567</div></div>
+            <div><div class="k">Preferred contact</div><div class="v">WhatsApp</div></div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Conversation">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><h2 style="margin:0">Conversation</h2><a href="Messages.dc.html" style="font-size:13px;font-weight:600;color:{{accent}}">Open</a></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="align-self:flex-start;max-width:90%;background:#F5F1EA;border-radius:12px 12px 12px 4px;padding:10px 12px;font-size:13px;line-height:1.5">Is Pipoca still available? We could visit this weekend.</div>
+            <div style="align-self:flex-end;max-width:90%;background:#EEF2FF;color:#312E81;border-radius:12px 12px 4px 12px;padding:10px 12px;font-size:13px;line-height:1.5">Yes, she is! Saturday morning works. I will send the address.</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#4F46E5","options":["#4F46E5","#0F766E","#B45309","#9D174D"]},"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#4F46E5';
+    const nav = [
+      ['Overview', 'Overview.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+      ['Dogs', 'Dogs.dc.html', 'M12 11c-3 0-5 3-5 5.5 0 2 1.5 3 3 3 .8 0 1.3-.4 2-.4s1.2.4 2 .4c1.5 0 3-1 3-3 0-2.5-2-5.5-5-5.5zM5.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM18.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM15 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z', ''],
+      ['Litters', 'Litters.dc.html', 'M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z', ''],
+      ['Leads', 'Leads.dc.html', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8', '7'],
+      ['Messages', 'Messages.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', '3'],
+      ['Media', 'Media.dc.html', 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21', ''],
+      ['Reviews', 'Reviews.dc.html', 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z', ''],
+      ['Settings', 'Settings-Kennel.dc.html', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z', '']
+    ];
+    const active = 'Leads';
+    const navItems = nav.map(([label, href, icon, badge]) => ({
+      label, href, icon, badge,
+      bg: label === active ? '#EEF2FF' : 'transparent',
+      color: label === active ? accent : '#44403C'
+    }));
+    const stageNames = ['New', 'Contacted', 'Interested', 'Follow-up', 'Reserved', 'Sold'];
+    const current = 2;
+    const stages = stageNames.map((label, i) => ({
+      label,
+      bar: i <= current ? accent : '#E7E2DA',
+      weight: i === current ? '700' : '500',
+      color: i === current ? '#1C1917' : (i < current ? '#57534E' : '#A8A29E')
+    }));
+    const timeline = [
+      { title: 'Follow-up due today', detail: 'Reminder you set after the phone call', time: 'Today', bg: '#FEF3C7', color: '#92400E', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2' },
+      { title: 'Moved to Interested', detail: 'Stage changed by you', time: '3 days ago', bg: '#DCFCE7', color: '#166534', icon: 'M5 12l5 5L20 7' },
+      { title: 'You added a note', detail: 'Two kids, fenced yard, prefers a calm female. Wants to visit on a Saturday.', time: '3 days ago', bg: '#F5F1EA', color: '#44403C', icon: 'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5' },
+      { title: 'Marina sent a message', detail: 'Asked if Pipoca is still available', time: '4 days ago', bg: '#DBEAFE', color: '#1E40AF', icon: 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z' },
+      { title: 'Lead created', detail: 'From the contact form on your Autumn litter page', time: '6 Oct', bg: '#EEF2FF', color: accent, icon: 'M12 5v14M5 12h14' }
+    ];
+    return { accent, navItems, stages, timeline };
+  }
+}
+</script>
+</body>
+</html>

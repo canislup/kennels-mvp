@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings, kennel profile</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:'Work Sans',sans-serif}
+button{cursor:pointer}
+.nav-link:hover{background:#F5F1EA}
+.f-label{display:block;font-size:13px;font-weight:600;color:#44403C;margin-bottom:6px}
+.f-input{width:100%;box-sizing:border-box;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:11px 14px;font-size:14px;color:#1C1917}
+.f-help{font-size:12px;color:#78716C;margin-top:6px}
+.card{background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px;padding:24px}
+.card h2{font-family:'Playfair Display',serif;font-size:20px;margin:0 0 4px}
+.sub{font-size:13px;color:#78716C;margin-bottom:20px}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:2300px;background:#FAF8F4;font-family:'Work Sans',sans-serif;color:#1C1917">
+
+  <aside style="flex:0 0 248px;box-sizing:border-box;background:#FFFFFF;border-right:1px solid #E7E2DA;padding:24px 16px;display:flex;flex-direction:column;gap:24px">
+    <a href="Overview.dc.html" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;padding:0 8px">Kennel<span style="color:{{accent}}">OS</span></a>
+    <nav aria-label="Dashboard" style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{navItems}}" as="item" hint-placeholder-count="8">
+        <a href="{{item.href}}" class="nav-link" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;background:{{item.bg}};color:{{item.color}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex:1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:999px;padding:2px 8px">{{item.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <div style="border:1px solid #E7E2DA;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8D9C0,#C9A063)"></div>
+        <div><div style="font-size:14px;font-weight:600">Maré Labs</div><div style="font-size:12px;color:#78716C">Salvador, BA</div></div>
+      </div>
+      <a href="#" style="font-size:13px;font-weight:500;color:{{accent}}">View public page</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 4px">
+      <div style="width:34px;height:34px;border-radius:999px;background:#1C1917;color:#FBF9F6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">JC</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">Juliana Carvalho</div><a href="#" style="font-size:12px;color:#78716C">Sign out</a></div>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 600px;min-width:0;padding:0 40px 56px;box-sizing:border-box">
+    <div style="height:72px;display:flex;align-items:center;justify-content:flex-end;gap:12px">
+      <div style="display:flex;border:1px solid #E7E2DA;border-radius:999px;background:#FFFFFF;font-size:12px;font-weight:600;overflow:hidden"><span style="padding:6px 12px;background:#1C1917;color:#FBF9F6">EN</span><span style="padding:6px 12px;color:#57534E">PT</span></div>
+      <button aria-label="Notifications, 4 unread" style="position:relative;width:40px;height:40px;border-radius:999px;border:1px solid #E7E2DA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#44403C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9zM13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+        <span style="position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:999px;background:#DC2626;border:2px solid #FFFFFF"></span>
+      </button>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <h1 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin:0 0 6px">Settings</h1>
+      <div style="font-size:15px;color:#57534E">Manage how Maré Labs appears to buyers, and your account.</div>
+    </div>
+
+    <div role="tablist" aria-label="Settings sections" style="display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid #E7E2DA;margin-bottom:28px">
+      <sc-for list="{{settingsTabs}}" as="t" hint-placeholder-count="4">
+        <a href="{{t.href}}" role="tab" style="font-size:14px;font-weight:{{t.weight}};color:{{t.color}};padding:12px 18px;border-bottom:2px solid {{t.line}};margin-bottom:-1px">{{t.label}}</a>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+
+      <div style="flex:3 1 520px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+        <section class="card" aria-label="Identity">
+          <h2>Identity</h2>
+          <div class="sub">The basics buyers see first.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+            <div style="grid-column:1/-1"><label class="f-label" for="k-name">Kennel name</label><input id="k-name" class="f-input" type="text" value="Maré Labs"></div>
+            <div style="grid-column:1/-1">
+              <label class="f-label" for="k-slug">Page address</label>
+              <div style="display:flex;align-items:center;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;overflow:hidden">
+                <span style="padding:11px 0 11px 14px;font-size:14px;color:#78716C;white-space:nowrap">kennelos.com/kennel/</span>
+                <input id="k-slug" type="text" value="mare-labs" style="flex:1;min-width:0;border:0;padding:11px 8px;font-size:14px;color:#1C1917;outline:none">
+                <span style="padding:0 14px;font-size:12px;font-weight:600;color:#166534;white-space:nowrap">Available</span>
+              </div>
+              <div class="f-help">Changing this breaks old links to your page.</div>
+            </div>
+            <div><label class="f-label" for="k-city">City</label><input id="k-city" class="f-input" type="text" value="Salvador"></div>
+            <div><label class="f-label" for="k-state">State</label><select id="k-state" class="f-input"><option>BA</option><option>SP</option><option>RJ</option></select></div>
+            <div style="grid-column:1/-1"><label class="f-label" for="k-desc">About your kennel</label>
+              <textarea id="k-desc" class="f-input" rows="5" style="resize:vertical;line-height:1.6">Maré Labs is a coastal kennel in Salvador specializing in Chocolate and Yellow Labrador Retrievers, bred for the easygoing, people-loving temperament the breed is known for. We also raise a small line of Poodles.</textarea>
+              <div class="f-help" style="text-align:right">236 / 1000</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:22px">
+            <div style="flex:0 0 auto">
+              <span class="f-label">Logo</span>
+              <div style="display:flex;align-items:center;gap:14px">
+                <div style="width:84px;height:84px;border-radius:18px;background:linear-gradient(135deg,#E8D9C0,#C9A063);border:1px solid #E7E2DA"></div>
+                <button style="font-size:13px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:9px 14px">Replace</button>
+              </div>
+            </div>
+            <div style="flex:1 1 280px;min-width:0">
+              <span class="f-label">Cover image</span>
+              <div style="position:relative;height:120px;border-radius:14px;background:linear-gradient(135deg,#C9A27A,#8B6240)">
+                <button style="position:absolute;right:10px;bottom:10px;font-size:12px;font-weight:600;color:#1C1917;background:#FFFFFF;border:0;border-radius:8px;padding:7px 12px">Replace and crop</button>
+              </div>
+              <div class="f-help">Wide photos work best, at least 1600 px across.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Breeds">
+          <h2>Breeds</h2>
+          <div class="sub">Pick up to 3 breeds. Each one gets its own tab on your public page.</div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+            <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;background:#EEF2FF;color:{{accent}};border-radius:999px;padding:8px 8px 8px 16px">Labrador Retriever <button aria-label="Remove Labrador Retriever" style="border:0;background:rgba(79,70,229,0.12);color:inherit;border-radius:999px;width:22px;height:22px;font-size:13px;line-height:1">x</button></span>
+            <span style="display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;background:#EEF2FF;color:{{accent}};border-radius:999px;padding:8px 8px 8px 16px">Poodle <button aria-label="Remove Poodle" style="border:0;background:rgba(79,70,229,0.12);color:inherit;border-radius:999px;width:22px;height:22px;font-size:13px;line-height:1">x</button></span>
+            <button style="font-size:14px;font-weight:600;color:#44403C;background:#FFFFFF;border:1px dashed #A8A29E;border-radius:999px;padding:8px 16px">Add a breed</button>
+            <span style="font-size:12px;color:#78716C;margin-left:auto">2 of 3 chosen</span>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Registration">
+          <h2>Registration</h2>
+          <div class="sub">Used to verify your kennel. Not shown to buyers.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+            <div style="grid-column:1/-1">
+              <span class="f-label">Registered as</span>
+              <div style="display:inline-flex;border:1px solid #D6D0C4;border-radius:10px;overflow:hidden">
+                <button style="border:0;padding:10px 22px;font-size:14px;font-weight:600;background:#EEF2FF;color:{{accent}}">Company (CNPJ)</button>
+                <button style="border:0;padding:10px 22px;font-size:14px;background:#FFFFFF;color:#57534E">Individual (CPF)</button>
+              </div>
+            </div>
+            <div><label class="f-label" for="k-cnpj">CNPJ</label><input id="k-cnpj" class="f-input" type="text" value="88.999.000/0001-11"><div class="f-help">Switch to CPF if you breed as an individual.</div></div>
+            <div><label class="f-label" for="k-cbkc">CBKC registration</label><input id="k-cbkc" class="f-input" type="text" value="CBKC-2008"></div>
+            <div><label class="f-label" for="k-since">Breeding since</label><input id="k-since" class="f-input" type="text" value="2020"></div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Contact">
+          <h2>Contact and social</h2>
+          <div class="sub">Choose what buyers can see. Messages always reach your inbox.</div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{contacts}}" as="c" hint-placeholder-count="5">
+              <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px">
+                <div style="flex:1 1 260px;min-width:0"><label class="f-label" for="{{c.id}}">{{c.label}}</label><input id="{{c.id}}" class="f-input" type="text" value="{{c.value}}"></div>
+                <div style="display:flex;align-items:center;gap:10px;padding-bottom:10px">
+                  <span style="display:inline-block;width:40px;height:22px;border-radius:999px;background:{{c.track}};position:relative"><span style="position:absolute;top:2px;left:{{c.knob}};width:18px;height:18px;border-radius:999px;background:#FFFFFF"></span></span>
+                  <span style="font-size:13px;color:#57534E">{{c.state}}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Location">
+          <h2>Map location</h2>
+          <div class="sub">Powers the distance filter in the directory.</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+            <div style="flex:1 1 260px"><label for="k-addr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Address</label><input id="k-addr" class="f-input" type="text" value="Salvador, Bahia, Brazil"></div>
+            <button style="font-size:14px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:10px 18px">Look up</button>
+          </div>
+          <div style="height:160px;border-radius:14px;background:#EFEAE0;display:flex;align-items:center;justify-content:center;color:#78716C;font-size:13px;margin-bottom:12px">Map preview</div>
+          <div style="font-size:13px;color:#57534E">Latitude -12.9777 · Longitude -38.5016</div>
+        </section>
+      </div>
+
+      <div style="flex:2 1 340px;min-width:0;display:flex;flex-direction:column;gap:24px">
+        <section class="card" aria-label="Live preview" style="padding:0;overflow:hidden">
+          <div style="padding:18px 24px;border-bottom:1px solid #E7E2DA;display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700">Live preview</span><a href="#" style="font-size:13px;font-weight:600;color:{{accent}}">Open page</a></div>
+          <div style="height:110px;background:linear-gradient(135deg,#C9A27A,#8B6240)"></div>
+          <div style="padding:0 24px 24px">
+            <div style="width:72px;height:72px;border-radius:16px;margin-top:-36px;background:linear-gradient(135deg,#E8D9C0,#C9A063);border:4px solid #FFFFFF"></div>
+            <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin:12px 0 4px">Maré Labs</div>
+            <div style="font-size:13px;color:#57534E;margin-bottom:14px">Salvador, BA · Labrador Retriever and Poodle specialists</div>
+            <div style="display:flex;gap:16px;border-bottom:1px solid #E7E2DA;margin-bottom:14px;font-size:13px"><span style="padding-bottom:10px;border-bottom:2px solid #1C1917;font-weight:600">Labrador Retriever</span><span style="padding-bottom:10px;color:#78716C">Poodle</span></div>
+            <div style="font-size:13px;line-height:1.6;color:#57534E">Maré Labs is a coastal kennel in Salvador specializing in Chocolate and Yellow Labrador Retrievers...</div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Profile strength">
+          <h2 style="margin-bottom:12px">Profile strength</h2>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;height:8px;border-radius:999px;background:#F0EBE2;overflow:hidden"><div style="width:83%;height:100%;background:{{accent}}"></div></div><span style="font-size:13px;font-weight:600">83%</span></div>
+          <div style="font-size:13px;color:#57534E;line-height:1.6">Request verification to earn the Verified badge and rank higher in the directory.</div>
+          <a href="Settings-Account.dc.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:{{accent}}">Go to verification</a>
+        </section>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:32px;background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px;padding:16px 24px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#92400E"><span style="width:8px;height:8px;border-radius:999px;background:#D97706"></span>You have unsaved changes</div>
+      <div style="display:flex;gap:10px">
+        <button style="font-size:14px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:11px 20px">Discard</button>
+        <button style="font-size:14px;font-weight:600;color:#FFFFFF;background:{{accent}};border:0;border-radius:10px;padding:11px 22px">Save changes</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#4F46E5","options":["#4F46E5","#0F766E","#B45309","#9D174D"]},"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#4F46E5';
+    const nav = [
+      ['Overview', 'Overview.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+      ['Dogs', 'Dogs.dc.html', 'M12 11c-3 0-5 3-5 5.5 0 2 1.5 3 3 3 .8 0 1.3-.4 2-.4s1.2.4 2 .4c1.5 0 3-1 3-3 0-2.5-2-5.5-5-5.5zM5.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM18.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM15 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z', ''],
+      ['Litters', 'Litters.dc.html', 'M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z', ''],
+      ['Leads', 'Leads.dc.html', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8', '7'],
+      ['Messages', 'Messages.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', '3'],
+      ['Media', 'Media.dc.html', 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21', ''],
+      ['Reviews', 'Reviews.dc.html', 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z', ''],
+      ['Settings', 'Settings-Kennel.dc.html', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z', '']
+    ];
+    const active = 'Settings';
+    const navItems = nav.map(([label, href, icon, badge]) => ({
+      label, href, icon, badge,
+      bg: label === active ? '#EEF2FF' : 'transparent',
+      color: label === active ? accent : '#44403C'
+    }));
+    const tabDefs = [['Kennel profile', 'Settings-Kennel.dc.html', true], ['Account', 'Settings-Account.dc.html', false], ['Notifications', 'Settings-Account.dc.html', false], ['Verification', 'Settings-Account.dc.html', false]];
+    const settingsTabs = tabDefs.map(([label, href, on]) => ({
+      label, href,
+      weight: on ? '600' : '500',
+      color: on ? accent : '#57534E',
+      line: on ? accent : 'transparent'
+    }));
+    const cdefs = [
+      ['c-phone', 'Public phone', '+55 71 3333 4455', true],
+      ['c-email', 'Public email', 'contato@marelabs.com', true],
+      ['c-web', 'Website', 'https://marelabs.com', false],
+      ['c-ig', 'Instagram', '@mare.labs', true],
+      ['c-wa', 'WhatsApp', '+55 71 98877 1122', true]
+    ];
+    const contacts = cdefs.map(([id, label, value, on]) => ({
+      id, label, value,
+      track: on ? accent : '#D6D0C4',
+      knob: on ? '20px' : '2px',
+      state: on ? 'Shown on your page' : 'Hidden'
+    }));
+    return { accent, navItems, settingsTabs, contacts };
+  }
+}
+</script>
+</body>
+</html>

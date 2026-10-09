@@ -5,28 +5,153 @@
     }
   },
   "dashboard": {
-    "sidebar": {
-      "nav": {
-        "overview": "Visão Geral",
-        "roster": "Plantel",
-        "litters": "Ninhadas",
-        "profile": "Perfil",
-        "settings": "Configurações"
+    "shell": {
+      "metadata": {
+        "titleTemplate": "%s · KennelOS",
+        "defaultTitle": "Painel · KennelOS"
       },
-      "signOut": "Sair"
+      "skipToContent": "Pular para o conteúdo",
+      "nav": {
+        "label": "Painel",
+        "overview": "Visão geral",
+        "dogs": "Cães",
+        "litters": "Ninhadas",
+        "leads": "Interessados",
+        "messages": "Mensagens",
+        "media": "Mídia",
+        "reviews": "Avaliações",
+        "settings": "Configurações",
+        "newLeadsBadge": "{count, plural, one {# novo interessado} other {# novos interessados}}",
+        "unreadMessagesBadge": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+      },
+      "viewPublicPage": "Ver página pública",
+      "opensInNewTab": "(abre em uma nova aba)",
+      "signOut": "Sair",
+      "mobileNav": {
+        "open": "Abrir menu",
+        "close": "Fechar menu",
+        "label": "Menu do painel"
+      },
+      "notifications": {
+        "button": "Notificações",
+        "buttonUnread": "Notificações, {count} não lidas",
+        "title": "Notificações",
+        "unreadCount": "{count} não lidas",
+        "unread": "não lida",
+        "empty": "Tudo em dia por aqui."
+      }
+    },
+    "common": {
+      "time": {
+        "justNow": "Agora mesmo",
+        "yesterday": "Ontem",
+        "daysAgo": "{count, plural, one {há # dia} other {há # dias}}"
+      },
+      "dogStatus": {
+        "BREEDING_STOCK": "Reprodutor",
+        "AVAILABLE_PUPPY": "Disponível",
+        "RESERVED": "Reservado",
+        "SOLD": "Vendido"
+      },
+      "placeholder": {
+        "title": "Esta seção está sendo redesenhada",
+        "description": "Estamos reconstruindo esta parte do painel. Ela volta em breve.",
+        "back": "Voltar para a visão geral"
+      }
     },
     "overview": {
-      "heading": "Visão Geral",
-      "welcome": "Bem-vindo(a) de volta, {kennelName}",
       "onboarding": {
-        "title": "Bem-vindo(a) ao KennelOS!",
-        "description": "Você ainda não configurou seu canil. Crie seu perfil para começar a gerenciar seus cachorros e ninhadas e ser encontrado por compradores.",
-        "cta": "Criar Seu Canil"
+        "title": "Boas-vindas ao KennelOS!",
+        "description": "Você ainda não configurou seu canil. Crie o perfil para começar a organizar seus cães e ninhadas e ser encontrado por compradores.",
+        "cta": "Criar meu canil"
+      },
+      "greeting": {
+        "morning": "Bom dia, {name}",
+        "afternoon": "Boa tarde, {name}",
+        "evening": "Boa noite, {name}"
+      },
+      "subtitle": "Veja o que está acontecendo hoje em {kennelName}.",
+      "actions": {
+        "newLitter": "Nova ninhada",
+        "addDog": "Adicionar cão"
+      },
+      "setup": {
+        "heading": "Termine de configurar seu canil",
+        "summary": "{done} de {total} etapas concluídas. Perfis completos aparecem mais acima no diretório.",
+        "progressLabel": "Progresso da configuração",
+        "percent": "{percent}%",
+        "steps": {
+          "kennelDetails": "Dados do canil",
+          "logoAndCover": "Logo e capa",
+          "breeds": "Raças",
+          "firstDog": "Primeiro cão",
+          "photos": "Fotos",
+          "verification": "Pedir verificação"
+        },
+        "state": {
+          "done": "concluída",
+          "next": "próxima etapa",
+          "todo": "pendente"
+        }
       },
       "metrics": {
-        "totalDogs": "Total de Cachorros",
-        "activeLitters": "Ninhadas Ativas",
-        "publicProfile": "Perfil Público"
+        "label": "Números principais",
+        "newLeads": {
+          "label": "Novos interessados",
+          "note": "{count} desde ontem"
+        },
+        "unreadMessages": {
+          "label": "Mensagens não lidas",
+          "note": "{days, plural, =0 {A mais antiga chegou hoje} one {A mais antiga espera há # dia} other {A mais antiga espera há # dias}}",
+          "noneWaiting": "Nenhuma esperando resposta"
+        },
+        "availablePuppies": {
+          "label": "Filhotes disponíveis",
+          "note": "{count, plural, one {Em # ninhada} other {Em # ninhadas}}"
+        },
+        "activeLitters": {
+          "label": "Ninhadas ativas",
+          "note": "{days, plural, =0 {Próxima entrega hoje} one {Próxima entrega amanhã} other {Próxima entrega em # dias}}",
+          "noneScheduled": "Nenhuma entrega agendada"
+        }
+      },
+      "activity": {
+        "heading": "Atividade recente",
+        "empty": "Nada de novo por enquanto. Interessados, mensagens e novidades das ninhadas aparecem aqui.",
+        "newLead": {
+          "title": "Novo interessado: {name}",
+          "detail": "Perguntou sobre {subject}"
+        },
+        "newMessage": {
+          "title": "{name} enviou uma mensagem",
+          "detail": "“{excerpt}”"
+        },
+        "newReview": {
+          "title": "Nova avaliação de {rating} estrelas",
+          "detail": "{authorName} avaliou {kennelName}"
+        },
+        "dogStatusChanged": {
+          "title": "{dogName} agora está como {status}",
+          "detail": "Status alterado por você"
+        },
+        "litterBorn": {
+          "title": "Ninhada de {damName} registrada como nascida",
+          "detail": "{count, plural, one {# filhote, agora listado como disponível} other {# filhotes, agora listados como disponíveis}}"
+        }
+      },
+      "upcoming": {
+        "heading": "Próximos compromissos",
+        "empty": "Nenhum retorno ou entrega agendado.",
+        "seeAll": "Ver todos os retornos",
+        "followUp": {
+          "title": "Retornar para {leadName}",
+          "detail": "{days, plural, =0 {Interessado, para hoje} =1 {Interessado, para amanhã} other {Interessado, em # dias}}",
+          "overdue": "Interessado, retorno atrasado"
+        },
+        "goHome": {
+          "title": "Entrega: {litterName}",
+          "detail": "{puppies, plural, one {# filhote} other {# filhotes}}, {reserved, plural, one {# reservado} other {# reservados}}"
+        }
       }
     },
     "dogs": {
@@ -68,9 +193,6 @@
         "emptyTitle": "Nenhum cachorro encontrado",
         "emptyDescription": "Comece cadastrando o perfil do seu primeiro cachorro."
       }
-    },
-    "layout": {
-      "viewPublicProfile": "Ver Perfil Público"
     },
     "kennelSetup": {
       "page": {

@@ -23,6 +23,7 @@ type HomeProps = {
 // Breed names are database content (not translated); these match Breed rows.
 const POPULAR_BREEDS = [
   "Labrador Retriever",
+  "Siberian Husky",
   "French Bulldog",
   "Doberman Pinscher",
   "Shih Tzu",

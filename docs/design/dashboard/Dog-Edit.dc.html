@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Edit dog</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:'Work Sans',sans-serif}
+button{cursor:pointer}
+.nav-link:hover{background:#F5F1EA}
+.f-label{display:block;font-size:13px;font-weight:600;color:#44403C;margin-bottom:6px}
+.f-input{width:100%;box-sizing:border-box;border:1px solid #D6D0C4;border-radius:10px;background:#FFFFFF;padding:11px 14px;font-size:14px;color:#1C1917}
+.f-help{font-size:12px;color:#78716C;margin-top:6px}
+.card{background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px;padding:24px}
+.card h2{font-family:'Playfair Display',serif;font-size:20px;margin:0 0 18px}
+</style>
+</helmet>
+<div style="display:flex;flex-wrap:wrap;min-height:1620px;background:#FAF8F4;font-family:'Work Sans',sans-serif;color:#1C1917">
+
+  <aside style="flex:0 0 248px;box-sizing:border-box;background:#FFFFFF;border-right:1px solid #E7E2DA;padding:24px 16px;display:flex;flex-direction:column;gap:24px">
+    <a href="Overview.dc.html" style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;padding:0 8px">Kennel<span style="color:{{accent}}">OS</span></a>
+    <nav aria-label="Dashboard" style="display:flex;flex-direction:column;gap:4px">
+      <sc-for list="{{navItems}}" as="item" hint-placeholder-count="8">
+        <a href="{{item.href}}" class="nav-link" style="display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;background:{{item.bg}};color:{{item.color}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{item.icon}}"></path></svg>
+          <span style="flex:1">{{item.label}}</span>
+          <sc-if value="{{item.badge}}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:999px;padding:2px 8px">{{item.badge}}</span>
+          </sc-if>
+        </a>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <div style="border:1px solid #E7E2DA;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E8D9C0,#C9A063)"></div>
+        <div><div style="font-size:14px;font-weight:600">Maré Labs</div><div style="font-size:12px;color:#78716C">Salvador, BA</div></div>
+      </div>
+      <a href="#" style="font-size:13px;font-weight:500;color:{{accent}}">View public page</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 4px">
+      <div style="width:34px;height:34px;border-radius:999px;background:#1C1917;color:#FBF9F6;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600">JC</div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">Juliana Carvalho</div><a href="#" style="font-size:12px;color:#78716C">Sign out</a></div>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 600px;min-width:0;padding:0 40px 56px;box-sizing:border-box">
+    <div style="height:72px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div style="font-size:13px;color:#78716C"><a href="Dogs.dc.html" style="color:#78716C">Dogs</a><span style="margin:0 8px">/</span><span style="color:#1C1917;font-weight:500">Café</span></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="display:flex;border:1px solid #E7E2DA;border-radius:999px;background:#FFFFFF;font-size:12px;font-weight:600;overflow:hidden"><span style="padding:6px 12px;background:#1C1917;color:#FBF9F6">EN</span><span style="padding:6px 12px;color:#57534E">PT</span></div>
+        <button aria-label="Notifications, 4 unread" style="position:relative;width:40px;height:40px;border-radius:999px;border:1px solid #E7E2DA;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#44403C">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9zM13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+          <span style="position:absolute;top:8px;right:9px;width:9px;height:9px;border-radius:999px;background:#DC2626;border:2px solid #FFFFFF"></span>
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px">
+      <div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;margin:0 0 6px">Edit Café</h1>
+        <div style="font-size:15px;color:#57534E">Changes show on her public dog page as soon as you save.</div>
+      </div>
+      <a href="#" style="font-size:14px;font-weight:600;color:{{accent}}">Preview public page</a>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+
+      <div style="flex:3 1 520px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+        <section class="card" aria-label="Basics">
+          <h2>Basics</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+            <div><label class="f-label" for="d-name">Name</label><input id="d-name" class="f-input" type="text" value="Café"></div>
+            <div><label class="f-label" for="d-breed">Breed</label><select id="d-breed" class="f-input"><option>Labrador Retriever</option><option>Poodle</option></select><div class="f-help">Only breeds your kennel raises.</div></div>
+            <div>
+              <span class="f-label">Sex</span>
+              <div style="display:flex;border:1px solid #D6D0C4;border-radius:10px;overflow:hidden">
+                <button style="flex:1;border:0;padding:11px;font-size:14px;background:#FFFFFF;color:#57534E">Male</button>
+                <button style="flex:1;border:0;padding:11px;font-size:14px;font-weight:600;background:#EEF2FF;color:{{accent}}">Female</button>
+              </div>
+            </div>
+            <div>
+              <span class="f-label">Life stage</span>
+              <div style="display:flex;border:1px solid #D6D0C4;border-radius:10px;overflow:hidden">
+                <button style="flex:1;border:0;padding:11px;font-size:14px;font-weight:600;background:#EEF2FF;color:{{accent}}">Puppy</button>
+                <button style="flex:1;border:0;padding:11px;font-size:14px;background:#FFFFFF;color:#57534E">Adult</button>
+              </div>
+            </div>
+            <div><label class="f-label" for="d-birth">Birth date</label><input id="d-birth" class="f-input" type="text" value="02 Jul 2026"><div class="f-help">Age on the public page is calculated from this.</div></div>
+            <div><label class="f-label" for="d-status">Status</label><select id="d-status" class="f-input"><option>Reserved</option><option>Breeding stock</option><option>Available puppy</option><option>Sold</option></select></div>
+          </div>
+          <div style="margin-top:18px;padding:16px;border-radius:12px;background:#EEF2FF;border:1px solid #DDE3FB">
+            <label class="f-label" for="d-litter">Litter</label>
+            <select id="d-litter" class="f-input"><option>Pérola and Marley, Autumn litter (born 02 Jul 2026)</option><option>No litter</option></select>
+            <div class="f-help" style="color:#4B5563">Shown only for puppies. Parents on the public page come from this litter.</div>
+          </div>
+        </section>
+
+        <section class="card" aria-label="Registry and lineage">
+          <h2>Registry and lineage</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+            <div><label class="f-label" for="d-reg">Registry</label><input id="d-reg" class="f-input" type="text" value="CBKC"></div>
+            <div><label class="f-label" for="d-line">Bloodline</label><input id="d-line" class="f-input" type="text" value="Chocolate Labs BR"><div class="f-help">Shown as a badge on the dog page.</div></div>
+          </div>
+          <div style="margin-top:18px"><label class="f-label" for="d-ped">Pedigree link</label><input id="d-ped" class="f-input" type="text" placeholder="https://"></div>
+        </section>
+
+        <section class="card" aria-label="Parents">
+          <h2>Parents</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+            <div><label class="f-label" for="d-sire">Sire (father)</label><input id="d-sire" class="f-input" type="text" value="Marley"></div>
+            <div><label class="f-label" for="d-dam">Dam (mother)</label><input id="d-dam" class="f-input" type="text" value="Pérola"></div>
+          </div>
+          <div class="f-help">Registered names, as plain text. Adults can list parents from other kennels.</div>
+        </section>
+
+        <section class="card" aria-label="About">
+          <h2>About Café</h2>
+          <label class="f-label" for="d-bio">Bio</label>
+          <textarea id="d-bio" class="f-input" rows="6" style="resize:vertical;line-height:1.6">Café is a calm, curious chocolate girl who greets everyone at the door. She loves water, carries her toys from room to room and has taken to her first training sessions quickly.</textarea>
+          <div class="f-help" style="text-align:right">188 / 800</div>
+        </section>
+      </div>
+
+      <div style="flex:2 1 340px;min-width:0;display:flex;flex-direction:column;gap:24px">
+
+        <section class="card" aria-label="Photos">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <h2 style="margin:0">Photos</h2>
+            <span style="font-size:12px;color:#78716C">5 of 8</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+            <sc-for list="{{photos}}" as="p" hint-placeholder-count="5">
+              <div style="position:relative;aspect-ratio:1/1;border-radius:12px;background:{{p.bg}};border:2px solid {{p.border}}">
+                <sc-if value="{{p.cover}}" hint-placeholder-val="{{ false }}"><span style="position:absolute;left:6px;bottom:6px;font-size:10px;font-weight:600;color:#FFFFFF;background:{{accent}};border-radius:999px;padding:2px 8px">Cover</span></sc-if>
+                <button aria-label="Remove photo" style="position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:999px;border:0;background:rgba(28,25,23,0.65);color:#FFFFFF;font-size:13px;line-height:1">x</button>
+              </div>
+            </sc-for>
+            <div style="aspect-ratio:1/1;border-radius:12px;border:2px dashed #D6D0C4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:{{accent}};font-size:12px;font-weight:600">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add
+            </div>
+          </div>
+          <div class="f-help">Drag to reorder. The first photo is the cover.</div>
+        </section>
+
+        <section class="card" aria-label="Health documents">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <h2 style="margin:0">Health documents</h2>
+            <span style="font-size:12px;color:#78716C">3 uploaded</span>
+          </div>
+          <div style="font-size:13px;color:#57534E;margin-bottom:14px">Upload photos or scans of test results. Buyers see them as a gallery on the public page.</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{docs}}" as="doc" hint-placeholder-count="3">
+              <div style="display:flex;gap:12px;align-items:center;border:1px solid #E7E2DA;border-radius:12px;padding:10px">
+                <div style="flex:0 0 56px;height:70px;border-radius:8px;background:#F5F1EA;border:1px solid #E7E2DA;display:flex;align-items:center;justify-content:center;color:#A8A29E">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6"></path></svg>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:14px;font-weight:600">{{doc.label}}</div>
+                  <div style="font-size:12px;color:#78716C;margin-top:2px">{{doc.file}}</div>
+                </div>
+                <button aria-label="Remove document" style="border:0;background:transparent;color:#78716C;font-size:13px">Remove</button>
+              </div>
+            </sc-for>
+          </div>
+          <button style="width:100%;margin-top:14px;border:1px dashed #A8A29E;border-radius:10px;background:#FFFFFF;padding:12px;font-size:14px;font-weight:600;color:{{accent}}">Upload health document</button>
+        </section>
+
+        <section class="card" aria-label="Danger zone" style="border-color:#F3D3D3">
+          <h2 style="color:#991B1B">Archive or delete</h2>
+          <div style="font-size:13px;color:#57534E;margin-bottom:16px">Archiving hides Café from your public page and keeps her record. Deleting removes her and her photos for good.</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <button style="font-size:14px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:10px 16px">Archive dog</button>
+            <button style="font-size:14px;font-weight:600;color:#991B1B;background:#FEF2F2;border:1px solid #F3D3D3;border-radius:10px;padding:10px 16px">Delete permanently</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:32px;background:#FFFFFF;border:1px solid #E7E2DA;border-radius:16px;padding:16px 24px">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#92400E"><span style="width:8px;height:8px;border-radius:999px;background:#D97706"></span>You have unsaved changes</div>
+      <div style="display:flex;gap:10px">
+        <a href="Dogs.dc.html" style="font-size:14px;font-weight:600;color:#1C1917;background:#FFFFFF;border:1px solid #D6D0C4;border-radius:10px;padding:11px 20px">Cancel</a>
+        <button style="font-size:14px;font-weight:600;color:#FFFFFF;background:{{accent}};border:0;border-radius:10px;padding:11px 22px">Save changes</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#4F46E5","options":["#4F46E5","#0F766E","#B45309","#9D174D"]},"$preview":{"width":1440,"height":1620}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#4F46E5';
+    const nav = [
+      ['Overview', 'Overview.dc.html', 'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z', ''],
+      ['Dogs', 'Dogs.dc.html', 'M12 11c-3 0-5 3-5 5.5 0 2 1.5 3 3 3 .8 0 1.3-.4 2-.4s1.2.4 2 .4c1.5 0 3-1 3-3 0-2.5-2-5.5-5-5.5zM5.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM18.5 8a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM15 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z', ''],
+      ['Litters', 'Litters.dc.html', 'M12 21s-7-4.5-9-9a5 5 0 0 1 9-3 5 5 0 0 1 9 3c-2 4.5-9 9-9 9z', ''],
+      ['Leads', 'Leads.dc.html', 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8', '7'],
+      ['Messages', 'Messages.dc.html', 'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z', '3'],
+      ['Media', 'Media.dc.html', 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21', ''],
+      ['Reviews', 'Reviews.dc.html', 'M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8 5.8 21.1 7 14.2 2 9.3l6.9-1z', ''],
+      ['Settings', 'Settings-Kennel.dc.html', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z', '']
+    ];
+    const active = 'Dogs';
+    const navItems = nav.map(([label, href, icon, badge]) => ({
+      label, href, icon, badge,
+      bg: label === active ? '#EEF2FF' : 'transparent',
+      color: label === active ? accent : '#44403C'
+    }));
+    const grads = ['linear-gradient(135deg,#C9A27A,#8B6240)', 'linear-gradient(135deg,#D9B98F,#A47B52)', 'linear-gradient(135deg,#B58B63,#7A5535)', 'linear-gradient(135deg,#E0C8A4,#B8924F)', 'linear-gradient(135deg,#CBA77F,#946B45)'];
+    const photos = grads.map((bg, i) => ({ bg, cover: i === 0, border: i === 0 ? accent : 'transparent' }));
+    const docs = [
+      { label: 'OFA hips and elbows (parents)', file: 'ofa-pais.jpg' },
+      { label: 'DNA panel', file: 'dna-cafe.jpg' },
+      { label: 'Vaccination card', file: 'vacinas.jpg' }
+    ];
+    return { accent, navItems, photos, docs };
+  }
+}
+</script>
+</body>
+</html>
