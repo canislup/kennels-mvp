@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const NO_COUNTS: NavCounts = { newLeads: 0, unreadMessages: 0 };
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children, breadcrumb }: { children: React.ReactNode; breadcrumb: React.ReactNode }) {
     const session = await verifyKennelSession();
     if (!session) {
         redirect({ href: "/login", locale: await getLocale() });
@@ -49,12 +49,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </aside>
 
             <div className="flex min-w-0 flex-1 flex-col">
-                <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-line bg-white px-4 sm:px-6 lg:static lg:h-18 lg:border-b-0 lg:px-10">
-                    <div className="flex items-center gap-1.5 lg:hidden">
+                <header className="group/topbar sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-line bg-white px-4 sm:px-6 lg:static lg:h-18 lg:border-b-0 lg:px-10">
+                    <div className="flex shrink-0 items-center gap-1.5 lg:hidden">
                         <MobileNav>{sidebar}</MobileNav>
-                        <Wordmark className="text-xl" />
+                        {/* On mobile the page's breadcrumb, when there is one, takes the wordmark's place. */}
+                        <Wordmark className="text-xl group-has-[[data-breadcrumb]]/topbar:hidden" />
                     </div>
-                    <div className="ml-auto flex items-center gap-3">
+                    {/* Filled by the @breadcrumb parallel route; empty on pages without one. */}
+                    <div className="min-w-0 flex-1">{breadcrumb}</div>
+                    <div className="flex shrink-0 items-center gap-3">
                         <LocaleSwitcher tone="dashboard" />
                         <NotificationsBell notifications={notifications} />
                     </div>

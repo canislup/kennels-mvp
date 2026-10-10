@@ -38,8 +38,31 @@
         "title": "Notificações",
         "unreadCount": "{count} não lidas",
         "unread": "não lida",
-        "empty": "Tudo em dia por aqui."
-      }
+        "empty": "Tudo em dia por aqui.",
+        "types": {
+          "newLead": {
+            "title": "Novo interessado: {name}",
+            "detail": "Quer saber sobre seus filhotes"
+          },
+          "newMessage": {
+            "title": "{name} enviou uma mensagem",
+            "detail": "“{excerpt}”"
+          },
+          "newReview": {
+            "title": "Nova avaliação de {rating} estrelas",
+            "detail": "De {reviewerName}"
+          },
+          "followUpDue": {
+            "title": "Retorno para hoje",
+            "detail": "{leadName}"
+          },
+          "verificationReminder": {
+            "title": "Peça a verificação",
+            "detail": "É a última etapa para completar seu perfil"
+          }
+        }
+      },
+      "breadcrumbLabel": "Navegação estrutural"
     },
     "common": {
       "time": {
@@ -57,6 +80,50 @@
         "title": "Esta seção está sendo redesenhada",
         "description": "Estamos reconstruindo esta parte do painel. Ela volta em breve.",
         "back": "Voltar para a visão geral"
+      },
+      "dismiss": "Fechar",
+      "loading": "Carregando…",
+      "dogStatusOption": {
+        "BREEDING_STOCK": "Reprodutor",
+        "AVAILABLE_PUPPY": "Filhote disponível",
+        "RESERVED": "Reservado",
+        "SOLD": "Vendido"
+      },
+      "sex": {
+        "MALE": "Macho",
+        "FEMALE": "Fêmea"
+      },
+      "lifeStage": {
+        "PUPPY": "Filhote",
+        "ADULT": "Adulto"
+      },
+      "age": {
+        "weeks": "{count, plural, one {# semana} other {# semanas}}",
+        "months": "{count, plural, one {# mês} other {# meses}}",
+        "years": "{count, plural, one {# ano} other {# anos}}"
+      },
+      "form": {
+        "characterCount": "{count} / {max}",
+        "unsavedChanges": "Você tem alterações não salvas",
+        "allSaved": "Tudo salvo",
+        "cancel": "Cancelar",
+        "saving": "Salvando…"
+      },
+      "errors": {
+        "required": "Campo obrigatório.",
+        "tooLong": "Use no máximo {max} caracteres.",
+        "invalidBreed": "Escolha uma das raças que seu canil cria.",
+        "invalidChoice": "Escolha uma das opções.",
+        "invalidDate": "Informe uma data válida.",
+        "futureDate": "A data de nascimento não pode estar no futuro.",
+        "litterPuppiesOnly": "Só filhotes podem ser vinculados a uma ninhada.",
+        "invalidUrl": "Informe um link que comece com http:// ou https://.",
+        "tooManyPhotos": "Você pode adicionar até {max} fotos.",
+        "invalidPhoto": "Não foi possível ler uma das fotos. Remova-a e envie de novo.",
+        "tooManyDocuments": "Você pode adicionar até {max} documentos.",
+        "invalidDocument": "Cada documento precisa de um nome e de uma imagem enviada.",
+        "notFound": "Este cão não existe mais. Ele pode ter sido excluído.",
+        "generic": "Algo deu errado. Tente de novo."
       }
     },
     "overview": {
@@ -107,7 +174,7 @@
         },
         "availablePuppies": {
           "label": "Filhotes disponíveis",
-          "note": "{count, plural, one {Em # ninhada} other {Em # ninhadas}}"
+          "note": "{count, plural, =0 {Nenhum filhote listado} one {Em # ninhada} other {Em # ninhadas}}"
         },
         "activeLitters": {
           "label": "Ninhadas ativas",
@@ -128,7 +195,7 @@
         },
         "newReview": {
           "title": "Nova avaliação de {rating} estrelas",
-          "detail": "{authorName} avaliou {kennelName}"
+          "detail": "{reviewerName} avaliou {kennelName}"
         },
         "dogStatusChanged": {
           "title": "{dogName} agora está como {status}",
@@ -155,43 +222,144 @@
       }
     },
     "dogs": {
-      "card": {
-        "editTooltip": "Editar Cachorro",
-        "photoAlt": "{name} - Foto {index}",
-        "fullscreenAlt": "{name} - Tela Cheia"
-      },
-      "addModal": {
-        "trigger": "Adicionar Novo Perfil",
-        "title": "Novo Perfil de Cachorro",
-        "imagesLabel": "Imagens",
-        "addImages": "Adicionar Imagens",
-        "uploadedPreviewAlt": "Pré-visualização enviada",
-        "nameLabel": "Nome",
-        "namePlaceholder": "ex.: Bella",
-        "breedLabel": "Raça",
-        "breedPlaceholder": "Selecione uma raça...",
-        "genderLabel": "Sexo",
-        "genderPlaceholder": "Selecione o sexo",
-        "genderMale": "Macho",
-        "genderFemale": "Fêmea",
-        "cancel": "Cancelar",
-        "saving": "Salvando...",
-        "submit": "Criar Perfil",
-        "errors": {
-          "createFailed": "Não foi possível criar o perfil do cachorro.",
-          "network": "Ocorreu um erro de conexão."
+      "list": {
+        "title": "Cães",
+        "subtitle": "Seu plantel: reprodutores, filhotes e vendas anteriores.",
+        "addDog": "Adicionar cão",
+        "tabsLabel": "Filtrar por status",
+        "tabs": {
+          "all": "Todos",
+          "BREEDING_STOCK": "Reprodutores",
+          "AVAILABLE_PUPPY": "Filhotes disponíveis",
+          "RESERVED": "Reservados",
+          "SOLD": "Vendidos"
+        },
+        "filters": {
+          "searchLabel": "Buscar cães",
+          "searchPlaceholder": "Buscar por nome ou registro",
+          "breedLabel": "Raça",
+          "allBreeds": "Todas as raças",
+          "sexLabel": "Sexo",
+          "anySex": "Qualquer sexo",
+          "male": "Macho",
+          "female": "Fêmea",
+          "stageLabel": "Fase de vida",
+          "anyStage": "Qualquer fase",
+          "puppy": "Filhote",
+          "adult": "Adulto"
+        },
+        "edit": "Editar",
+        "noPhoto": "Ainda sem foto",
+        "changeStatus": "Mudar o status de {name}, atualmente {status}",
+        "statusMenuLabel": "Status de {name}",
+        "statusFailed": "Não foi possível mudar o status. Tente de novo.",
+        "showing": "Mostrando {shown} de {total} {total, plural, one {cão} other {cães}}",
+        "filteredNote": "(filtrado)",
+        "paginationLabel": "Páginas",
+        "previous": "Anterior",
+        "next": "Próxima",
+        "emptyRoster": {
+          "title": "Nenhum cão ainda",
+          "description": "Cadastre seus reprodutores e filhotes para montar seu plantel e mostrá-los na sua página pública.",
+          "cta": "Adicionar o primeiro cão"
+        },
+        "emptyFiltered": {
+          "title": "Nenhum cão encontrado com esses filtros",
+          "description": "Tente outra busca ou limpe os filtros para ver todo o plantel.",
+          "clear": "Limpar filtros"
         }
       },
-      "editModal": {
-        "trigger": "Editar Cachorro",
-        "title": "Editar Cachorro",
-        "nameLabel": "Nome"
+      "notices": {
+        "created": "Cão adicionado ao plantel.",
+        "archived": "Cão arquivado. Ele não aparece mais no plantel nem na página pública.",
+        "deleted": "Cão excluído definitivamente."
       },
-      "page": {
-        "heading": "Cachorros",
-        "subheading": "Gerencie o plantel de {kennelName}",
-        "emptyTitle": "Nenhum cachorro encontrado",
-        "emptyDescription": "Comece cadastrando o perfil do seu primeiro cachorro."
+      "form": {
+        "createTitle": "Adicionar um cão",
+        "createSubtitle": "Preencha o básico agora. Fotos e documentos podem ser adicionados depois.",
+        "editTitle": "Editar {name}",
+        "editSubtitle": "As alterações aparecem na página pública do cão assim que você salvar.",
+        "previewPublic": "Ver página pública",
+        "opensInNewTab": "(abre em uma nova aba)",
+        "newDogCrumb": "Novo cão",
+        "archivedNotice": "{name} está arquivado e não aparece no plantel nem na página pública.",
+        "submitCreate": "Adicionar cão",
+        "submitEdit": "Salvar alterações",
+        "noLitter": "Sem ninhada",
+        "litterBorn": "{label} (nascida em {date})",
+        "litterPlanned": "{label} (planejada)",
+        "sections": {
+          "basics": "Informações básicas",
+          "registry": "Registro e linhagem",
+          "parents": "Pais",
+          "about": "Sobre",
+          "aboutNamed": "Sobre {name}"
+        },
+        "fields": {
+          "name": "Nome",
+          "breed": "Raça",
+          "sex": "Sexo",
+          "lifeStage": "Fase de vida",
+          "birthDate": "Data de nascimento",
+          "status": "Status",
+          "litter": "Ninhada",
+          "registry": "Registro",
+          "lineage": "Linhagem",
+          "pedigreeUrl": "Link do pedigree",
+          "sireName": "Pai",
+          "damName": "Mãe",
+          "bio": "Descrição"
+        },
+        "placeholders": {
+          "breed": "Escolha uma raça",
+          "registry": "ex.: CBKC"
+        },
+        "help": {
+          "breed": "Só as raças que seu canil cria.",
+          "birthDate": "A idade na página pública é calculada a partir desta data.",
+          "litter": "Aparece só para filhotes. Os pais na página pública vêm desta ninhada.",
+          "lineage": "Aparece como selo na página do cão.",
+          "parents": "Nomes de registro, em texto livre. Adultos podem ter pais de outros canis."
+        },
+        "photos": {
+          "heading": "Fotos",
+          "count": "{count} de {max}",
+          "cover": "Capa",
+          "add": "Adicionar",
+          "help": "Arraste para reordenar ou use os botões de seta. A primeira foto é a capa.",
+          "photoAlt": "Foto {position}",
+          "remove": "Remover foto {position}",
+          "moveEarlier": "Mover foto {position} para trás",
+          "moveLater": "Mover foto {position} para frente",
+          "moved": "Foto movida da posição {from} para {to} de {total}.",
+          "removed": "Foto {position} removida."
+        },
+        "documents": {
+          "heading": "Documentos de saúde",
+          "count": "{count, plural, one {# enviado} other {# enviados}}",
+          "description": "Envie fotos ou digitalizações dos resultados de exames. Os compradores veem como uma galeria na página pública.",
+          "upload": "Enviar documento de saúde",
+          "labelField": "Nome do documento",
+          "labelPlaceholder": "ex.: Displasia coxofemoral e de cotovelo",
+          "chooseImage": "Escolher imagem",
+          "cancel": "Cancelar",
+          "remove": "Remover",
+          "limitReached": "Você atingiu o limite de {max} documentos."
+        },
+        "danger": {
+          "heading": "Arquivar ou excluir",
+          "description": "Arquivar esconde {name} do plantel e da página pública, mantendo o cadastro. Excluir apaga o cão e todas as fotos de vez.",
+          "archive": "Arquivar cão",
+          "delete": "Excluir definitivamente",
+          "cancel": "Cancelar",
+          "working": "Aguarde…",
+          "archiveTitle": "Arquivar {name}?",
+          "archiveDescription": "{name} deixa de aparecer no plantel e na sua página pública. O cadastro é mantido.",
+          "archiveConfirm": "Arquivar cão",
+          "deleteTitle": "Excluir {name} definitivamente?",
+          "deleteDescription": "Isso apaga {name}, todas as fotos e todos os documentos de saúde. Não dá para desfazer.",
+          "deleteConfirm": "Excluir definitivamente"
+        }
       }
     },
     "kennelSetup": {

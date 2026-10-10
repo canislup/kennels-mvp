@@ -266,7 +266,7 @@ function activityText(
         case "NEW_REVIEW":
             return {
                 title: t("activity.newReview.title", { rating: item.params.rating }),
-                detail: t("activity.newReview.detail", { authorName: item.params.authorName, kennelName }),
+                detail: t("activity.newReview.detail", { reviewerName: item.params.reviewerName, kennelName }),
             };
         case "DOG_STATUS_CHANGED":
             return {

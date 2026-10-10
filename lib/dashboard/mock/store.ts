@@ -9,7 +9,10 @@
 // Only lib/dashboard/*.ts may import this. Pages and components never do.
 import { buildFixtures, type MockFixtures } from "./fixtures";
 
-const STORE_KEY = Symbol.for("kennelos.dashboard.mockStore");
+// Bump when the fixture shape changes, so a running dev server rebuilds the
+// store instead of serving an old shape from globalThis.
+const STORE_VERSION = 2;
+const STORE_KEY = Symbol.for(`kennelos.dashboard.mockStore.v${STORE_VERSION}`);
 
 type GlobalWithStore = typeof globalThis & { [STORE_KEY]?: MockFixtures };
 

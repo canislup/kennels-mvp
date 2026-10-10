@@ -1,0 +1,171 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import { getCurrentKennel } from "@/lib/dashboard/kennel";
+import { getDogStatusCounts, getKennelBreeds, listDogs } from "@/lib/dashboard/dogs";
+import type { DogStatus, DogStatusCounts } from "@/lib/dashboard/types";
+import Button from "@/components/dashboard/ui/Button";
+import EmptyState from "@/components/dashboard/ui/EmptyState";
+import Notice from "@/components/dashboard/ui/Notice";
+import PageHeader from "@/components/dashboard/ui/PageHeader";
+import DogCard from "@/components/dashboard/dogs/DogCard";
+import DogFilters from "@/components/dashboard/dogs/DogFilters";
+import { SEX_PARAM, STAGE_PARAM, STATUS_ORDER, STATUS_PARAM, fromParam } from "@/components/dashboard/dogs/dogMeta";
+
+const PAGE_SIZE = 12;
+const NOTICES = ["created", "archived", "deleted"] as const;
+
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("dashboard.dogs.list");
+    return { title: t("title") };
+}
+
+type SearchParams = Record<string, string | string[] | undefined>;
+const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : undefined);
+
+const COUNT_KEY: Record<DogStatus, keyof DogStatusCounts> = {
+    BREEDING_STOCK: "breedingStock",
+    AVAILABLE_PUPPY: "availablePuppy",
+    RESERVED: "reserved",
+    SOLD: "sold",
+};
+
+export default async function DogsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+    const kennel = await getCurrentKennel();
+    if (!kennel) notFound();
+
+    const raw = await searchParams;
+    const status = fromParam(STATUS_PARAM, one(raw.status));
+    const sex = fromParam(SEX_PARAM, one(raw.sex));
+    const stage = fromParam(STAGE_PARAM, one(raw.stage));
+    const q = one(raw.q)?.trim() || undefined;
+    const breedParam = one(raw.breed) || undefined;
+    const page = Math.max(1, Number.parseInt(one(raw.page) ?? "1", 10) || 1);
+    const notice = NOTICES.find((n) => n === one(raw.notice));
+
+    const [t, breeds, counts] = await Promise.all([getTranslations("dashboard"), getKennelBreeds(kennel.id), getDogStatusCounts(kennel.id)]);
+    const breed = breeds.some((b) => b.name === breedParam) ? breedParam : undefined;
+    const result = await listDogs(kennel.id, { status, q, breed, sex, stage, page, pageSize: PAGE_SIZE });
+    const filtered = Boolean(status || q || breed || sex || stage);
+    const now = new Date();
+
+    // Links keep every other param, reset the page unless told otherwise.
+    const hrefWith = (changes: Record<string, string | undefined>) => {
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(raw)) {
+            if (typeof value === "string" && key !== "page" && key !== "notice") params.set(key, value);
+        }
+        for (const [key, value] of Object.entries(changes)) {
+            if (value) params.set(key, value);
+            else params.delete(key);
+        }
+        const query = params.toString();
+        return query ? `/dashboard/dogs?${query}` : "/dashboard/dogs";
+    };
+
+    const tabs = [
+        { key: "all", label: t("dogs.list.tabs.all"), count: counts.all, value: undefined as DogStatus | undefined },
+        ...STATUS_ORDER.map((s) => ({ key: s, label: t(`dogs.list.tabs.${s}`), count: counts[COUNT_KEY[s]], value: s })),
+    ];
+
+    const lastPage = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
+    const hasPrevious = page > 1;
+    const hasNext = page < lastPage;
+
+    return (
+        <>
+            <PageHeader title={t("dogs.list.title")} subtitle={t("dogs.list.subtitle")} actions={<Button href="/dashboard/dogs/new">{t("dogs.list.addDog")}</Button>} />
+
+            {notice && (
+                <Notice tone="success" clearParam="notice" className="mb-5">
+                    {t(`dogs.notices.${notice}`)}
+                </Notice>
+            )}
+
+            {counts.all === 0 ? (
+                <EmptyState
+                    title={t("dogs.list.emptyRoster.title")}
+                    description={t("dogs.list.emptyRoster.description")}
+                    action={<Button href="/dashboard/dogs/new">{t("dogs.list.emptyRoster.cta")}</Button>}
+                />
+            ) : (
+                <>
+                    <nav aria-label={t("dogs.list.tabsLabel")} className="mb-4">
+                        <ul className="flex flex-wrap gap-2">
+                            {tabs.map((tab) => {
+                                const active = tab.value === status;
+                                return (
+                                    <li key={tab.key}>
+                                        <Link
+                                            href={hrefWith({ status: tab.value && STATUS_PARAM[tab.value] })}
+                                            aria-current={active ? "page" : undefined}
+                                            scroll={false}
+                                            className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                                                active ? "border-stone-900 bg-stone-900 text-stone-50" : "border-line-strong bg-white text-stone-700 hover:bg-stone-50"
+                                            }`}
+                                        >
+                                            {tab.label}
+                                            <span className="font-medium opacity-70">{tab.count}</span>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </nav>
+
+                    <DogFilters breeds={breeds.map((b) => b.name)} />
+
+                    {result.items.length === 0 ? (
+                        <EmptyState
+                            title={t("dogs.list.emptyFiltered.title")}
+                            description={t("dogs.list.emptyFiltered.description")}
+                            action={
+                                <Button href="/dashboard/dogs" variant="secondary">
+                                    {t("dogs.list.emptyFiltered.clear")}
+                                </Button>
+                            }
+                        />
+                    ) : (
+                        <>
+                            <ul className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-5">
+                                {result.items.map((dog) => (
+                                    <li key={dog.id} className="grid">
+                                        <DogCard dog={dog} now={now} />
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+                                <p className="text-[13px] text-stone-500" aria-live="polite">
+                                    {t("dogs.list.showing", { shown: result.items.length, total: result.total })}
+                                    {filtered && <span className="sr-only"> {t("dogs.list.filteredNote")}</span>}
+                                </p>
+                                <nav aria-label={t("dogs.list.paginationLabel")} className="flex gap-2">
+                                    <PageLink href={hasPrevious ? hrefWith({ page: String(page - 1) }) : null} label={t("dogs.list.previous")} />
+                                    <PageLink href={hasNext ? hrefWith({ page: String(page + 1) }) : null} label={t("dogs.list.next")} />
+                                </nav>
+                            </div>
+                        </>
+                    )}
+                </>
+            )}
+        </>
+    );
+}
+
+function PageLink({ href, label }: { href: string | null; label: string }) {
+    const classes = "rounded-xl border border-line-strong bg-white px-4 py-2.25 text-[13px] font-medium";
+    if (!href) {
+        return (
+            <span aria-disabled="true" className={`${classes} cursor-not-allowed text-stone-400`}>
+                {label}
+            </span>
+        );
+    }
+    return (
+        <Link href={href} className={`${classes} text-stone-700 hover:bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}>
+            {label}
+        </Link>
+    );
+}

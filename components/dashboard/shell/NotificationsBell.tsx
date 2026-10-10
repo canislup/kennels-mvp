@@ -4,6 +4,24 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Bell } from "lucide-react";
 import type { DashboardNotification } from "@/lib/dashboard/types";
+
+type NotificationT = ReturnType<typeof useTranslations<"dashboard.shell.notifications">>;
+
+/** Title + detail in the viewer's language, from the stored type + params. */
+function notificationText(n: DashboardNotification, t: NotificationT): { title: string; detail: string } {
+    switch (n.type) {
+        case "NEW_LEAD":
+            return { title: t("types.newLead.title", n.params), detail: t("types.newLead.detail") };
+        case "NEW_MESSAGE":
+            return { title: t("types.newMessage.title", n.params), detail: t("types.newMessage.detail", n.params) };
+        case "NEW_REVIEW":
+            return { title: t("types.newReview.title", { rating: n.params.rating }), detail: t("types.newReview.detail", n.params) };
+        case "FOLLOW_UP_DUE":
+            return { title: t("types.followUpDue.title"), detail: t("types.followUpDue.detail", n.params) };
+        case "VERIFICATION_REMINDER":
+            return { title: t("types.verificationReminder.title"), detail: t("types.verificationReminder.detail") };
+    }
+}
 import { formatRelativeTime } from "../relativeTime";
 
 /** Bell with an unread dot and a small popover listing the latest notifications. */
@@ -70,7 +88,9 @@ export default function NotificationsBell({ notifications }: { notifications: Da
                         <p className="px-4 py-6 text-center text-sm text-stone-500">{t("empty")}</p>
                     ) : (
                         <ul className="max-h-96 divide-y divide-line overflow-y-auto">
-                            {notifications.map((n) => (
+                            {notifications.map((n) => {
+                                const { title, detail } = notificationText(n, t);
+                                return (
                                 <li key={n.id} className="flex gap-3 px-4 py-3">
                                     <span
                                         className={`mt-1.5 size-2 shrink-0 rounded-full ${n.read ? "bg-transparent" : "bg-accent"}`}
@@ -78,16 +98,17 @@ export default function NotificationsBell({ notifications }: { notifications: Da
                                     />
                                     <div className="min-w-0 flex-1">
                                         <p className={`text-sm text-stone-900 ${n.read ? "font-normal" : "font-semibold"}`}>
-                                            {n.title}
+                                            {title}
                                             {!n.read && <span className="sr-only"> ({t("unread")})</span>}
                                         </p>
-                                        <p className="mt-0.5 truncate text-xs text-stone-500">{n.detail}</p>
+                                        <p className="mt-0.5 truncate text-xs text-stone-500">{detail}</p>
                                         <p className="mt-1 text-xs text-stone-400">
                                             <time dateTime={n.createdAt}>{formatRelativeTime(format, tTime, n.createdAt, new Date(openedAt))}</time>
                                         </p>
                                     </div>
                                 </li>
-                            ))}
+                                );
+                            })}
                         </ul>
                     )}
                 </div>

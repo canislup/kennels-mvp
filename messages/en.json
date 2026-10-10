@@ -38,8 +38,31 @@
         "title": "Notifications",
         "unreadCount": "{count} unread",
         "unread": "unread",
-        "empty": "You're all caught up."
-      }
+        "empty": "You're all caught up.",
+        "types": {
+          "newLead": {
+            "title": "New lead: {name}",
+            "detail": "Wants to hear about your puppies"
+          },
+          "newMessage": {
+            "title": "{name} sent a message",
+            "detail": "“{excerpt}”"
+          },
+          "newReview": {
+            "title": "New {rating}-star review",
+            "detail": "From {reviewerName}"
+          },
+          "followUpDue": {
+            "title": "Follow-up due today",
+            "detail": "{leadName}"
+          },
+          "verificationReminder": {
+            "title": "Request verification",
+            "detail": "It's the last step to finish your profile"
+          }
+        }
+      },
+      "breadcrumbLabel": "Breadcrumb"
     },
     "common": {
       "time": {
@@ -57,6 +80,50 @@
         "title": "This section is being redesigned",
         "description": "We're rebuilding this part of the dashboard. It will be back soon.",
         "back": "Back to Overview"
+      },
+      "dismiss": "Dismiss",
+      "loading": "Loading…",
+      "dogStatusOption": {
+        "BREEDING_STOCK": "Breeding stock",
+        "AVAILABLE_PUPPY": "Available puppy",
+        "RESERVED": "Reserved",
+        "SOLD": "Sold"
+      },
+      "sex": {
+        "MALE": "Male",
+        "FEMALE": "Female"
+      },
+      "lifeStage": {
+        "PUPPY": "Puppy",
+        "ADULT": "Adult"
+      },
+      "age": {
+        "weeks": "{count, plural, one {# week} other {# weeks}}",
+        "months": "{count, plural, one {# month} other {# months}}",
+        "years": "{count, plural, one {# year} other {# years}}"
+      },
+      "form": {
+        "characterCount": "{count} / {max}",
+        "unsavedChanges": "You have unsaved changes",
+        "allSaved": "All changes saved",
+        "cancel": "Cancel",
+        "saving": "Saving…"
+      },
+      "errors": {
+        "required": "This field is required.",
+        "tooLong": "Use {max} characters or fewer.",
+        "invalidBreed": "Choose one of the breeds your kennel raises.",
+        "invalidChoice": "Choose one of the options.",
+        "invalidDate": "Enter a valid date.",
+        "futureDate": "The birth date can't be in the future.",
+        "litterPuppiesOnly": "Only puppies can be linked to a litter.",
+        "invalidUrl": "Enter a link that starts with http:// or https://.",
+        "tooManyPhotos": "You can add up to {max} photos.",
+        "invalidPhoto": "One of the photos couldn't be read. Remove it and upload it again.",
+        "tooManyDocuments": "You can add up to {max} documents.",
+        "invalidDocument": "Each document needs a label and an uploaded image.",
+        "notFound": "This dog no longer exists. It may have been deleted.",
+        "generic": "Something went wrong. Please try again."
       }
     },
     "overview": {
@@ -107,7 +174,7 @@
         },
         "availablePuppies": {
           "label": "Available puppies",
-          "note": "{count, plural, one {In # litter} other {Across # litters}}"
+          "note": "{count, plural, =0 {No puppies listed} one {In # litter} other {Across # litters}}"
         },
         "activeLitters": {
           "label": "Active litters",
@@ -128,7 +195,7 @@
         },
         "newReview": {
           "title": "New {rating}-star review",
-          "detail": "{authorName} reviewed {kennelName}"
+          "detail": "{reviewerName} reviewed {kennelName}"
         },
         "dogStatusChanged": {
           "title": "{dogName} marked {status}",
@@ -155,43 +222,144 @@
       }
     },
     "dogs": {
-      "card": {
-        "editTooltip": "Edit Dog",
-        "photoAlt": "{name} - Photo {index}",
-        "fullscreenAlt": "{name} - Fullscreen"
-      },
-      "addModal": {
-        "trigger": "Add New Profile",
-        "title": "New Dog Profile",
-        "imagesLabel": "Images",
-        "addImages": "Add Images",
-        "uploadedPreviewAlt": "Uploaded preview",
-        "nameLabel": "Name",
-        "namePlaceholder": "e.g., Bella",
-        "breedLabel": "Breed",
-        "breedPlaceholder": "Select a breed...",
-        "genderLabel": "Gender",
-        "genderPlaceholder": "Select gender",
-        "genderMale": "Male",
-        "genderFemale": "Female",
-        "cancel": "Cancel",
-        "saving": "Saving...",
-        "submit": "Create Profile",
-        "errors": {
-          "createFailed": "Failed to create dog profile.",
-          "network": "A network error occurred."
+      "list": {
+        "title": "Dogs",
+        "subtitle": "Your roster: breeding stock, puppies and past sales.",
+        "addDog": "Add dog",
+        "tabsLabel": "Filter by status",
+        "tabs": {
+          "all": "All",
+          "BREEDING_STOCK": "Breeding stock",
+          "AVAILABLE_PUPPY": "Available puppies",
+          "RESERVED": "Reserved",
+          "SOLD": "Sold"
+        },
+        "filters": {
+          "searchLabel": "Search dogs",
+          "searchPlaceholder": "Search by name or registry",
+          "breedLabel": "Breed",
+          "allBreeds": "All breeds",
+          "sexLabel": "Sex",
+          "anySex": "Any sex",
+          "male": "Male",
+          "female": "Female",
+          "stageLabel": "Life stage",
+          "anyStage": "Any life stage",
+          "puppy": "Puppy",
+          "adult": "Adult"
+        },
+        "edit": "Edit",
+        "noPhoto": "No photo yet",
+        "changeStatus": "Change status of {name}, currently {status}",
+        "statusMenuLabel": "Status for {name}",
+        "statusFailed": "Couldn't update the status. Try again.",
+        "showing": "Showing {shown} of {total} {total, plural, one {dog} other {dogs}}",
+        "filteredNote": "(filtered)",
+        "paginationLabel": "Pages",
+        "previous": "Previous",
+        "next": "Next",
+        "emptyRoster": {
+          "title": "No dogs yet",
+          "description": "Add your breeding stock and puppies to build your roster and show them on your public page.",
+          "cta": "Add your first dog"
+        },
+        "emptyFiltered": {
+          "title": "No dogs match these filters",
+          "description": "Try a different search, or clear the filters to see your whole roster.",
+          "clear": "Clear filters"
         }
       },
-      "editModal": {
-        "trigger": "Edit Dog",
-        "title": "Edit Dog",
-        "nameLabel": "Name"
+      "notices": {
+        "created": "Dog added to your roster.",
+        "archived": "Dog archived. It no longer shows on your roster or public page.",
+        "deleted": "Dog deleted permanently."
       },
-      "page": {
-        "heading": "Dogs",
-        "subheading": "Manage {kennelName}'s roster",
-        "emptyTitle": "No dogs found",
-        "emptyDescription": "Get started by creating your first dog profile."
+      "form": {
+        "createTitle": "Add a dog",
+        "createSubtitle": "Fill in the basics now. You can add photos and documents any time.",
+        "editTitle": "Edit {name}",
+        "editSubtitle": "Changes show on the public dog page as soon as you save.",
+        "previewPublic": "Preview public page",
+        "opensInNewTab": "(opens in a new tab)",
+        "newDogCrumb": "New dog",
+        "archivedNotice": "{name} is archived and hidden from your roster and public page.",
+        "submitCreate": "Add dog",
+        "submitEdit": "Save changes",
+        "noLitter": "No litter",
+        "litterBorn": "{label} (born {date})",
+        "litterPlanned": "{label} (planned)",
+        "sections": {
+          "basics": "Basics",
+          "registry": "Registry and lineage",
+          "parents": "Parents",
+          "about": "About",
+          "aboutNamed": "About {name}"
+        },
+        "fields": {
+          "name": "Name",
+          "breed": "Breed",
+          "sex": "Sex",
+          "lifeStage": "Life stage",
+          "birthDate": "Birth date",
+          "status": "Status",
+          "litter": "Litter",
+          "registry": "Registry",
+          "lineage": "Bloodline",
+          "pedigreeUrl": "Pedigree link",
+          "sireName": "Sire (father)",
+          "damName": "Dam (mother)",
+          "bio": "Bio"
+        },
+        "placeholders": {
+          "breed": "Choose a breed",
+          "registry": "e.g. CBKC"
+        },
+        "help": {
+          "breed": "Only breeds your kennel raises.",
+          "birthDate": "Age on the public page is calculated from this.",
+          "litter": "Shown only for puppies. Parents on the public page come from this litter.",
+          "lineage": "Shown as a badge on the dog page.",
+          "parents": "Registered names, as plain text. Adults can list parents from other kennels."
+        },
+        "photos": {
+          "heading": "Photos",
+          "count": "{count} of {max}",
+          "cover": "Cover",
+          "add": "Add",
+          "help": "Drag to reorder, or use the arrow buttons. The first photo is the cover.",
+          "photoAlt": "Photo {position}",
+          "remove": "Remove photo {position}",
+          "moveEarlier": "Move photo {position} earlier",
+          "moveLater": "Move photo {position} later",
+          "moved": "Photo moved from position {from} to {to} of {total}.",
+          "removed": "Photo {position} removed."
+        },
+        "documents": {
+          "heading": "Health documents",
+          "count": "{count} uploaded",
+          "description": "Upload photos or scans of test results. Buyers see them as a gallery on the public page.",
+          "upload": "Upload health document",
+          "labelField": "Document name",
+          "labelPlaceholder": "e.g. OFA hips and elbows",
+          "chooseImage": "Choose image",
+          "cancel": "Cancel",
+          "remove": "Remove",
+          "limitReached": "You've reached the limit of {max} documents."
+        },
+        "danger": {
+          "heading": "Archive or delete",
+          "description": "Archiving hides {name} from your roster and public page and keeps the record. Deleting removes the dog and all photos for good.",
+          "archive": "Archive dog",
+          "delete": "Delete permanently",
+          "cancel": "Cancel",
+          "working": "Working…",
+          "archiveTitle": "Archive {name}?",
+          "archiveDescription": "{name} will be hidden from your roster and your public page. The record is kept.",
+          "archiveConfirm": "Archive dog",
+          "deleteTitle": "Delete {name} permanently?",
+          "deleteDescription": "This removes {name}, all photos and all health documents. It can't be undone.",
+          "deleteConfirm": "Delete permanently"
+        }
       }
     },
     "kennelSetup": {
