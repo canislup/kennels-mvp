@@ -22,6 +22,8 @@ export type LitterStatus = "PLANNED" | "AVAILABLE" | "RESERVED" | "SOLD_OUT";
 /** The signed-in owner's kennel, for the sidebar and page greetings. Real data. */
 export type CurrentKennel = {
     id: string;
+    /** Owner.id (the session user), for the account-level functions. */
+    ownerId: string;
     name: string;
     slug: string;
     city: string;
@@ -563,3 +565,102 @@ export type MediaListResult = { items: MediaItem[]; total: number; page: number;
 export type MediaFilterOptions = { breeds: KennelBreedOption[]; dogs: { id: string; name: string; breed: string }[] };
 
 export type PhotoUpload = { url: string; width?: number; height?: number };
+
+// --- Reviews (Step 6a) ---------------------------------------------------------------
+
+/** NEW MODEL `ReviewReply` (or reply columns on `Review`): the kennel's one public reply. */
+export type ReviewReply = { body: string; createdAt: ISODateString; updatedAt: ISODateString };
+
+export type ReviewReportReason = "INAPPROPRIATE" | "NOT_A_BUYER" | "SPAM" | "OTHER";
+
+/** NEW MODEL `Review`. Written by the public review page from an invite (not built yet). */
+export type Review = {
+    id: string;
+    reviewerName: string;
+    /** e.g. "Bought Café, Labrador". Free text snapshotted when the review is created. */
+    purchaseLabel: string | null;
+    /** The reviewer came from one of this kennel's invites ("Verified buyer"). */
+    verified: boolean;
+    /** 1 to 5. */
+    rating: number;
+    body: string;
+    createdAt: ISODateString;
+    reply: ReviewReply | null;
+    /** Set when the kennel reports it; the review stays public until moderation. */
+    reportedAt: ISODateString | null;
+    reportReason: ReviewReportReason | null;
+    /** The kennel's optional explanation, ≤ 500 (for the moderator; never public). */
+    reportDetails: string | null;
+};
+
+export type ReviewStatusFilter = "all" | "needs-reply" | "replied" | "reported";
+
+export type ReviewSummary = {
+    /** One decimal, 0 when there are no reviews. */
+    average: number;
+    total: number;
+    /** 5 stars down to 1. `percent` is a whole number of the total. */
+    distribution: { stars: number; count: number; percent: number }[];
+    needsReply: number;
+    replied: number;
+    reported: number;
+};
+
+export type ReviewListResult = { items: Review[]; total: number; page: number; pageSize: number };
+
+/** NEW MODEL `ReviewInvite`: a single-use link that lets one buyer leave one review. */
+export type ReviewInvite = {
+    id: string;
+    email: string | null;
+    token: string;
+    createdAt: ISODateString;
+    usedAt: ISODateString | null;
+    /** Always null in this version: there is no email sending. */
+    emailSentAt: ISODateString | null;
+};
+
+export type ReviewInviteResult = { ok: true; inviteId: string; url: string; emailSent: false } | MutationFailure;
+
+// --- Settings: account, notifications, verification (Step 6a) ------------------------
+
+export type AppLocale = "en" | "pt-BR";
+
+/** Owner.fullName, Owner.email, and NEW FIELD Owner.locale. */
+export type Account = { fullName: string; email: string; locale: AppLocale };
+
+export type PasswordChangeInput = { currentPassword: string; newPassword: string; confirmPassword: string };
+
+/** NEW MODEL `NotificationPreference` (ownerId, type, emailEnabled). */
+export type NotificationPreferenceType = "NEW_LEAD" | "NEW_MESSAGE" | "NEW_REVIEW" | "WAITLIST_ACTIVITY" | "VERIFICATION_UPDATE";
+
+export type NotificationPreference = { type: NotificationPreferenceType; emailEnabled: boolean };
+
+export type VerificationStatus = "NOT_SUBMITTED" | "PENDING" | "APPROVED" | "REJECTED";
+
+/** NEW MODEL `VerificationRequest` (one current request per kennel). */
+export type VerificationRequest = {
+    id: string;
+    status: VerificationStatus;
+    cbkcRegistration: string | null;
+    /** Cloudinary URLs of the proof documents (images), 1 to 5. */
+    documentUrls: string[];
+    submittedAt: ISODateString | null;
+    decidedAt: ISODateString | null;
+    /** The reviewer's note (shown when REJECTED). */
+    reviewerNote: string | null;
+};
+
+/**
+ * How the kennel is registered. `Kennel.cnpj` exists; a CPF (individual
+ * breeder) is a NEW FIELD (`Kennel.cpf` or a type + number pair). The number
+ * is always masked on the server: a full CPF never reaches the browser.
+ */
+export type RegistrationSummary = { type: "CNPJ" | "CPF"; maskedNumber: string };
+
+export type VerificationView = {
+    request: VerificationRequest;
+    registration: RegistrationSummary | null;
+    registrationMissing: boolean;
+    /** The kennel's CBKC number on file (Kennel.cbkcRegistration), to prefill the form. */
+    cbkcOnFile: string | null;
+};

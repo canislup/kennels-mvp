@@ -76,11 +76,6 @@
         "RESERVED": "Reservado",
         "SOLD": "Vendido"
       },
-      "placeholder": {
-        "title": "Esta seção está sendo redesenhada",
-        "description": "Estamos reconstruindo esta parte do painel. Ela volta em breve.",
-        "back": "Voltar para a visão geral"
-      },
       "dismiss": "Fechar",
       "loading": "Carregando…",
       "dogStatusOption": {
@@ -156,7 +151,20 @@
         "invalidVideoUrl": "Cole um link do YouTube ou do Vimeo (youtube.com/watch, youtu.be, youtube.com/shorts ou vimeo.com).",
         "dogBreedMismatch": "Esse cão não é da raça escolhida.",
         "tooManySelected": "Selecione no máximo {max} itens por vez.",
-        "nothingSelected": "Selecione pelo menos um item."
+        "nothingSelected": "Selecione pelo menos um item.",
+        "replyRequired": "Escreva uma resposta primeiro.",
+        "chooseReason": "Escolha um motivo.",
+        "alreadyReported": "Você já denunciou esta avaliação.",
+        "emailTaken": "Outra conta já usa este e-mail.",
+        "passwordTooShort": "Use pelo menos {min} caracteres.",
+        "passwordUnchanged": "Escolha uma senha diferente da atual.",
+        "passwordMismatch": "As senhas não são iguais.",
+        "confirmNameMismatch": "Não corresponde ao nome do canil. Confira as maiúsculas e os acentos.",
+        "documentsRequired": "Adicione pelo menos um documento.",
+        "invalidUpload": "Um dos arquivos não foi enviado corretamente. Remova e envie de novo.",
+        "verificationNotEditable": "Esta solicitação não pode ser alterada agora.",
+        "verificationNotPending": "Não há solicitação em análise para cancelar.",
+        "registrationMissing": "Cadastre o CNPJ ou CPF no Perfil do canil primeiro."
       }
     },
     "overview": {
@@ -1084,6 +1092,248 @@
         "videos": "Nenhum vídeo ainda",
         "videosHelp": "Adicione um link do YouTube ou do Vimeo para mostrar um vídeo na sua página pública.",
         "filteredVideos": "Nenhum vídeo com esses filtros"
+      }
+    },
+    "reviews": {
+      "title": "Avaliações",
+      "subtitle": "O que os compradores dizem sobre {kennelName}. Responda publicamente para mostrar que você se importa.",
+      "summary": {
+        "heading": "Resumo das avaliações",
+        "outOf": "{average} de 5",
+        "count": "{count, plural, one {# avaliação} other {# avaliações}}",
+        "distribution": "Avaliações por nota",
+        "bar": "{stars, plural, one {# estrela} other {# estrelas}}: {count, plural, one {# avaliação} other {# avaliações}}"
+      },
+      "invite": {
+        "heading": "Convidar um comprador",
+        "description": "Crie um link pessoal para um comprador deixar uma avaliação. Só quem você convida pode avaliar.",
+        "emailLabel": "E-mail do comprador (opcional)",
+        "emailPlaceholder": "comprador@email.com",
+        "send": "Enviar",
+        "copyInstead": "Copiar link do convite",
+        "createdFor": "Convite criado para {email}. O envio de e-mails ainda não está configurado, então copie o link e envie você mesmo.",
+        "createdLink": "Link do convite criado. Copie e envie para o comprador.",
+        "linkLabel": "Link do convite",
+        "pageNotLive": "Prévia: a página de avaliação que este link abre ainda não está no ar.",
+        "copy": "Copiar",
+        "copied": "Link copiado",
+        "copyManual": "Não foi possível copiar automaticamente. O link está selecionado: pressione Ctrl+C (ou ⌘C) para copiar."
+      },
+      "tabs": {
+        "label": "Filtrar avaliações",
+        "all": "Todas",
+        "needsReply": "Sem resposta",
+        "replied": "Respondidas",
+        "reported": "Denunciadas"
+      },
+      "showing": "Mostrando {shown} de {total, plural, one {# avaliação} other {# avaliações}}",
+      "pagination": "Páginas",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "card": {
+        "verifiedBuyer": "Comprador verificado",
+        "rating": "{rating} de 5 estrelas",
+        "reported": "Denunciada, em análise",
+        "edited": "editada",
+        "yourReply": "Sua resposta",
+        "editReply": "Editar resposta",
+        "editReplyLabel": "Editar sua resposta para {name}",
+        "reply": "Responder",
+        "replyLabel": "Responder a {name}"
+      },
+      "replyForm": {
+        "label": "Responder publicamente",
+        "editLabel": "Editar sua resposta pública",
+        "placeholder": "Agradeça a {name} e diga algo pessoal",
+        "cancel": "Cancelar",
+        "post": "Publicar resposta",
+        "save": "Salvar resposta",
+        "posting": "Salvando…",
+        "posted": "Resposta publicada.",
+        "updated": "Resposta atualizada."
+      },
+      "report": {
+        "trigger": "Denunciar avaliação",
+        "triggerLabel": "Denunciar a avaliação de {name}",
+        "title": "Denunciar avaliação",
+        "description": "Nossa equipe vai analisar. A avaliação continua pública até uma decisão.",
+        "reason": "Motivo",
+        "choose": "Escolha um motivo",
+        "reasons": {
+          "INAPPROPRIATE": "Inadequada ou ofensiva",
+          "NOT_A_BUYER": "Não é um comprador de verdade",
+          "SPAM": "Spam ou propaganda",
+          "OTHER": "Outro motivo"
+        },
+        "details": "Detalhes (opcional)",
+        "submit": "Denunciar",
+        "pending": "Enviando…",
+        "cancel": "Cancelar"
+      },
+      "empty": {
+        "none": "Nenhuma avaliação ainda",
+        "noneHelp": "Convide um comprador pelo cartão acima. A avaliação dele vai aparecer aqui.",
+        "filtered": "Nenhuma avaliação aqui",
+        "filteredHelp": {
+          "all": "Ainda não há avaliações.",
+          "needsReply": "Você já respondeu a todas as avaliações.",
+          "replied": "Você ainda não respondeu a nenhuma avaliação.",
+          "reported": "Você não denunciou nenhuma avaliação."
+        },
+        "showAll": "Ver todas as avaliações"
+      }
+    },
+    "settings": {
+      "title": "Configurações",
+      "subtitle": "Sua conta, notificações e verificação do canil.",
+      "tabs": {
+        "label": "Seções das configurações",
+        "profile": "Perfil do canil",
+        "account": "Conta",
+        "notifications": "Notificações",
+        "verification": "Verificação"
+      },
+      "profile": {
+        "title": "A aba Perfil do canil está sendo redesenhada",
+        "description": "Em breve você vai poder editar aqui o nome, o logo, a descrição e o registro do canil."
+      },
+      "common": {
+        "saving": "Salvando…",
+        "cancel": "Cancelar"
+      },
+      "account": {
+        "details": {
+          "heading": "Dados da conta",
+          "sub": "Seus dados pessoais de acesso.",
+          "fullName": "Nome completo",
+          "email": "E-mail",
+          "language": "Idioma",
+          "languages": {
+            "en": "English",
+            "pt-BR": "Português (Brasil)"
+          },
+          "save": "Salvar",
+          "saved": "Dados da conta salvos."
+        },
+        "password": {
+          "heading": "Alterar senha",
+          "sub": "Escolha uma senha que você não usa em outros lugares.",
+          "current": "Senha atual",
+          "new": "Nova senha",
+          "newHelp": "Pelo menos {min} caracteres.",
+          "confirm": "Confirme a nova senha",
+          "submit": "Atualizar senha",
+          "pending": "Atualizando…",
+          "updated": "Apenas prévia: a nova senha passou em todas as verificações, mas não foi salva. Você continua entrando com a senha atual."
+        },
+        "danger": {
+          "heading": "Zona de perigo",
+          "description": "Excluir sua conta remove a página do canil, os cães, as ninhadas, as fotos, os interessados e as mensagens. Não é possível desfazer.",
+          "confirmLabel": "Digite o nome do canil para confirmar",
+          "confirmHelp": "Digite “{name}” exatamente, com as mesmas maiúsculas e acentos.",
+          "button": "Excluir conta",
+          "dialogTitle": "Excluir sua conta e {name}?",
+          "dialogDescription": "A página do canil e todos os dados serão excluídos para sempre. Não é possível desfazer.",
+          "dialogConfirm": "Excluir tudo",
+          "pending": "Excluindo…",
+          "previewNotice": "Apenas prévia: no app real, sua conta e todos os dados seriam excluídos agora. Nada foi excluído."
+        }
+      },
+      "notifications": {
+        "heading": "Notificações por e-mail",
+        "sub": "Escolha o que também chega no seu e-mail.",
+        "note": "Os alertas no app estão sempre ativos. As notificações por e-mail vão começar a funcionar quando o envio de e-mails for conectado.",
+        "on": "E-mail",
+        "off": "Desativado",
+        "save": "Salvar preferências",
+        "types": {
+          "NEW_LEAD": {
+            "title": "Novo interessado",
+            "help": "Quando um comprador envia um contato."
+          },
+          "NEW_MESSAGE": {
+            "title": "Nova mensagem",
+            "help": "Quando um comprador responde na sua caixa de entrada."
+          },
+          "NEW_REVIEW": {
+            "title": "Nova avaliação",
+            "help": "Quando um comprador deixa uma avaliação."
+          },
+          "WAITLIST_ACTIVITY": {
+            "title": "Lista de espera",
+            "help": "Quando alguém entra na lista de espera de uma ninhada."
+          },
+          "VERIFICATION_UPDATE": {
+            "title": "Atualizações da verificação",
+            "help": "Quando o status da sua verificação muda."
+          }
+        }
+      },
+      "verification": {
+        "heading": "Verificação",
+        "sub": "O selo de verificado mostra aos compradores que seu canil é real e registrado.",
+        "statusLabel": "Status:",
+        "status": {
+          "NOT_SUBMITTED": "Não enviada",
+          "PENDING": "Em análise",
+          "APPROVED": "Aprovada",
+          "REJECTED": "Recusada"
+        },
+        "steps": {
+          "label": "Andamento da verificação",
+          "submitted": "1. Enviada",
+          "inReview": "2. Em análise",
+          "decision": "3. Decisão",
+          "notYet": "Ainda não",
+          "reviewTime": "Normalmente de 2 a 3 dias úteis",
+          "reviewDone": "Analisada",
+          "decisionHint": "Aprovada ou com ajustes",
+          "approvedOn": "Aprovada em {date}",
+          "rejectedOn": "Precisa de ajustes ({date})",
+          "state": {
+            "done": "concluída",
+            "current": "em andamento",
+            "rejected": "precisa de ajustes",
+            "todo": "não iniciada"
+          }
+        },
+        "rejectedTitle": "Sua solicitação precisa de ajustes",
+        "reviewerNote": "Observação da análise:",
+        "rejectedHelp": "Atualize os documentos abaixo e envie de novo.",
+        "approvedTitle": "Seu canil está verificado",
+        "approvedBody": "Aprovado em {date}. Sua página pública mostra o selo de verificado.",
+        "registeredAs": "Registrado como",
+        "registrationTypes": {
+          "CNPJ": "Empresa (CNPJ)",
+          "CPF": "Pessoa física (CPF)"
+        },
+        "changeRegistration": "Alterar no Perfil do canil",
+        "missingTitle": "Cadastre seu CNPJ ou CPF primeiro",
+        "missing": "A verificação precisa do CNPJ ou CPF do canil.",
+        "goToProfile": "Ir para o Perfil do canil",
+        "cbkc": "Registro CBKC",
+        "cbkcHelp": "Opcional. O número do seu canil na Confederação Brasileira de Cinofilia.",
+        "documents": "Documentos comprobatórios",
+        "documentsHelp": "Fotos ou digitalizações do cartão CNPJ ou CPF e do certificado da CBKC. JPG, PNG ou WebP, até 10 MB cada, no máximo {max} documentos.",
+        "uploaded": "Enviado",
+        "remove": "Remover {name}",
+        "addDocument": "Adicionar documento",
+        "submitBlocked": "Cadastre seu CNPJ ou CPF para enviar.",
+        "submit": "Enviar para análise",
+        "resubmit": "Enviar novamente",
+        "submitting": "Enviando…",
+        "ifRejected": "<strong>Se for recusada:</strong> a observação da análise aparece aqui e você pode enviar de novo com novos documentos.",
+        "none": "Nenhum",
+        "pendingSummary": "Enviada em {date}. A decisão vai aparecer nesta página.",
+        "withdraw": "Cancelar solicitação",
+        "withdrawTitle": "Cancelar sua solicitação de verificação?",
+        "withdrawDescription": "A solicitação sai da fila de análise. O número CBKC e os documentos continuam aqui para você enviar de novo depois.",
+        "withdrawConfirm": "Cancelar solicitação",
+        "withdrawing": "Cancelando…",
+        "notices": {
+          "submitted": "Solicitação de verificação enviada.",
+          "withdrawn": "Solicitação cancelada. Você pode enviar de novo quando quiser."
+        }
       }
     }
   },

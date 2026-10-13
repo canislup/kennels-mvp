@@ -23,8 +23,9 @@ Pages and components never import from `mock/`, so swapping a body needs no UI c
 ### `getCurrentKennel(): Promise<CurrentKennel | null>`: REAL, read
 
 - **Input:** none. Reads the session via `verifyKennelSession()`.
-- **Output:** `{ id, name, slug, city, state, logoUrl, ownerName, ownerInitials }`, or `null` when there's no session or the owner hasn't created a kennel yet.
-- **Prisma:** `Kennel` (`id`, `name`, `slug`, `city`, `state`, `logoUrl`) + `Owner.fullName`. No schema change.
+- **Output:** `{ id, ownerId, name, slug, city, state, logoUrl, ownerName, ownerInitials }`, or `null` when there's no session or the owner hasn't created a kennel yet. `ownerId` (Step 6a) is what the account-level functions take.
+- **Prisma:** `Kennel` (`id`, `ownerId`, `name`, `slug`, `city`, `state`, `logoUrl`) + `Owner.fullName`. No schema change.
+- **TEMPORARY mock part (Step 6a):** `ownerName` takes the name saved on Settings → Account from the mock store (`accountOverrides`). Delete those lines once `updateAccount` writes `Owner.fullName`.
 - **Notes:** `ownerInitials` is derived from the first and last words of `fullName`. Wrapped in React `cache()`, so the layout and page share one query per request.
 
 ### `getNavCounts(kennelId): Promise<NavCounts>`: MOCK, read
@@ -65,7 +66,7 @@ Returns four independent parts. Each can become its own query; `Promise.all` the
 | `breeds` | the kennel has ≥ 1 `KennelBreed` |
 | `firstDog` | the kennel has ≥ 1 `Dog` |
 | `photos` | the kennel has ≥ N `Media` rows of type `PHOTO` (pick N) |
-| `verification` | a verification has been requested. **Implies** a new field, e.g. `Kennel.verificationRequestedAt DateTime?` (`isVerified` already exists for the approved state) |
+| `verification` | the kennel's `VerificationRequest.status` is `PENDING` or `APPROVED` (Step 6a, derived in `getOverview` from `getVerificationStatus`). Keep `Kennel.isVerified` in sync when a request is approved (it drives the public badge) |
 
 **`metrics: OverviewMetrics`**
 
@@ -88,7 +89,7 @@ The UI turns these timestamps into "Oldest waiting 2 days" and "Next go-home in 
 | --- | --- | --- |
 | `NEW_LEAD` | `{ name, subject }` | a lead is created |
 | `NEW_MESSAGE` | `{ name, excerpt }` | a buyer sends a message |
-| `NEW_REVIEW` | `{ reviewerName, rating }` (one reviewer name) | a review is posted (`Review` model is future work) |
+| `NEW_REVIEW` | `{ reviewerName, rating }` (one reviewer name) | a review is posted. Step 6a's mock derives these items from the `Review` rows (one per review, newest first), so the name and rating are always a real review's |
 | `DOG_STATUS_CHANGED` | `{ dogName, status: DogStatus }` | a dog's status changes |
 | `LITTER_BORN` | `{ damName, puppyCount }` | a litter is marked born |
 
@@ -444,6 +445,132 @@ The kennel gallery on the public page: photos (uploaded to Cloudinary) and video
 
 ---
 
+## Reviews (`reviews.ts`)
+
+Reviews of the kennel, the kennel's public reply, reports and invites. **Only invited people can review** (the anti-fake-review rule): a review can only be created through a valid, unused `ReviewInvite`.
+
+```prisma
+model Review {                    // NEW MODEL
+  id            String   @id @default(uuid())
+  kennelId      String   // → Kennel, onDelete: Cascade
+  inviteId      String?  @unique // → ReviewInvite (the invite it came from; null only for imported reviews, if ever)
+  reviewerName  String
+  purchaseLabel String?  // e.g. "Bought Café, Labrador", snapshotted when the review is created
+  verified      Boolean  // the reviewer came from this kennel's invite ("Verified buyer")
+  rating        Int      // 1 to 5 (check constraint)
+  body          String
+  createdAt     DateTime @default(now())
+  replyBody      String?  // the kennel's one public reply, 1–1000 (or a ReviewReply model)
+  replyCreatedAt DateTime?
+  replyUpdatedAt DateTime?
+  reportedAt    DateTime?
+  reportReason  ReviewReportReason? // INAPPROPRIATE | NOT_A_BUYER | SPAM | OTHER
+  reportDetails String?  // ≤ 500, for moderators, never public
+  @@index([kennelId, createdAt])
+}
+
+model ReviewInvite {              // NEW MODEL
+  id          String    @id @default(uuid())
+  kennelId    String    // → Kennel, onDelete: Cascade
+  email       String?
+  token       String    @unique // random, ≥ 128 bits (store a hash if you prefer)
+  createdAt   DateTime  @default(now())
+  usedAt      DateTime?
+  emailSentAt DateTime? // always null in this version: no email sending
+}
+```
+
+| Function | Output / writes | Notes |
+| --- | --- | --- |
+| `getReviewSummary(kennelId)` | `{ average, total, distribution: { stars, count, percent }[], needsReply, replied, reported }` | `average` one decimal (0 with no reviews); distribution 5 → 1; `percent` of the total, rounded. **Recommendation:** keep `Kennel.ratingAverage Float` and `Kennel.reviewCount Int` as stored aggregates, updated in the transaction that creates a review (the directory and public cards need them on every list query) |
+| `listReviews(kennelId, { status, page, pageSize = 10 })` | `{ items: Review[], total, page, pageSize }` | newest first. `status`: `all`; `needs-reply` = no reply; `replied` = has a reply; `reported` = `reportedAt` set |
+| `postReviewReply(kennelId, reviewId, body)` | reply body + `replyCreatedAt` (first time) / `replyUpdatedAt` | **creates or edits** the public reply (edit is an addition beyond the design, so a public typo can be fixed). 1–1000 characters, trimmed. No delete |
+| `reportReview(kennelId, reviewId, { reason, details? })` | `reportedAt`, `reportReason`, `reportDetails` | reporting twice → `formError: alreadyReported`. The review **stays public** until moderation (moderation tools are out of scope); the UI shows "Reported, under review" and hides the report button |
+| `createReviewInvite(kennelId, { email?, locale })` → `{ ok, inviteId, url, emailSent: false }` | `ReviewInvite` with a random token | optional, well-formed email. **No email is sent in this version: `emailSent` is always false** and the UI says so. `url` is `/{locale}/review/{token}` (the UI makes it absolute with the site's origin; the real version should use a configured site URL). **That public page doesn't exist yet**: it's a backend + public-site task. It must check the token (exists, unused, this kennel), take the rating and text, create the `Review` with `verified = true` and `inviteId`, set `usedAt`, and update the kennel's stored aggregates, all in one transaction |
+
+**Ownership:** every mutation checks the review belongs to `kennelId` (`where: { id: reviewId, kennelId }`), else `formError: notFound`. The review id is bound on the server (`.bind`), which is not tamper-proof.
+
+**Fixtures:** 14 reviews (nine 5★, three 4★, one 3★, one 2★; average 4.4): the design's four (Pedro Lima, Fernando Dias, Isabela Rocha, Paulo Lima) plus ten more; three without a reply, one reported (Thiago Nunes). Reviewers who are leads use the lead's name. Two invites.
+
+---
+
+## Account (`account.ts`)
+
+`ownerId` is `CurrentKennel.ownerId` (the session user), never a value from the browser. **Partly real today:** `getAccount` starts from the real `Owner` row and the duplicate-email check reads real owners; saved changes live in the mock store (`accountOverrides`) and nothing is written to the database. `getCurrentKennel()` applies the saved name (temporary, see Shell).
+
+| Function | Output / writes | Notes |
+| --- | --- | --- |
+| `getAccount(ownerId)` | `{ fullName, email, locale \| null }` | `Owner.fullName`, `Owner.email`, **NEW FIELD** `Owner.locale String?` (`en` \| `pt-BR`; null = never chosen). The language select shows the language on screen |
+| `updateAccount(ownerId, { fullName, email, locale })` | `Owner.fullName`, `email`, `locale` | name 1–80; well-formed email (stored lower-case); `locale` `en` or `pt-BR`; **an email used by another owner** → `fieldErrors.email = emailTaken` (case-insensitive). **The real backend must verify a new email address** before switching to it (send a link to the new address; keep the old one until confirmed). After a changed language the action sets the `NEXT_LOCALE` cookie and redirects to the same page in the new locale with `?notice=saved`. Consider making the EN \| PT switcher also save `Owner.locale` when signed in |
+| `changePassword(ownerId, { currentPassword, newPassword, confirmPassword })` | nothing in the mock | the mock **can't check the real password**: it only requires a non-empty current password; new ≥ 8 characters (≤ 200), different from the current one, equal to the confirmation. **Real version needs:** `bcrypt.compare(currentPassword, Owner.passwordHash)` (wrong → `fieldErrors.currentPassword`), hash the new one (`bcrypt.hash`, same cost as signup), a **rate limit** on attempts, and **invalidate the owner's other sessions** (e.g. a `passwordChangedAt` / session version checked when verifying the JWT). Password values are never returned to the browser: after any result the fields come back empty. The UI says the mock didn't save anything |
+| `requestAccountDeletion(ownerId, kennelId, { confirmName })` | **nothing: the mock never deletes** | `confirmName` must equal the kennel's name exactly (case-sensitive; `confirmNameMismatch`). On success the UI shows "Preview only… Nothing was deleted." |
+
+**Real account deletion: the order and why.** Delete in this order, in one database transaction (after the external part):
+
+1. **Cloudinary assets** (gallery photos, dog photos, health and verification documents, logo): delete them first via the Admin API with the server secret, or **queue** them (a job table processed after commit) so a Cloudinary failure can't leave the database half-deleted. Assets are outside the transaction, so they come first or are queued.
+2. `Media` rows.
+3. Reviews and their replies (`Review`), then `ReviewInvite`.
+4. Lead data: `LeadEvent`, `LeadNote`, `Message`, `Conversation`, `WaitlistEntry` (children before their parents; most cascade from `Lead`).
+5. `Lead` (clear `Dog.reservedForLeadId` first, or rely on `SetNull`).
+6. `Dog`, **after clearing `Litter.damId` / `sireId`** that point at the kennel's dogs (no cascade there, so deleting dogs first would fail on those references).
+7. `Litter`.
+8. `NotificationPreference`, `VerificationRequest`, `Notification` / activity rows.
+9. `Kennel`, then `Owner`. Then clear the session cookie and sign out.
+
+**Product decision (open):** delete immediately, or offer a **grace period** (e.g. mark the account `deletionRequestedAt`, hide the public page at once, delete for good after 14–30 days unless the owner signs in and cancels).
+
+---
+
+## Notification preferences (`notificationPreferences.ts`)
+
+```prisma
+model NotificationPreference {    // NEW MODEL
+  ownerId      String  // → Owner, onDelete: Cascade
+  type         NotificationPreferenceType // NEW_LEAD | NEW_MESSAGE | NEW_REVIEW | WAITLIST_ACTIVITY | VERIFICATION_UPDATE
+  emailEnabled Boolean
+  @@id([ownerId, type])
+}
+```
+
+| Function | Output / writes | Notes |
+| --- | --- | --- |
+| `getNotificationPreferences(ownerId)` | `{ type, emailEnabled }[]` (all five, display order) | a type with no row uses the default: **all on except `WAITLIST_ACTIVITY`** |
+| `updateNotificationPreferences(ownerId, prefs)` | upsert one row per type | the action whitelists the five types (a checked switch posts `on`) |
+
+**Preferences have no effect until an email provider exists.** In-app alerts are always on; the UI says email notifications start once email sending is connected.
+
+---
+
+## Verification (`verification.ts`)
+
+```prisma
+model VerificationRequest {       // NEW MODEL (one current request per kennel)
+  id               String   @id @default(uuid())
+  kennelId         String   @unique // → Kennel, onDelete: Cascade
+  status           VerificationStatus @default(NOT_SUBMITTED) // NOT_SUBMITTED | PENDING | APPROVED | REJECTED
+  cbkcRegistration String?  // ≤ 40 (also keep Kennel.cbkcRegistration, which exists, in sync)
+  documentUrls     String[] // 1–5 Cloudinary image URLs (or Media rows with a VERIFICATION category, which would also keep the file names)
+  submittedAt      DateTime?
+  decidedAt        DateTime?
+  reviewerNote     String?
+}
+```
+
+How the kennel is registered: `Kennel.cnpj` exists; **a CPF is a NEW FIELD** (`Kennel.cpf String? @unique`, or a `registrationType` + `registrationNumber` pair). Both are set on the Kennel profile tab (Step 6b).
+
+| Function | Output / writes | Notes |
+| --- | --- | --- |
+| `getVerification(kennelId)` | `{ request, registration: { type: "CNPJ" \| "CPF", maskedNumber } \| null, registrationMissing, cbkcOnFile }` | **masked on the server**: a CNPJ is shown formatted in full (`12.345.678/0001-90`, public company data); a CPF as `***.456.789-**` (personal data; **never return the full CPF to the client**). Neither on file → `registrationMissing: true` and the UI disables submitting |
+| `getVerificationStatus(kennelId)` | `VerificationStatus` | Overview checklist |
+| `submitVerification(kennelId, { cbkcRegistration?, documentUrls })` | status `PENDING`, `submittedAt = now()`, clears `decidedAt` / `reviewerNote` | only from `NOT_SUBMITTED` or `REJECTED` (`verificationNotEditable`); requires a CNPJ or CPF on file (`registrationMissing`); 1–5 documents, `https://res.cloudinary.com/` URLs only; CBKC ≤ 40. The action redirects with `?notice=submitted` |
+| `withdrawVerification(kennelId)` | `PENDING` → `NOT_SUBMITTED` (keeps CBKC + documents) | otherwise `verificationNotPending`. Redirects with `?notice=withdrawn` |
+
+Approving or rejecting (setting `decidedAt`, `reviewerNote`, and `Kennel.isVerified`) is an admin/moderation task, out of scope.
+
+**DEV-ONLY testing aid — delete when the real function is written.** In development builds only (`NODE_ENV !== "production"`), the Verification page passes `?state=none|pending|rejected|approved` and `?registration=cnpj|cpf|none` to `getVerification`, which **puts the mock store in that state** (so the screen's actions work from it). Production builds ignore both params. The code is marked `DEV-ONLY TESTING AID` in `verification.ts` and in the page.
+
+---
+
 ## Schema changes implied so far
 
 None are made in this step. Collected here for planning:
@@ -454,4 +581,5 @@ None are made in this step. Collected here for planning:
 - Step 4a: models `Lead`, `LeadEvent`; enums `LeadStage`, `LeadSource`, `PreferredContact`, `LeadEventType`; `@@unique([kennelId, email])` on `Lead`.
 - Step 4b: `LeadStage.LOST`, enum `LostReason`, `Lead.lostReason`; models `LeadNote`, `Conversation` (one per lead), `Message` (`direction`, `readAt`); `Dog.reservedForLeadId String? @unique` (who holds the puppy); `@@unique([litterId, leadId])` on `WaitlistEntry`; `Kennel.timeZone String` (IANA name) for "today" on the server.
 - Step 5: `Message.sharedDogId String?` (→ `Dog`, `onDelete: SetNull`); `Media.caption String?`, `Media.position Int` (also Step 2), enum `VideoProvider` + `Media.provider VideoProvider?`, `Media.thumbnailUrl String?`, possibly `Media.publicId String?` (Cloudinary deletion) and `Media.width/height Int?`. Optional `auto` key in `STAGE_CHANGED` params (JSON, no migration).
+- Step 6a: models `Review` (with reply + report columns, or a `ReviewReply` model), `ReviewInvite`, `NotificationPreference`, `VerificationRequest`; enums `ReviewReportReason`, `NotificationPreferenceType`, `VerificationStatus`; `Owner.locale String?`; `Kennel.cpf String? @unique` (or a registration type + number); recommended aggregates `Kennel.ratingAverage Float`, `Kennel.reviewCount Int`; for real deletion possibly `deletionRequestedAt` (grace period) and an asset-deletion queue. Replaces the earlier `Kennel.verificationRequestedAt` idea.
 - Step 3: `Dog.registrationNumber String?`; new model `WaitlistEntry` (`litterId` → `Litter` with `onDelete: Cascade`, `leadId` → `Lead`, `position`, `note`, `createdAt`). Not new: `Litter.name`, `Litter.bornAt` (exist). Consider making `Litter.name` required.

@@ -76,11 +76,6 @@
         "RESERVED": "Reserved",
         "SOLD": "Sold"
       },
-      "placeholder": {
-        "title": "This section is being redesigned",
-        "description": "We're rebuilding this part of the dashboard. It will be back soon.",
-        "back": "Back to Overview"
-      },
       "dismiss": "Dismiss",
       "loading": "Loading…",
       "dogStatusOption": {
@@ -156,7 +151,20 @@
         "invalidVideoUrl": "Paste a YouTube or Vimeo link (youtube.com/watch, youtu.be, youtube.com/shorts or vimeo.com).",
         "dogBreedMismatch": "That dog isn't of the chosen breed.",
         "tooManySelected": "Select at most {max} items at a time.",
-        "nothingSelected": "Select at least one item."
+        "nothingSelected": "Select at least one item.",
+        "replyRequired": "Write a reply first.",
+        "chooseReason": "Choose a reason.",
+        "alreadyReported": "You already reported this review.",
+        "emailTaken": "Another account already uses this email.",
+        "passwordTooShort": "Use at least {min} characters.",
+        "passwordUnchanged": "Choose a password different from your current one.",
+        "passwordMismatch": "The passwords don't match.",
+        "confirmNameMismatch": "That doesn't match your kennel name. Check capital letters and accents.",
+        "documentsRequired": "Add at least one document.",
+        "invalidUpload": "One of the files didn't upload correctly. Remove it and upload it again.",
+        "verificationNotEditable": "This request can't be changed right now.",
+        "verificationNotPending": "There's no pending request to withdraw.",
+        "registrationMissing": "Add your CNPJ or CPF in Kennel profile first."
       }
     },
     "overview": {
@@ -1084,6 +1092,248 @@
         "videos": "No videos yet",
         "videosHelp": "Add a YouTube or Vimeo link to show a video on your public page.",
         "filteredVideos": "No videos match these filters"
+      }
+    },
+    "reviews": {
+      "title": "Reviews",
+      "subtitle": "What buyers say about {kennelName}. Reply publicly to show you care.",
+      "summary": {
+        "heading": "Rating summary",
+        "outOf": "{average} out of 5",
+        "count": "{count, plural, one {# review} other {# reviews}}",
+        "distribution": "Reviews by rating",
+        "bar": "{stars, plural, one {# star} other {# stars}}: {count, plural, one {# review} other {# reviews}}"
+      },
+      "invite": {
+        "heading": "Ask a past buyer",
+        "description": "Create a personal link a buyer can use to leave a review. Only people you invite can review.",
+        "emailLabel": "Buyer email (optional)",
+        "emailPlaceholder": "buyer@email.com",
+        "send": "Send",
+        "copyInstead": "Copy invite link instead",
+        "createdFor": "Invite created for {email}. Email sending isn't set up yet, so copy the link and send it yourself.",
+        "createdLink": "Invite link created. Copy it and send it to your buyer.",
+        "linkLabel": "Invite link",
+        "pageNotLive": "Preview: the review page this link opens isn't live yet.",
+        "copy": "Copy",
+        "copied": "Link copied",
+        "copyManual": "Couldn't copy automatically. The link is selected: press Ctrl+C (or ⌘C) to copy it."
+      },
+      "tabs": {
+        "label": "Filter reviews",
+        "all": "All",
+        "needsReply": "Needs reply",
+        "replied": "Replied",
+        "reported": "Reported"
+      },
+      "showing": "Showing {shown} of {total, plural, one {# review} other {# reviews}}",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "card": {
+        "verifiedBuyer": "Verified buyer",
+        "rating": "{rating} out of 5 stars",
+        "reported": "Reported, under review",
+        "edited": "edited",
+        "yourReply": "Your reply",
+        "editReply": "Edit reply",
+        "editReplyLabel": "Edit your reply to {name}",
+        "reply": "Reply",
+        "replyLabel": "Reply to {name}"
+      },
+      "replyForm": {
+        "label": "Reply publicly",
+        "editLabel": "Edit your public reply",
+        "placeholder": "Thank {name} and say something personal",
+        "cancel": "Cancel",
+        "post": "Post reply",
+        "save": "Save reply",
+        "posting": "Saving…",
+        "posted": "Reply posted.",
+        "updated": "Reply updated."
+      },
+      "report": {
+        "trigger": "Report this review",
+        "triggerLabel": "Report {name}'s review",
+        "title": "Report this review",
+        "description": "Our team will look at it. The review stays public until a decision is made.",
+        "reason": "Reason",
+        "choose": "Choose a reason",
+        "reasons": {
+          "INAPPROPRIATE": "Inappropriate or offensive",
+          "NOT_A_BUYER": "Not a real buyer",
+          "SPAM": "Spam or advertising",
+          "OTHER": "Something else"
+        },
+        "details": "Details (optional)",
+        "submit": "Report review",
+        "pending": "Reporting…",
+        "cancel": "Cancel"
+      },
+      "empty": {
+        "none": "No reviews yet",
+        "noneHelp": "Ask a past buyer with the card above. Their review will show up here.",
+        "filtered": "No reviews here",
+        "filteredHelp": {
+          "all": "There are no reviews yet.",
+          "needsReply": "You've replied to every review.",
+          "replied": "You haven't replied to any reviews yet.",
+          "reported": "You haven't reported any reviews."
+        },
+        "showAll": "Show all reviews"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Your account, notifications and kennel verification.",
+      "tabs": {
+        "label": "Settings sections",
+        "profile": "Kennel profile",
+        "account": "Account",
+        "notifications": "Notifications",
+        "verification": "Verification"
+      },
+      "profile": {
+        "title": "The Kennel profile tab is being redesigned",
+        "description": "Editing your kennel's name, logo, description and registration will be back here soon."
+      },
+      "common": {
+        "saving": "Saving…",
+        "cancel": "Cancel"
+      },
+      "account": {
+        "details": {
+          "heading": "Account details",
+          "sub": "Your personal sign-in details.",
+          "fullName": "Full name",
+          "email": "Email",
+          "language": "Language",
+          "languages": {
+            "en": "English",
+            "pt-BR": "Português (Brasil)"
+          },
+          "save": "Save",
+          "saved": "Account details saved."
+        },
+        "password": {
+          "heading": "Change password",
+          "sub": "Choose a password you don't use anywhere else.",
+          "current": "Current password",
+          "new": "New password",
+          "newHelp": "At least {min} characters.",
+          "confirm": "Confirm new password",
+          "submit": "Update password",
+          "pending": "Updating…",
+          "updated": "Preview only: the new password passed every check, but it wasn't saved. You still sign in with your current password."
+        },
+        "danger": {
+          "heading": "Danger zone",
+          "description": "Deleting your account removes your kennel page, dogs, litters, photos, leads and messages. This cannot be undone.",
+          "confirmLabel": "Type your kennel name to confirm",
+          "confirmHelp": "Type “{name}” exactly, with the same capital letters and accents.",
+          "button": "Delete account",
+          "dialogTitle": "Delete your account and {name}?",
+          "dialogDescription": "Your kennel page and all its data are deleted for good. This cannot be undone.",
+          "dialogConfirm": "Delete everything",
+          "pending": "Deleting…",
+          "previewNotice": "Preview only: in the real app your account and all its data would be deleted now. Nothing was deleted."
+        }
+      },
+      "notifications": {
+        "heading": "Email notifications",
+        "sub": "Choose what also reaches your email.",
+        "note": "In-app alerts are always on. Email notifications will start working once email sending is connected.",
+        "on": "Email",
+        "off": "Off",
+        "save": "Save preferences",
+        "types": {
+          "NEW_LEAD": {
+            "title": "New lead",
+            "help": "When a buyer sends an inquiry."
+          },
+          "NEW_MESSAGE": {
+            "title": "New message",
+            "help": "When a buyer replies in your inbox."
+          },
+          "NEW_REVIEW": {
+            "title": "New review",
+            "help": "When a buyer leaves a review."
+          },
+          "WAITLIST_ACTIVITY": {
+            "title": "Waitlist activity",
+            "help": "When someone joins a litter waitlist."
+          },
+          "VERIFICATION_UPDATE": {
+            "title": "Verification updates",
+            "help": "When your verification status changes."
+          }
+        }
+      },
+      "verification": {
+        "heading": "Verification",
+        "sub": "A verified badge tells buyers you are a real, registered kennel.",
+        "statusLabel": "Status:",
+        "status": {
+          "NOT_SUBMITTED": "Not submitted",
+          "PENDING": "Pending review",
+          "APPROVED": "Approved",
+          "REJECTED": "Rejected"
+        },
+        "steps": {
+          "label": "Verification progress",
+          "submitted": "1. Submitted",
+          "inReview": "2. In review",
+          "decision": "3. Decision",
+          "notYet": "Not yet",
+          "reviewTime": "Usually 2 to 3 business days",
+          "reviewDone": "Reviewed",
+          "decisionHint": "Approved or needs changes",
+          "approvedOn": "Approved on {date}",
+          "rejectedOn": "Needs changes ({date})",
+          "state": {
+            "done": "done",
+            "current": "in progress",
+            "rejected": "needs changes",
+            "todo": "not started"
+          }
+        },
+        "rejectedTitle": "Your request needs changes",
+        "reviewerNote": "Reviewer's note:",
+        "rejectedHelp": "Update your documents below and resubmit.",
+        "approvedTitle": "Your kennel is verified",
+        "approvedBody": "Approved on {date}. Your public page shows the verified badge.",
+        "registeredAs": "Registered as",
+        "registrationTypes": {
+          "CNPJ": "Company (CNPJ)",
+          "CPF": "Individual (CPF)"
+        },
+        "changeRegistration": "Change in Kennel profile",
+        "missingTitle": "Add your CNPJ or CPF first",
+        "missing": "Verification needs your kennel's CNPJ or CPF on file.",
+        "goToProfile": "Go to Kennel profile",
+        "cbkc": "CBKC registration",
+        "cbkcHelp": "Optional. Your kennel's number at the Confederação Brasileira de Cinofilia.",
+        "documents": "Proof documents",
+        "documentsHelp": "Photos or scans of your CNPJ card or CPF and your CBKC certificate. JPG, PNG or WebP, up to 10 MB each, up to {max} documents.",
+        "uploaded": "Uploaded",
+        "remove": "Remove {name}",
+        "addDocument": "Add document",
+        "submitBlocked": "Add your CNPJ or CPF to submit.",
+        "submit": "Submit for review",
+        "resubmit": "Resubmit",
+        "submitting": "Submitting…",
+        "ifRejected": "<strong>If rejected:</strong> you will see the reviewer's note here and can resubmit with new documents.",
+        "none": "None",
+        "pendingSummary": "Submitted on {date}. This page will show the decision.",
+        "withdraw": "Withdraw request",
+        "withdrawTitle": "Withdraw your verification request?",
+        "withdrawDescription": "Your request leaves the review queue. Your CBKC number and documents stay here so you can submit again later.",
+        "withdrawConfirm": "Withdraw",
+        "withdrawing": "Withdrawing…",
+        "notices": {
+          "submitted": "Verification request submitted.",
+          "withdrawn": "Request withdrawn. You can submit again at any time."
+        }
       }
     }
   },

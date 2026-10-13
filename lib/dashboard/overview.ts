@@ -7,7 +7,8 @@ import { dateOnlyToIso } from "./age";
 import { computeLitterStats } from "./litters";
 import { countNewLeads, getUpcomingFollowUps } from "./leads";
 import { getUnreadSummary } from "./messages";
-import type { Overview, UpcomingItem } from "./types";
+import { getVerificationStatus } from "./verification";
+import type { ActivityItem, Overview, UpcomingItem } from "./types";
 
 /**
  * Setup checklist, key metrics, the 5 latest activity items (newest first)
@@ -34,7 +35,12 @@ export async function getOverview(kennelId: string): Promise<Overview> {
         };
     });
 
-    const [newLeads, followUps, unread] = await Promise.all([countNewLeads(kennelId), getUpcomingFollowUps(kennelId, 4), getUnreadSummary(kennelId)]);
+    const [newLeads, followUps, unread, verificationStatus] = await Promise.all([
+        countNewLeads(kennelId),
+        getUpcomingFollowUps(kennelId, 4),
+        getUnreadSummary(kennelId),
+        getVerificationStatus(kennelId),
+    ]);
     const followUpItems: UpcomingItem[] = followUps.map((item) => ({
         id: `up_followup_${item.leadId}`,
         type: "LEAD_FOLLOW_UP",
@@ -42,8 +48,17 @@ export async function getOverview(kennelId: string): Promise<Overview> {
         dueAt: dateOnlyToIso(item.followUpAt),
     }));
 
+    // One "New review" item per review (the newest ones make the top 5), from the reviews store.
+    const reviewItems: ActivityItem[] = store.reviews.map((review) => ({
+        id: `act_review_${review.id}`,
+        type: "NEW_REVIEW",
+        params: { reviewerName: review.reviewerName, rating: review.rating },
+        createdAt: review.createdAt,
+    }));
+
     return snapshot({
-        setupSteps: store.setupSteps,
+        // "Request verification" is done once a request is pending or approved.
+        setupSteps: [...store.setupSteps, { key: "verification", done: verificationStatus === "PENDING" || verificationStatus === "APPROVED" }],
         metrics: {
             ...store.metrics,
             newLeads,
@@ -54,7 +69,7 @@ export async function getOverview(kennelId: string): Promise<Overview> {
             },
             activeLitters: { count: activeLitters.length, nextGoHomeAt: goHomeItems[0]?.dueAt ?? null },
         },
-        recentActivity: [...store.recentActivity].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5),
+        recentActivity: [...store.recentActivity, ...reviewItems].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 5),
         // Follow-ups (overdue first) and go-home dates, by date, at most 4.
         upcoming: [...followUpItems, ...goHomeItems].sort((a, b) => a.dueAt.localeCompare(b.dueAt)).slice(0, 4),
     });

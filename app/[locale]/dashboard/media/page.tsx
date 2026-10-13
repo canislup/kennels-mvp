@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { getCurrentKennel } from "@/lib/dashboard/kennel";
 import { getMediaCounts, getMediaFilterOptions, listMedia } from "@/lib/dashboard/media";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
+import PageLink from "@/components/dashboard/ui/PageLink";
 import Notice from "@/components/dashboard/ui/Notice";
 import PageHeader from "@/components/dashboard/ui/PageHeader";
 import UrlFilters from "@/components/dashboard/ui/UrlFilters";
@@ -147,21 +148,5 @@ export default async function MediaPage({ searchParams }: { searchParams: Promis
                 <VideoGrid items={result.items} options={options} filtered={filtered} />
             )}
         </>
-    );
-}
-
-function PageLink({ href, label }: { href: string | null; label: string }) {
-    const classes = "rounded-xl border border-line-strong bg-white px-4 py-2.25 text-[13px] font-medium";
-    if (!href) {
-        return (
-            <span aria-disabled="true" className={`${classes} cursor-not-allowed text-stone-400`}>
-                {label}
-            </span>
-        );
-    }
-    return (
-        <Link href={href} className={`${classes} text-stone-700 hover:bg-stone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}>
-            {label}
-        </Link>
     );
 }

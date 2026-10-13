@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import SectionPlaceholder from "@/components/dashboard/SectionPlaceholder";
+import { Hammer } from "lucide-react";
+import EmptyState from "@/components/dashboard/ui/EmptyState";
 
-// Placeholder until this section's redesign step replaces it.
+// Kennel profile tab: placeholder until Step 6b rebuilds it.
 export async function generateMetadata(): Promise<Metadata> {
-    const t = await getTranslations("dashboard.shell.nav");
-    return { title: t("settings") };
+    const t = await getTranslations("dashboard.settings");
+    return { title: `${t("tabs.profile")} · ${t("title")}` };
 }
 
-export default function SettingsPage() {
-    return <SectionPlaceholder section="settings" />;
+export default async function KennelProfileSettingsPage() {
+    const t = await getTranslations("dashboard.settings.profile");
+    return <EmptyState icon={<Hammer className="size-6" strokeWidth={1.8} />} title={t("title")} description={t("description")} />;
 }

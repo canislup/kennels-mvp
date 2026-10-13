@@ -2,6 +2,7 @@
 // for the Add lead form. parseLeadFormData() whitelists the keys the form may
 // send; validateLeadInput() returns errors as translation keys
 // (dashboard.common.errors.*) + params.
+import { EMAIL_PATTERN } from "./common";
 import type { FieldError, LeadFormField, LeadFormOptions, LeadInput, LeadSource, LeadStage, PreferredContact } from "../types";
 
 export const LEAD_LIMITS = { name: 80, email: 254, city: 60, state: 40, interestNote: 120 } as const;
@@ -58,7 +59,6 @@ export function parseLeadFormData(formData: FormData): LeadFormValues {
     return values;
 }
 
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE = /^[0-9 +\-()]{8,20}$/;
 
 const isValidDate = (value: string) => {
@@ -89,7 +89,7 @@ export function validateLeadInput(
     if (!values.email && !values.phone) {
         errors.email = { key: "contactRequired" };
     } else {
-        if (values.email && (!EMAIL.test(values.email) || values.email.length > LEAD_LIMITS.email)) errors.email = { key: "invalidEmail" };
+        if (values.email && (!EMAIL_PATTERN.test(values.email) || values.email.length > LEAD_LIMITS.email)) errors.email = { key: "invalidEmail" };
         if (values.phone && !PHONE.test(values.phone)) errors.phone = { key: "invalidPhone" };
     }
 

@@ -9,6 +9,8 @@ import { buildLitterFixtures, buildWaitlistFixtures } from "./litters";
 import { buildLeadFixtures } from "./leads";
 import { buildConversationFixtures } from "./conversations";
 import { buildMediaFixtures } from "./media";
+import { buildReviewFixtures } from "./reviews";
+import { buildSettingsFixtures } from "./settings";
 import type { ActivityItem, DashboardNotification, NavCounts, OverviewMetrics, SetupStep, UpcomingItem } from "../types";
 
 const MINUTE = 60_000;
@@ -28,10 +30,15 @@ export function buildFixtures() {
     // Both derived in getNavCounts() (leads and conversations stores).
     const navCounts: NavCounts = { newLeads: 0, unreadMessages: 0 };
 
+    // The bell's review notification names the newest fixture review (a real
+    // Notification row would snapshot it when the review is created).
+    const { reviews, reviewInvites } = buildReviewFixtures();
+    const newestReview = [...reviews].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]!;
+
     const notifications: DashboardNotification[] = [
         { id: "ntf_1", type: "NEW_LEAD", params: { name: "Ricardo Alves" }, createdAt: ago(12 * MINUTE), read: false },
         { id: "ntf_2", type: "NEW_MESSAGE", params: { name: "Camila Torres", excerpt: "Is the chocolate male still available?" }, createdAt: ago(1 * HOUR), read: false },
-        { id: "ntf_3", type: "NEW_REVIEW", params: { reviewerName: "Pedro Lima", rating: 5 }, createdAt: ago(3 * HOUR), read: false },
+        { id: "ntf_3", type: "NEW_REVIEW", params: { reviewerName: newestReview.reviewerName, rating: newestReview.rating }, createdAt: newestReview.createdAt, read: false },
         { id: "ntf_4", type: "FOLLOW_UP_DUE", params: { leadName: "Ricardo Alves" }, createdAt: ago(5 * HOUR), read: false },
         { id: "ntf_5", type: "VERIFICATION_REMINDER", params: {}, createdAt: ago(2 * DAY), read: true },
     ];
@@ -42,7 +49,7 @@ export function buildFixtures() {
         { key: "breeds", done: true },
         { key: "firstDog", done: true },
         { key: "photos", done: true },
-        { key: "verification", done: false },
+        // "verification" is derived from the verification request in getOverview().
     ];
 
     const metrics: OverviewMetrics = {
@@ -58,7 +65,7 @@ export function buildFixtures() {
     const recentActivity: ActivityItem[] = [
         { id: "act_1", type: "NEW_LEAD", params: { name: "Ricardo Alves", subject: "Nala and Marley’s next litter" }, createdAt: ago(12 * MINUTE) },
         { id: "act_2", type: "NEW_MESSAGE", params: { name: "Camila Torres", excerpt: "Is the chocolate male still available?" }, createdAt: ago(1 * HOUR) },
-        { id: "act_3", type: "NEW_REVIEW", params: { reviewerName: "Pedro Lima", rating: 5 }, createdAt: ago(3 * HOUR) },
+        // NEW_REVIEW items are derived from the reviews store in getOverview().
         { id: "act_4", type: "DOG_STATUS_CHANGED", params: { dogName: "Café", status: "RESERVED" }, createdAt: ago(1 * DAY + 2 * HOUR) },
         { id: "act_5", type: "LITTER_BORN", params: { damName: "Frida", puppyCount: 7 }, createdAt: ago(2 * DAY + 3 * HOUR) },
     ];
@@ -94,6 +101,9 @@ export function buildFixtures() {
         conversations,
         messages,
         media: buildMediaFixtures(),
+        reviews,
+        reviewInvites,
+        ...buildSettingsFixtures(),
     };
 }
 

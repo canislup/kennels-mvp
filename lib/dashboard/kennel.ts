@@ -1,9 +1,12 @@
 // MOCK IMPLEMENTATION: replace the body with the real Prisma query. Keep the signature.
 // (Exception: getCurrentKennel below is already REAL. It reads the session
-// and Prisma directly, and needs no backend work.)
+// and Prisma directly. One temporary mock part: it applies the owner name
+// saved on Settings → Account (mock store) until updateAccount writes to
+// Prisma; then delete the override lines.)
 import { cache } from "react";
 import { verifyKennelSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getMockStore } from "./mock/store";
 import type { CurrentKennel } from "./types";
 
 function initialsOf(fullName: string): string {
@@ -30,19 +33,24 @@ export const getCurrentKennel = cache(async (): Promise<CurrentKennel | null> =>
             city: true,
             state: true,
             logoUrl: true,
+            ownerId: true,
             owner: { select: { fullName: true } },
         },
     });
     if (!kennel) return null;
 
+    // TEMPORARY (mock): the name saved on Settings → Account.
+    const ownerName = getMockStore().accountOverrides[kennel.ownerId]?.fullName ?? kennel.owner.fullName;
+
     return {
         id: kennel.id,
+        ownerId: kennel.ownerId,
         name: kennel.name,
         slug: kennel.slug,
         city: kennel.city,
         state: kennel.state,
         logoUrl: kennel.logoUrl,
-        ownerName: kennel.owner.fullName,
-        ownerInitials: initialsOf(kennel.owner.fullName),
+        ownerName,
+        ownerInitials: initialsOf(ownerName),
     };
 });
