@@ -113,11 +113,14 @@ export type DogListItem = {
     birthDate: string | null; // Dog.birthDate as YYYY-MM-DD
     status: DogStatus;
     coverPhotoUrl: string | null; // first photo (Media position 0 / photoUrls[0])
+    archived: boolean; // Dog.archivedAt != null
 };
 
 export type DogListFilters = {
     status?: DogStatus;
-    /** Name or registry, case- and accent-insensitive. */
+    /** true = only archived dogs (status is then ignored); otherwise archived dogs are excluded. */
+    archived?: boolean;
+    /** Name, registry or registration number, case- and accent-insensitive. */
     q?: string;
     breed?: string;
     sex?: DogSex;
@@ -140,6 +143,8 @@ export type DogStatusCounts = {
     availablePuppy: number;
     reserved: number;
     sold: number;
+    /** Archived dogs (not included in `all`). */
+    archived: number;
 };
 
 export type HealthDocument = {
@@ -161,6 +166,7 @@ export type DogForEdit = {
     status: DogStatus;
     litterId: string | null; // NEW FIELD: Dog.litterId (optional relation to Litter)
     registry: string | null;
+    registrationNumber: string | null; // NEW FIELD: Dog.registrationNumber, e.g. "BR-204518"
     lineage: string | null; // "Bloodline" in the UI
     pedigreeUrl: string | null;
     sireName: string | null;
@@ -183,6 +189,105 @@ export type LitterOption = {
     bornAt: ISODateString | null;
 };
 
+// --- Litters -----------------------------------------------------------------
+
+/** Calendar date without time, "YYYY-MM-DD" (form inputs, birth and go-home dates). */
+export type DateOnlyString = string;
+
+/** Computed per litter, never stored (see ENDPOINTS.md). */
+export type LitterStats = {
+    /** max(Litter.puppyCount, linked puppies). 0 = count not set. */
+    totalPuppies: number;
+    available: number; // linked puppies with status AVAILABLE_PUPPY
+    reserved: number; // linked puppies with status RESERVED
+    onWaitlist: number; // WaitlistEntry rows
+    /** (total − available) ÷ total, 0–1; 0 when total is 0. */
+    placedShare: number;
+};
+
+export type LitterListItem = {
+    id: string;
+    name: string; // Litter.name (exists, nullable in the schema)
+    breed: string; // Litter.breed (free text, matches a Breed.name)
+    status: LitterStatus;
+    damName: string | null; // via Litter.damId → Dog.name
+    sireName: string | null; // via Litter.sireId → Dog.name
+    birthDate: DateOnlyString | null; // Litter.bornAt (exists)
+    expectedGoHomeDate: DateOnlyString | null; // Litter.expectedGoHomeDate
+    stats: LitterStats;
+};
+
+export type LitterStatusCounts = {
+    all: number;
+    planned: number;
+    available: number;
+    reserved: number;
+    soldOut: number;
+};
+
+export type DogAge = { unit: "weeks" | "months" | "years"; count: number };
+
+export type LitterParentSummary = {
+    id: string;
+    name: string;
+    breed: string;
+    /** Translated in the UI with dashboard.common.age.{unit}. null when no birth date. */
+    ageLabelParts: DogAge | null;
+    coverPhotoUrl: string | null;
+};
+
+export type LitterPuppy = {
+    id: string;
+    name: string;
+    sex: DogSex;
+    status: DogStatus;
+    coverPhotoUrl: string | null;
+};
+
+export type LitterDetail = LitterListItem & {
+    puppyCount: number; // Litter.puppyCount as entered (0 = not set)
+    dam: LitterParentSummary | null;
+    sire: LitterParentSummary | null;
+    puppies: LitterPuppy[];
+};
+
+/** NEW MODEL: WaitlistEntry { id, litterId, leadId, position, note, createdAt }. `name` comes from the Lead. */
+export type WaitlistEntry = {
+    id: string;
+    position: number;
+    leadId: string;
+    name: string;
+    note: string | null;
+    createdAt: ISODateString;
+};
+
+/** Everything the litter form edits. */
+export type LitterForEdit = {
+    id: string;
+    name: string;
+    breed: string;
+    status: LitterStatus;
+    damId: string | null;
+    sireId: string | null;
+    birthDate: DateOnlyString | null;
+    expectedGoHomeDate: DateOnlyString | null;
+    puppyCount: number; // 0–20, 0 = not set
+};
+
+/** Validated, whitelisted input for createLitter / updateLitter. */
+export type LitterInput = Omit<LitterForEdit, "id">;
+
+export type ParentOption = { id: string; name: string; breed: string };
+
+export type LitterFormOptions = {
+    breeds: KennelBreedOption[];
+    /** Adult, non-archived females / males of this kennel (any breed: the form filters by breed). */
+    females: ParentOption[];
+    males: ParentOption[];
+};
+
+export type LinkablePuppy = LitterPuppy;
+
 // --- Mutations ---------------------------------------------------------------
 
 /** A validation problem as a translation key (dashboard.common.errors.*) + params. */
@@ -199,3 +304,7 @@ export type MutationFailure<F extends string = string> = {
 export type DogMutationResult = { ok: true; dog: { id: string; slug: string } } | MutationFailure<DogFormField>;
 
 export type SimpleMutationResult = { ok: true } | MutationFailure;
+
+export type LitterFormField = keyof LitterInput;
+
+export type LitterMutationResult = { ok: true; litter: { id: string } } | MutationFailure<LitterFormField>;

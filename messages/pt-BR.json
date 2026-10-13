@@ -123,7 +123,15 @@
         "tooManyDocuments": "Você pode adicionar até {max} documentos.",
         "invalidDocument": "Cada documento precisa de um nome e de uma imagem enviada.",
         "notFound": "Este cão não existe mais. Ele pode ter sido excluído.",
-        "generic": "Algo deu errado. Tente de novo."
+        "generic": "Algo deu errado. Tente de novo.",
+        "invalidDam": "Escolha uma fêmea adulta desta raça do seu canil.",
+        "invalidSire": "Escolha um macho adulto desta raça do seu canil.",
+        "futureLitterDate": "A data de nascimento não pode estar no futuro.",
+        "birthDateRequiredForStatus": "Informe a data de nascimento: só ninhadas planejadas podem ser salvas sem ela.",
+        "goHomeBeforeBirth": "A entrega não pode ser antes do nascimento.",
+        "puppyCountRange": "Informe um número inteiro de 0 a {max}.",
+        "breedHasPuppies": "Esta ninhada já tem filhotes de outra raça. Desvincule-os antes (na página de cada filhote).",
+        "puppyNotLinkable": "Não foi possível vincular esse filhote: ele pode já estar em uma ninhada ou ser de outra raça."
       }
     },
     "overview": {
@@ -232,11 +240,12 @@
           "BREEDING_STOCK": "Reprodutores",
           "AVAILABLE_PUPPY": "Filhotes disponíveis",
           "RESERVED": "Reservados",
-          "SOLD": "Vendidos"
+          "SOLD": "Vendidos",
+          "archived": "Arquivados"
         },
         "filters": {
           "searchLabel": "Buscar cães",
-          "searchPlaceholder": "Buscar por nome ou registro",
+          "searchPlaceholder": "Buscar por nome, registro ou número",
           "breedLabel": "Raça",
           "allBreeds": "Todas as raças",
           "sexLabel": "Sexo",
@@ -267,12 +276,20 @@
           "title": "Nenhum cão encontrado com esses filtros",
           "description": "Tente outra busca ou limpe os filtros para ver todo o plantel.",
           "clear": "Limpar filtros"
+        },
+        "archivedBadge": "Arquivado",
+        "restore": "Restaurar",
+        "restoring": "Restaurando…",
+        "emptyArchived": {
+          "title": "Nenhum cão arquivado",
+          "description": "Os cães que você arquivar ficam aqui e podem ser restaurados quando quiser."
         }
       },
       "notices": {
         "created": "Cão adicionado ao plantel.",
         "archived": "Cão arquivado. Ele não aparece mais no plantel nem na página pública.",
-        "deleted": "Cão excluído definitivamente."
+        "deleted": "Cão excluído definitivamente.",
+        "restored": "Cão restaurado. Ele voltou ao plantel com o status que tinha."
       },
       "form": {
         "createTitle": "Adicionar um cão",
@@ -308,11 +325,13 @@
           "pedigreeUrl": "Link do pedigree",
           "sireName": "Pai",
           "damName": "Mãe",
-          "bio": "Descrição"
+          "bio": "Descrição",
+          "registrationNumber": "Número de registro"
         },
         "placeholders": {
           "breed": "Escolha uma raça",
-          "registry": "ex.: CBKC"
+          "registry": "ex.: CBKC",
+          "registrationNumber": "ex.: BR-204518"
         },
         "help": {
           "breed": "Só as raças que seu canil cria.",
@@ -359,7 +378,10 @@
           "deleteTitle": "Excluir {name} definitivamente?",
           "deleteDescription": "Isso apaga {name}, todas as fotos e todos os documentos de saúde. Não dá para desfazer.",
           "deleteConfirm": "Excluir definitivamente"
-        }
+        },
+        "restore": "Restaurar",
+        "restoring": "Restaurando…",
+        "restoredNotice": "{name} foi restaurado e voltou ao plantel."
       }
     },
     "kennelSetup": {
@@ -388,6 +410,164 @@
         "errors": {
           "failed": "Não foi possível criar seu canil.",
           "network": "Ocorreu um erro de conexão."
+        }
+      }
+    },
+    "litters": {
+      "status": {
+        "PLANNED": "Planejada",
+        "AVAILABLE": "Disponível",
+        "RESERVED": "Reservada",
+        "SOLD_OUT": "Esgotada"
+      },
+      "list": {
+        "title": "Ninhadas",
+        "subtitle": "Planeje ninhadas, acompanhe os filhotes e quem está na lista de espera.",
+        "newLitter": "Nova ninhada",
+        "tabsLabel": "Filtrar por status",
+        "listLabel": "Ninhadas",
+        "tabs": {
+          "all": "Todas",
+          "PLANNED": "Planejadas",
+          "AVAILABLE": "Disponíveis",
+          "RESERVED": "Reservadas",
+          "SOLD_OUT": "Esgotadas"
+        },
+        "emptyAll": {
+          "title": "Nenhuma ninhada ainda",
+          "description": "Planeje uma ninhada para acompanhar os filhotes, as datas de entrega e as famílias na lista de espera.",
+          "cta": "Planejar a primeira ninhada"
+        },
+        "emptyTab": {
+          "title": "Nenhuma ninhada em “{status}”",
+          "description": "As ninhadas com este status aparecem aqui.",
+          "showAll": "Ver todas as ninhadas"
+        }
+      },
+      "notices": {
+        "created": "Ninhada criada.",
+        "deleted": "Ninhada excluída. Os filhotes continuam no plantel, sem ninhada.",
+        "puppyAdded": "Filhote adicionado à ninhada."
+      },
+      "card": {
+        "parentsBoth": "{breed} · {dam} e {sire}",
+        "parentsOne": "{breed} · {parent}",
+        "parentsNone": "{breed} · Pais não informados",
+        "count": "{available} de {total} disponíveis",
+        "countNotSet": "Número de filhotes não informado",
+        "placed": "{percent}% encaminhados",
+        "progressLabel": "Filhotes encaminhados em {name}",
+        "date": {
+          "expected": "Prevista para {date}",
+          "goHome": "Entrega {date}",
+          "wentHome": "Entregue em {date}",
+          "notSet": "Data não informada"
+        }
+      },
+      "detail": {
+        "born": "Nascida em {date}",
+        "goHome": "Entrega prevista {date}",
+        "edit": "Editar ninhada",
+        "changeStatus": "Mudar status",
+        "changeStatusLabel": "Mudar o status de {name}, atualmente {status}",
+        "statusMenuLabel": "Status de {name}",
+        "statusFailed": "Não foi possível mudar o status. Tente de novo.",
+        "backToList": "Voltar para as ninhadas",
+        "stats": {
+          "puppies": "Filhotes",
+          "available": "Disponíveis",
+          "reserved": "Reservados",
+          "onWaitlist": "Na lista de espera"
+        },
+        "parents": {
+          "dam": "Mãe",
+          "sire": "Pai",
+          "notSet": "Não informado",
+          "setInEdit": "Informar em Editar ninhada",
+          "meta": "{breed}, {age}"
+        }
+      },
+      "puppies": {
+        "heading": "Filhotes desta ninhada",
+        "addOrLink": "Adicionar ou vincular filhote",
+        "empty": "Nenhum filhote nesta ninhada ainda",
+        "emptyHelp": "Adicione um filhote novo ou vincule um que já está no plantel.",
+        "columns": {
+          "puppy": "Filhote",
+          "sex": "Sexo",
+          "status": "Status",
+          "actions": "Ações"
+        },
+        "edit": "Editar"
+      },
+      "linkDialog": {
+        "title": "Adicionar ou vincular filhote",
+        "description": "Escolha um dos seus filhotes de {breed} que ainda não está em uma ninhada, ou cadastre um novo.",
+        "noneLinkable": "Todos os seus filhotes de {breed} já estão em uma ninhada, então não há o que vincular. Cadastre um filhote novo.",
+        "pickLabel": "Filhotes sem ninhada",
+        "pickOne": "Escolha um filhote para vincular.",
+        "link": "Vincular filhote",
+        "linking": "Vinculando…",
+        "createHelp": "Ainda não está no plantel?",
+        "createNew": "Cadastrar filhote novo",
+        "cancel": "Cancelar"
+      },
+      "waitlist": {
+        "heading": "Lista de espera",
+        "count": "{count} na espera",
+        "empty": "Ninguém na lista de espera ainda",
+        "openLead": "Abrir interessado",
+        "position": "Posição",
+        "added": "Adicionado {time}"
+      },
+      "form": {
+        "createTitle": "Nova ninhada",
+        "createSubtitle": "Planeje a ninhada agora; informe o nascimento e os filhotes quando chegarem.",
+        "editTitle": "Editar {name}",
+        "editSubtitle": "As alterações aparecem na tela de Ninhadas assim que você salvar.",
+        "viewLitter": "Ver ninhada",
+        "newLitterCrumb": "Nova ninhada",
+        "noParent": "Não informado",
+        "chooseBreedFirst": "Escolha a raça primeiro",
+        "submitCreate": "Criar ninhada",
+        "submitEdit": "Salvar alterações",
+        "sections": {
+          "basics": "Informações básicas",
+          "parents": "Pais",
+          "dates": "Datas e tamanho"
+        },
+        "fields": {
+          "name": "Nome",
+          "breed": "Raça",
+          "status": "Status",
+          "dam": "Mãe",
+          "sire": "Pai",
+          "birthDate": "Data de nascimento",
+          "expectedGoHomeDate": "Entrega prevista",
+          "puppyCount": "Número de filhotes"
+        },
+        "placeholders": {
+          "name": "ex.: Ninhada de outono",
+          "breed": "Escolha uma raça"
+        },
+        "help": {
+          "name": "Compradores e sua equipe veem este nome.",
+          "breed": "Só as raças que seu canil cria.",
+          "status": "Mudar o status da ninhada não muda o status de nenhum filhote.",
+          "parents": "Só aparecem adultos da raça escolhida do seu canil. Os dois são opcionais.",
+          "noAdults": "Você ainda não tem adultos de {breed}. Cadastre-os em Cães para informar os pais.",
+          "birthDate": "Obrigatória para todos os status, menos Planejada.",
+          "puppyCount": "0 significa não informado. Filhotes vinculados também contam."
+        },
+        "danger": {
+          "heading": "Excluir ninhada",
+          "description": "Excluir apaga a ninhada e a lista de espera. Os filhotes continuam no plantel, só que sem ninhada.",
+          "delete": "Excluir ninhada",
+          "confirmTitle": "Excluir {name}?",
+          "confirmDescription": "{count, plural, =0 {Isso apaga a ninhada e a lista de espera. Não dá para desfazer.} one {Isso apaga a ninhada e a lista de espera. O # filhote continua no plantel, sem ninhada. Não dá para desfazer.} other {Isso apaga a ninhada e a lista de espera. Os # filhotes continuam no plantel, sem ninhada. Não dá para desfazer.}}",
+          "confirm": "Excluir ninhada",
+          "cancel": "Cancelar",
+          "working": "Excluindo…"
         }
       }
     }

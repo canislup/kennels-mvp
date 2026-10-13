@@ -9,6 +9,7 @@ import type { DogFormField, DogInput, DogLifeStage, DogSex, DogStatus, FieldErro
 export const DOG_LIMITS = {
     name: 60,
     registry: 40,
+    registrationNumber: 40,
     lineage: 60,
     parentName: 80,
     bio: 800,
@@ -31,6 +32,7 @@ export type DogFormValues = {
     status: string;
     litterId: string;
     registry: string;
+    registrationNumber: string;
     lineage: string;
     pedigreeUrl: string;
     sireName: string;
@@ -69,6 +71,7 @@ export function parseDogFormData(formData: FormData): DogFormValues {
         status: text(formData, "status"),
         litterId: text(formData, "litterId"),
         registry: text(formData, "registry"),
+        registrationNumber: text(formData, "registrationNumber"),
         lineage: text(formData, "lineage"),
         pedigreeUrl: text(formData, "pedigreeUrl"),
         sireName: text(formData, "sireName"),
@@ -134,6 +137,7 @@ export function validateDogInput(
     }
 
     tooLong("registry", values.registry, DOG_LIMITS.registry);
+    tooLong("registrationNumber", values.registrationNumber, DOG_LIMITS.registrationNumber);
     tooLong("lineage", values.lineage, DOG_LIMITS.lineage);
     tooLong("sireName", values.sireName, DOG_LIMITS.parentName);
     tooLong("damName", values.damName, DOG_LIMITS.parentName);
@@ -168,6 +172,7 @@ export function validateDogInput(
             status: values.status as DogStatus,
             litterId: values.lifeStage === "PUPPY" ? orNull(values.litterId) : null,
             registry: orNull(values.registry),
+            registrationNumber: orNull(values.registrationNumber),
             lineage: orNull(values.lineage),
             pedigreeUrl: orNull(values.pedigreeUrl),
             sireName: orNull(values.sireName),
@@ -190,6 +195,7 @@ export function dogToFormValues(dog: DogInput | null): DogFormValues {
         status: dog?.status ?? "BREEDING_STOCK",
         litterId: dog?.litterId ?? "",
         registry: dog?.registry ?? "",
+        registrationNumber: dog?.registrationNumber ?? "",
         lineage: dog?.lineage ?? "",
         pedigreeUrl: dog?.pedigreeUrl ?? "",
         sireName: dog?.sireName ?? "",

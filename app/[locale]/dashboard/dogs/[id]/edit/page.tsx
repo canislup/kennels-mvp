@@ -9,9 +9,10 @@ import Notice from "@/components/dashboard/ui/Notice";
 import PageHeader from "@/components/dashboard/ui/PageHeader";
 import DangerZone from "@/components/dashboard/dogs/DangerZone";
 import DogForm from "@/components/dashboard/dogs/DogForm";
-import { saveDogAction } from "../../actions";
+import SubmitButton from "@/components/dashboard/ui/SubmitButton";
+import { restoreDogAction, saveDogAction } from "../../actions";
 
-type Props = { params: Promise<{ id: string }> };
+type Props = { params: Promise<{ id: string }>; searchParams?: Promise<Record<string, string | string[] | undefined>> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const [{ id }, kennel, t] = await Promise.all([params, getCurrentKennel(), getTranslations("dashboard.dogs.form")]);
@@ -19,8 +20,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: dog ? t("editTitle", { name: dog.name }) : t("createTitle") };
 }
 
-export default async function EditDogPage({ params }: Props) {
-    const [{ id }, kennel] = await Promise.all([params, getCurrentKennel()]);
+export default async function EditDogPage({ params, searchParams }: Props) {
+    const [{ id }, kennel, query] = await Promise.all([params, getCurrentKennel(), searchParams]);
     if (!kennel) notFound();
     const [dog, t, breeds, litters] = await Promise.all([
         getDogForEdit(kennel.id, id),
@@ -47,9 +48,22 @@ export default async function EditDogPage({ params }: Props) {
                     </Link>
                 }
             />
+            {query?.notice === "restored" && !dog.archivedAt && (
+                <Notice tone="success" clearParam="notice" className="mb-5">
+                    {t("restoredNotice", { name: dog.name })}
+                </Notice>
+            )}
             {dog.archivedAt && (
                 <Notice tone="warning" dismissible={false} className="mb-5">
-                    {t("archivedNotice", { name: dog.name })}
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <span>{t("archivedNotice", { name: dog.name })}</span>
+                        {/* A separate form: it can't be nested inside the dog form below. */}
+                        <form action={restoreDogAction.bind(null, dog.id, "edit")}>
+                            <SubmitButton variant="secondary" className="px-3.5 py-1.5 text-xs" pendingLabel={t("restoring")}>
+                                {t("restore")}
+                            </SubmitButton>
+                        </form>
+                    </div>
                 </Notice>
             )}
             <DogForm

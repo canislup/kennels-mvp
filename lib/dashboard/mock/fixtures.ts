@@ -5,7 +5,7 @@
 // Sample data taken from docs/design/dashboard/Overview.dc.html and
 // Dogs.dc.html. Times are relative to "now" so the dashboard always looks current.
 import { buildDogFixtures, KENNEL_BREEDS } from "./dogs";
-import { buildLitterFixtures } from "./litters";
+import { buildLitterFixtures, buildWaitlistFixtures } from "./litters";
 import type { ActivityItem, DashboardNotification, NavCounts, OverviewMetrics, SetupStep, UpcomingItem } from "../types";
 
 const MINUTE = 60_000;
@@ -72,6 +72,7 @@ export function buildFixtures() {
         upcoming,
         kennelBreeds: KENNEL_BREEDS,
         litters: buildLitterFixtures(),
+        waitlist: buildWaitlistFixtures(),
         dogs: buildDogFixtures(),
     };
 }

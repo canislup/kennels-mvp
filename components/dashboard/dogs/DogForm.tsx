@@ -32,6 +32,7 @@ export default function DogForm({
     breeds,
     litters,
     dangerZone,
+    returnToLitter = false,
 }: {
     mode: "create" | "edit";
     /** saveDogAction, bound on the server with the dog id (null for create). */
@@ -41,6 +42,8 @@ export default function DogForm({
     litters: LitterOption[];
     /** Archive/delete card, rendered by the page on edit. */
     dangerZone?: React.ReactNode;
+    /** Opened from a litter ("Create a new puppy"): after create, go back to that litter. */
+    returnToLitter?: boolean;
 }) {
     const t = useTranslations("dashboard");
     const format = useFormatter();
@@ -182,6 +185,17 @@ export default function DogForm({
                             <Field id="dog-registry-name" label={t("dogs.form.fields.registry")} error={error("registry")}>
                                 {(control) => <TextInput {...control} name="registry" defaultValue={values.registry} placeholder={t("dogs.form.placeholders.registry")} />}
                             </Field>
+                            <Field id="dog-registration-number" label={t("dogs.form.fields.registrationNumber")} error={error("registrationNumber")}>
+                                {(control) => (
+                                    <TextInput
+                                        {...control}
+                                        name="registrationNumber"
+                                        defaultValue={values.registrationNumber}
+                                        placeholder={t("dogs.form.placeholders.registrationNumber")}
+                                        autoComplete="off"
+                                    />
+                                )}
+                            </Field>
                             <Field id="dog-lineage" label={t("dogs.form.fields.lineage")} help={t("dogs.form.help.lineage")} error={error("lineage")}>
                                 {(control) => <TextInput {...control} name="lineage" defaultValue={values.lineage} />}
                             </Field>
@@ -232,6 +246,7 @@ export default function DogForm({
                 </div>
             </div>
 
+            {returnToLitter && <input type="hidden" name="returnTo" value="litter" />}
             <SaveBar
                 cancelHref="/dashboard/dogs"
                 submitLabel={mode === "create" ? t("dogs.form.submitCreate") : t("dogs.form.submitEdit")}

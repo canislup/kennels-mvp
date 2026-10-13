@@ -59,10 +59,10 @@ export default async function OverviewPage() {
                 subtitle={t("subtitle", { kennelName: kennel.name })}
                 actions={
                     <>
-                        <Button href="/dashboard/litters" variant="secondary">
+                        <Button href="/dashboard/litters/new" variant="secondary">
                             {t("actions.newLitter")}
                         </Button>
-                        <Button href="/dashboard/dogs">{t("actions.addDog")}</Button>
+                        <Button href="/dashboard/dogs/new">{t("actions.addDog")}</Button>
                     </>
                 }
             />

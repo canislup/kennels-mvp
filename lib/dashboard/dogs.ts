@@ -6,6 +6,8 @@
 // See ENDPOINTS.md for the backend contract of each function.
 import { nextAvailableSlug, slugify } from "@/lib/slug";
 import { getMockStore, snapshot } from "./mock/store";
+import { dateOnlyToIso } from "./age";
+import { litterLabel } from "./litters";
 import type { MockDog } from "./mock/dogs";
 import type {
     DogForEdit,
@@ -35,6 +37,7 @@ const toListItem = (dog: MockDog): DogListItem => ({
     birthDate: dog.birthDate,
     status: dog.status,
     coverPhotoUrl: dog.photos[0] ?? null,
+    archived: dog.archivedAt !== null,
 });
 
 const toForEdit = (dog: MockDog): DogForEdit => {
@@ -47,16 +50,20 @@ const notFound = (): SimpleMutationResult => ({ ok: false, fieldErrors: {}, form
 
 // --- Reads -------------------------------------------------------------------
 
-/** One page of the roster, newest first. Archived dogs are excluded. */
+/**
+ * One page of the roster, newest first. Archived dogs are excluded, unless
+ * `archived: true`, which lists only archived dogs (and ignores `status`).
+ */
 export async function listDogs(kennelId: string, filters: DogListFilters): Promise<DogListResult> {
     void kennelId;
     const q = filters.q ? fold(filters.q.trim()) : "";
-    const matches = activeDogs()
-        .filter((dog) => !filters.status || dog.status === filters.status)
+    const pool = filters.archived ? getMockStore().dogs.filter((dog) => dog.archivedAt !== null) : activeDogs();
+    const matches = pool
+        .filter((dog) => filters.archived || !filters.status || dog.status === filters.status)
         .filter((dog) => !filters.breed || dog.breed === filters.breed)
         .filter((dog) => !filters.sex || dog.sex === filters.sex)
         .filter((dog) => !filters.stage || dog.lifeStage === filters.stage)
-        .filter((dog) => !q || fold(dog.name).includes(q) || fold(dog.registry ?? "").includes(q))
+        .filter((dog) => !q || [dog.name, dog.registry, dog.registrationNumber].some((value) => fold(value ?? "").includes(q)))
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
     const start = (filters.page - 1) * filters.pageSize;
@@ -68,10 +75,11 @@ export async function listDogs(kennelId: string, filters: DogListFilters): Promi
     });
 }
 
-/** Counts per status for the whole (non-archived) roster; ignores other filters. */
+/** Counts per status for the whole (non-archived) roster, plus archived; ignores other filters. */
 export async function getDogStatusCounts(kennelId: string): Promise<DogStatusCounts> {
     void kennelId;
     const dogs = activeDogs();
+    const archived = getMockStore().dogs.length - dogs.length;
     const count = (status: DogStatus) => dogs.filter((dog) => dog.status === status).length;
     return {
         all: dogs.length,
@@ -79,6 +87,7 @@ export async function getDogStatusCounts(kennelId: string): Promise<DogStatusCou
         availablePuppy: count("AVAILABLE_PUPPY"),
         reserved: count("RESERVED"),
         sold: count("SOLD"),
+        archived,
     };
 }
 
@@ -98,13 +107,15 @@ export async function getKennelBreeds(kennelId: string): Promise<KennelBreedOpti
 /** Litters for the puppy litter selector, newest first (planned litters last). */
 export async function getLitterOptions(kennelId: string): Promise<LitterOption[]> {
     void kennelId;
-    return getMockStore()
-        .litters.map((litter) => ({
-            id: litter.id,
-            label: `${litter.damName} × ${litter.sireName} · ${litter.name}`,
-            bornAt: litter.bornAt,
-        }))
-        .sort((a, b) => (b.bornAt ?? "").localeCompare(a.bornAt ?? ""));
+    return snapshot(
+        getMockStore()
+            .litters.map((litter) => ({
+                id: litter.id,
+                label: litterLabel(litter),
+                bornAt: litter.birthDate ? dateOnlyToIso(litter.birthDate) : null,
+            }))
+            .sort((a, b) => (b.bornAt ?? "").localeCompare(a.bornAt ?? "")),
+    );
 }
 
 // --- Mutations -----------------------------------------------------------------
@@ -151,12 +162,25 @@ export async function archiveDog(kennelId: string, dogId: string): Promise<Simpl
     return { ok: true };
 }
 
-/** Hard delete, including the dog's photos and documents. */
+/** Undoes archiveDog: clears archivedAt. Status was never changed by archiving, so the dog returns as it was. */
+export async function restoreDog(kennelId: string, dogId: string): Promise<SimpleMutationResult> {
+    void kennelId;
+    const dog = getMockStore().dogs.find((d) => d.id === dogId);
+    if (!dog) return notFound();
+    dog.archivedAt = null;
+    return { ok: true };
+}
+
+/** Hard delete, including the dog's photos and documents. Litters that use it as dam or sire lose that parent. */
 export async function deleteDog(kennelId: string, dogId: string): Promise<SimpleMutationResult> {
     void kennelId;
     const store = getMockStore();
     const index = store.dogs.findIndex((d) => d.id === dogId);
     if (index === -1) return notFound();
+    for (const litter of store.litters) {
+        if (litter.damId === dogId) litter.damId = null;
+        if (litter.sireId === dogId) litter.sireId = null;
+    }
     store.dogs.splice(index, 1);
     return { ok: true };
 }

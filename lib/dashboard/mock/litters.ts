@@ -1,19 +1,36 @@
 // MOCK IMPLEMENTATION: replace the body with the real Prisma query. Keep the signature.
-// (Fixture data only. Step 3, Litters, expands this.)
-import type { LitterStatus } from "../types";
+// (Fixture data only.)
+//
+// Four litters, one per status, so every Litters tab has content. Puppies are
+// linked from mock/dogs.ts (Dog.litterId); all counts on the Litters screen
+// are computed from those links, never stored here.
+import type { DateOnlyString, LitterStatus } from "../types";
 
 export type MockLitter = {
     id: string;
     name: string;
     breed: string;
     status: LitterStatus;
-    damName: string;
-    sireName: string;
-    bornAt: string | null; // ISO
-    expectedGoHomeDate: string | null; // ISO
+    damId: string | null;
+    sireId: string | null;
+    birthDate: DateOnlyString | null;
+    expectedGoHomeDate: DateOnlyString | null;
+    puppyCount: number;
+    createdAt: string; // ISO
 };
 
-const isoDate = (y: number, m: number, d: number) => new Date(Date.UTC(y, m - 1, d, 12)).toISOString();
+export type MockWaitlistEntry = {
+    id: string;
+    litterId: string;
+    leadId: string; // stable ids, reused by the Leads fixtures (Step 4)
+    name: string; // Lead name (the real query joins Lead)
+    position: number;
+    note: string | null;
+    createdAt: string; // ISO
+};
+
+const DAY = 86_400_000;
+const ago = (days: number) => new Date(Date.now() - days * DAY).toISOString();
 
 export function buildLitterFixtures(): MockLitter[] {
     return [
@@ -22,30 +39,56 @@ export function buildLitterFixtures(): MockLitter[] {
             name: "Autumn litter",
             breed: "Labrador Retriever",
             status: "AVAILABLE",
-            damName: "Pérola",
-            sireName: "Marley",
-            bornAt: isoDate(2026, 7, 2),
-            expectedGoHomeDate: isoDate(2026, 10, 21),
+            damId: "dog_perola",
+            sireId: "dog_marley",
+            birthDate: "2026-07-02",
+            expectedGoHomeDate: "2026-10-21",
+            puppyCount: 6,
+            createdAt: ago(2),
         },
         {
-            id: "ltr_poodle",
-            name: "Cloud litter",
-            breed: "Poodle",
-            status: "AVAILABLE",
-            damName: "Frida",
-            sireName: "Duque",
-            bornAt: isoDate(2026, 8, 10),
-            expectedGoHomeDate: isoDate(2026, 11, 2),
+            id: "ltr_winter",
+            name: "Winter litter",
+            breed: "Labrador Retriever",
+            status: "RESERVED",
+            damId: "dog_amora",
+            sireId: "dog_zeca",
+            birthDate: "2026-08-05",
+            expectedGoHomeDate: "2026-11-02",
+            puppyCount: 5,
+            createdAt: ago(20),
         },
         {
             id: "ltr_spring",
             name: "Spring litter",
             breed: "Labrador Retriever",
             status: "PLANNED",
-            damName: "Nala",
-            sireName: "Marley",
-            bornAt: null,
-            expectedGoHomeDate: isoDate(2027, 3, 15),
+            damId: "dog_nala",
+            sireId: "dog_marley",
+            birthDate: null,
+            expectedGoHomeDate: "2027-02-15",
+            puppyCount: 0,
+            createdAt: ago(5),
         },
+        {
+            id: "ltr_summer",
+            name: "Summer litter",
+            breed: "Poodle",
+            status: "SOLD_OUT",
+            damId: "dog_frida",
+            sireId: "dog_duque",
+            birthDate: "2026-06-01",
+            expectedGoHomeDate: "2026-08-03",
+            puppyCount: 4,
+            createdAt: ago(120),
+        },
+    ];
+}
+
+export function buildWaitlistFixtures(): MockWaitlistEntry[] {
+    return [
+        { id: "wl_1", litterId: "ltr_autumn", leadId: "lead-ricardo-alves", name: "Ricardo Alves", position: 1, note: "Wants a male, any colour.", createdAt: ago(0.01) },
+        { id: "wl_2", litterId: "ltr_autumn", leadId: "lead-marina-costa", name: "Marina Costa", position: 2, note: "Prefers a chocolate female. Deposit not yet paid.", createdAt: ago(2) },
+        { id: "wl_3", litterId: "ltr_autumn", leadId: "lead-camila-torres", name: "Camila Torres", position: 3, note: "Asked about Mocha.", createdAt: ago(3) },
     ];
 }

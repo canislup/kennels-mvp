@@ -123,7 +123,15 @@
         "tooManyDocuments": "You can add up to {max} documents.",
         "invalidDocument": "Each document needs a label and an uploaded image.",
         "notFound": "This dog no longer exists. It may have been deleted.",
-        "generic": "Something went wrong. Please try again."
+        "generic": "Something went wrong. Please try again.",
+        "invalidDam": "Choose a female adult of this breed from your kennel.",
+        "invalidSire": "Choose a male adult of this breed from your kennel.",
+        "futureLitterDate": "The birth date can't be in the future.",
+        "birthDateRequiredForStatus": "Add the birth date: only planned litters can be saved without one.",
+        "goHomeBeforeBirth": "The go-home date can't be before the birth date.",
+        "puppyCountRange": "Enter a whole number from 0 to {max}.",
+        "breedHasPuppies": "This litter already has puppies of another breed. Unlink them first (from each puppy's page).",
+        "puppyNotLinkable": "That puppy can't be linked: it may already be in a litter or be a different breed."
       }
     },
     "overview": {
@@ -232,11 +240,12 @@
           "BREEDING_STOCK": "Breeding stock",
           "AVAILABLE_PUPPY": "Available puppies",
           "RESERVED": "Reserved",
-          "SOLD": "Sold"
+          "SOLD": "Sold",
+          "archived": "Archived"
         },
         "filters": {
           "searchLabel": "Search dogs",
-          "searchPlaceholder": "Search by name or registry",
+          "searchPlaceholder": "Search by name, registry or number",
           "breedLabel": "Breed",
           "allBreeds": "All breeds",
           "sexLabel": "Sex",
@@ -267,12 +276,20 @@
           "title": "No dogs match these filters",
           "description": "Try a different search, or clear the filters to see your whole roster.",
           "clear": "Clear filters"
+        },
+        "archivedBadge": "Archived",
+        "restore": "Restore",
+        "restoring": "Restoring…",
+        "emptyArchived": {
+          "title": "No archived dogs",
+          "description": "Dogs you archive are kept here and can be restored at any time."
         }
       },
       "notices": {
         "created": "Dog added to your roster.",
         "archived": "Dog archived. It no longer shows on your roster or public page.",
-        "deleted": "Dog deleted permanently."
+        "deleted": "Dog deleted permanently.",
+        "restored": "Dog restored. It's back on your roster with its previous status."
       },
       "form": {
         "createTitle": "Add a dog",
@@ -308,11 +325,13 @@
           "pedigreeUrl": "Pedigree link",
           "sireName": "Sire (father)",
           "damName": "Dam (mother)",
-          "bio": "Bio"
+          "bio": "Bio",
+          "registrationNumber": "Registration number"
         },
         "placeholders": {
           "breed": "Choose a breed",
-          "registry": "e.g. CBKC"
+          "registry": "e.g. CBKC",
+          "registrationNumber": "e.g. BR-204518"
         },
         "help": {
           "breed": "Only breeds your kennel raises.",
@@ -359,7 +378,10 @@
           "deleteTitle": "Delete {name} permanently?",
           "deleteDescription": "This removes {name}, all photos and all health documents. It can't be undone.",
           "deleteConfirm": "Delete permanently"
-        }
+        },
+        "restore": "Restore",
+        "restoring": "Restoring…",
+        "restoredNotice": "{name} has been restored and is back on your roster."
       }
     },
     "kennelSetup": {
@@ -388,6 +410,164 @@
         "errors": {
           "failed": "Failed to create your kennel.",
           "network": "A network error occurred."
+        }
+      }
+    },
+    "litters": {
+      "status": {
+        "PLANNED": "Planned",
+        "AVAILABLE": "Available",
+        "RESERVED": "Reserved",
+        "SOLD_OUT": "Sold out"
+      },
+      "list": {
+        "title": "Litters",
+        "subtitle": "Plan litters, track puppies and manage who is waiting.",
+        "newLitter": "New litter",
+        "tabsLabel": "Filter by status",
+        "listLabel": "Litters",
+        "tabs": {
+          "all": "All",
+          "PLANNED": "Planned",
+          "AVAILABLE": "Available",
+          "RESERVED": "Reserved",
+          "SOLD_OUT": "Sold out"
+        },
+        "emptyAll": {
+          "title": "No litters yet",
+          "description": "Plan a litter to track its puppies, go-home dates and the families waiting for it.",
+          "cta": "Plan your first litter"
+        },
+        "emptyTab": {
+          "title": "No litters under “{status}”",
+          "description": "Litters with this status will appear here.",
+          "showAll": "Show all litters"
+        }
+      },
+      "notices": {
+        "created": "Litter created.",
+        "deleted": "Litter deleted. Its puppies are still on your roster, without a litter.",
+        "puppyAdded": "Puppy added to the litter."
+      },
+      "card": {
+        "parentsBoth": "{breed} · {dam} and {sire}",
+        "parentsOne": "{breed} · {parent}",
+        "parentsNone": "{breed} · Parents not set",
+        "count": "{available} of {total} available",
+        "countNotSet": "Puppy count not set",
+        "placed": "{percent}% placed",
+        "progressLabel": "Puppies placed in {name}",
+        "date": {
+          "expected": "Expected {date}",
+          "goHome": "Go-home {date}",
+          "wentHome": "Went home {date}",
+          "notSet": "Date not set"
+        }
+      },
+      "detail": {
+        "born": "Born {date}",
+        "goHome": "Go-home {date}",
+        "edit": "Edit litter",
+        "changeStatus": "Change status",
+        "changeStatusLabel": "Change status of {name}, currently {status}",
+        "statusMenuLabel": "Status for {name}",
+        "statusFailed": "Couldn't update the status. Try again.",
+        "backToList": "Back to litters",
+        "stats": {
+          "puppies": "Puppies",
+          "available": "Available",
+          "reserved": "Reserved",
+          "onWaitlist": "On waitlist"
+        },
+        "parents": {
+          "dam": "Dam",
+          "sire": "Sire",
+          "notSet": "Not set",
+          "setInEdit": "Set in Edit litter",
+          "meta": "{breed}, {age}"
+        }
+      },
+      "puppies": {
+        "heading": "Puppies in this litter",
+        "addOrLink": "Add or link puppy",
+        "empty": "No puppies in this litter yet",
+        "emptyHelp": "Add a new puppy or link one that's already on your roster.",
+        "columns": {
+          "puppy": "Puppy",
+          "sex": "Sex",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "edit": "Edit"
+      },
+      "linkDialog": {
+        "title": "Add or link puppy",
+        "description": "Pick one of your {breed} puppies that isn't in a litter yet, or create a new puppy.",
+        "noneLinkable": "All your {breed} puppies already belong to a litter, so there's nothing to link. Create a new puppy instead.",
+        "pickLabel": "Puppies without a litter",
+        "pickOne": "Choose a puppy to link.",
+        "link": "Link puppy",
+        "linking": "Linking…",
+        "createHelp": "Not on your roster yet?",
+        "createNew": "Create a new puppy",
+        "cancel": "Cancel"
+      },
+      "waitlist": {
+        "heading": "Waitlist",
+        "count": "{count} waiting",
+        "empty": "Nobody is waiting yet",
+        "openLead": "Open lead",
+        "position": "Position",
+        "added": "Added {time}"
+      },
+      "form": {
+        "createTitle": "New litter",
+        "createSubtitle": "Plan a litter now; add the birth date and puppies when they arrive.",
+        "editTitle": "Edit {name}",
+        "editSubtitle": "Changes show on your Litters screen as soon as you save.",
+        "viewLitter": "View litter",
+        "newLitterCrumb": "New litter",
+        "noParent": "Not set",
+        "chooseBreedFirst": "Choose a breed first",
+        "submitCreate": "Create litter",
+        "submitEdit": "Save changes",
+        "sections": {
+          "basics": "Basics",
+          "parents": "Parents",
+          "dates": "Dates and size"
+        },
+        "fields": {
+          "name": "Name",
+          "breed": "Breed",
+          "status": "Status",
+          "dam": "Dam (mother)",
+          "sire": "Sire (father)",
+          "birthDate": "Birth date",
+          "expectedGoHomeDate": "Expected go-home date",
+          "puppyCount": "Number of puppies"
+        },
+        "placeholders": {
+          "name": "e.g. Autumn litter",
+          "breed": "Choose a breed"
+        },
+        "help": {
+          "name": "Buyers and your team see this name.",
+          "breed": "Only breeds your kennel raises.",
+          "status": "Changing the litter's status doesn't change any puppy's status.",
+          "parents": "Only adults of the chosen breed from your kennel are listed. Both are optional.",
+          "noAdults": "You have no adult {breed} dogs yet. Add them in Dogs to set the parents.",
+          "birthDate": "Required for every status except Planned.",
+          "puppyCount": "0 means not set. Linked puppies count too."
+        },
+        "danger": {
+          "heading": "Delete litter",
+          "description": "Deleting removes the litter and its waitlist. Its puppies stay on your roster, just without a litter.",
+          "delete": "Delete litter",
+          "confirmTitle": "Delete {name}?",
+          "confirmDescription": "{count, plural, =0 {This removes the litter and its waitlist. It can't be undone.} one {This removes the litter and its waitlist. Its # puppy stays on your roster without a litter. It can't be undone.} other {This removes the litter and its waitlist. Its # puppies stay on your roster without a litter. It can't be undone.}}",
+          "confirm": "Delete litter",
+          "cancel": "Cancel",
+          "working": "Deleting…"
         }
       }
     }

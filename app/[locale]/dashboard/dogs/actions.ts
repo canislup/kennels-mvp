@@ -14,6 +14,7 @@ import {
     getDogForEdit,
     getKennelBreeds,
     getLitterOptions,
+    restoreDog,
     updateDog,
     updateDogStatus,
 } from "@/lib/dashboard/dogs";
@@ -62,7 +63,14 @@ export async function saveDogAction(dogId: string | null, previous: DogFormState
     if (!result.ok) return { status: "error", values, fieldErrors: result.fieldErrors, formError: result.formError, submission };
 
     if (!dogId) {
-        redirect({ href: "/dashboard/dogs?notice=created", locale: await getLocale() });
+        // Opened from a litter ("Create a new puppy"): go back to that litter.
+        // The id is the validated litterId, so this can only point at one of the kennel's litters.
+        const litterId = validation.input.litterId;
+        const href =
+            formData.get("returnTo") === "litter" && litterId
+                ? `/dashboard/litters?litter=${encodeURIComponent(litterId)}&notice=puppyAdded`
+                : "/dashboard/dogs?notice=created";
+        redirect({ href, locale: await getLocale() });
     }
     // Re-render the page (title, breadcrumb) with the saved name.
     refresh();
@@ -84,6 +92,20 @@ export async function archiveDogAction(dogId: string): Promise<SimpleMutationRes
     if (!result.ok) return result;
     redirect({ href: "/dashboard/dogs?notice=archived", locale: await getLocale() });
     return result;
+}
+
+/**
+ * Un-archives a dog. Used as a plain form action (bound with the dog id and
+ * where it was called from), so it redirects instead of returning a result.
+ */
+export async function restoreDogAction(dogId: string, from: "list" | "edit"): Promise<void> {
+    const kennelId = await requireKennelId();
+    const result = await restoreDog(kennelId, dogId);
+    const locale = await getLocale();
+    if (from === "edit") {
+        redirect({ href: `/dashboard/dogs/${encodeURIComponent(dogId)}/edit${result.ok ? "?notice=restored" : ""}`, locale });
+    }
+    redirect({ href: result.ok ? "/dashboard/dogs?status=archived&notice=restored" : "/dashboard/dogs?status=archived", locale });
 }
 
 export async function deleteDogAction(dogId: string): Promise<SimpleMutationResult> {

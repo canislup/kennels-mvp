@@ -25,17 +25,4 @@ export function fromParam<T extends string>(map: Record<T, string>, value: strin
     return (Object.keys(map) as T[]).find((key) => map[key] === value);
 }
 
-/**
- * Age for a card: weeks for the first month, months under a year (puppies and
- * young adults), then whole years. Counted on the calendar.
- */
-export function ageOf(birthDate: string | null, now: Date): { unit: "weeks" | "months" | "years"; count: number } | null {
-    if (!birthDate) return null;
-    const born = new Date(`${birthDate}T00:00:00`);
-    if (Number.isNaN(born.getTime()) || born > now) return null;
-    let months = (now.getFullYear() - born.getFullYear()) * 12 + (now.getMonth() - born.getMonth());
-    if (now.getDate() < born.getDate()) months--;
-    if (months >= 12) return { unit: "years", count: Math.floor(months / 12) };
-    if (months >= 1) return { unit: "months", count: months };
-    return { unit: "weeks", count: Math.max(1, Math.floor((now.getTime() - born.getTime()) / (7 * 86_400_000))) };
-}
+export { ageOf } from "@/lib/dashboard/age";

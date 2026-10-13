@@ -14,7 +14,8 @@ import DogFilters from "@/components/dashboard/dogs/DogFilters";
 import { SEX_PARAM, STAGE_PARAM, STATUS_ORDER, STATUS_PARAM, fromParam } from "@/components/dashboard/dogs/dogMeta";
 
 const PAGE_SIZE = 12;
-const NOTICES = ["created", "archived", "deleted"] as const;
+const NOTICES = ["created", "archived", "deleted", "restored"] as const;
+const ARCHIVED_PARAM = "archived";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("dashboard.dogs.list");
@@ -36,7 +37,8 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
     if (!kennel) notFound();
 
     const raw = await searchParams;
-    const status = fromParam(STATUS_PARAM, one(raw.status));
+    const archived = one(raw.status) === ARCHIVED_PARAM;
+    const status = archived ? undefined : fromParam(STATUS_PARAM, one(raw.status));
     const sex = fromParam(SEX_PARAM, one(raw.sex));
     const stage = fromParam(STAGE_PARAM, one(raw.stage));
     const q = one(raw.q)?.trim() || undefined;
@@ -46,8 +48,8 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
 
     const [t, breeds, counts] = await Promise.all([getTranslations("dashboard"), getKennelBreeds(kennel.id), getDogStatusCounts(kennel.id)]);
     const breed = breeds.some((b) => b.name === breedParam) ? breedParam : undefined;
-    const result = await listDogs(kennel.id, { status, q, breed, sex, stage, page, pageSize: PAGE_SIZE });
-    const filtered = Boolean(status || q || breed || sex || stage);
+    const result = await listDogs(kennel.id, { status, archived, q, breed, sex, stage, page, pageSize: PAGE_SIZE });
+    const filtered = Boolean(status || archived || q || breed || sex || stage);
     const now = new Date();
 
     // Links keep every other param, reset the page unless told otherwise.
@@ -65,8 +67,9 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
     };
 
     const tabs = [
-        { key: "all", label: t("dogs.list.tabs.all"), count: counts.all, value: undefined as DogStatus | undefined },
-        ...STATUS_ORDER.map((s) => ({ key: s, label: t(`dogs.list.tabs.${s}`), count: counts[COUNT_KEY[s]], value: s })),
+        { key: "all", label: t("dogs.list.tabs.all"), count: counts.all, param: undefined as string | undefined, active: !status && !archived },
+        ...STATUS_ORDER.map((s) => ({ key: s, label: t(`dogs.list.tabs.${s}`), count: counts[COUNT_KEY[s]], param: STATUS_PARAM[s], active: s === status })),
+        { key: "archived", label: t("dogs.list.tabs.archived"), count: counts.archived, param: ARCHIVED_PARAM, active: archived },
     ];
 
     const lastPage = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
@@ -83,7 +86,7 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
                 </Notice>
             )}
 
-            {counts.all === 0 ? (
+            {counts.all === 0 && counts.archived === 0 ? (
                 <EmptyState
                     title={t("dogs.list.emptyRoster.title")}
                     description={t("dogs.list.emptyRoster.description")}
@@ -94,11 +97,11 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
                     <nav aria-label={t("dogs.list.tabsLabel")} className="mb-4">
                         <ul className="flex flex-wrap gap-2">
                             {tabs.map((tab) => {
-                                const active = tab.value === status;
+                                const active = tab.active;
                                 return (
                                     <li key={tab.key}>
                                         <Link
-                                            href={hrefWith({ status: tab.value && STATUS_PARAM[tab.value] })}
+                                            href={hrefWith({ status: tab.param })}
                                             aria-current={active ? "page" : undefined}
                                             scroll={false}
                                             className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
@@ -116,7 +119,9 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
 
                     <DogFilters breeds={breeds.map((b) => b.name)} />
 
-                    {result.items.length === 0 ? (
+                    {result.items.length === 0 && archived && !(q || breed || sex || stage) ? (
+                        <EmptyState title={t("dogs.list.emptyArchived.title")} description={t("dogs.list.emptyArchived.description")} />
+                    ) : result.items.length === 0 ? (
                         <EmptyState
                             title={t("dogs.list.emptyFiltered.title")}
                             description={t("dogs.list.emptyFiltered.description")}
