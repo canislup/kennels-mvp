@@ -2,12 +2,14 @@
 //
 // Data for the dashboard shell (sidebar badges, notifications bell).
 import { getMockStore, snapshot } from "./mock/store";
+import { countNewLeads } from "./leads";
+import { getUnreadSummary } from "./messages";
 import type { DashboardNotification, NavCounts } from "./types";
 
-/** Sidebar badge counts. Real version: count NEW leads and unread messages for the kennel. */
+/** Sidebar badge counts: leads in stage New, and conversations with an unread inbound message. */
 export async function getNavCounts(kennelId: string): Promise<NavCounts> {
-    void kennelId; // used by the real query
-    return snapshot(getMockStore().navCounts);
+    const [{ count }, unread] = await Promise.all([countNewLeads(kennelId), getUnreadSummary(kennelId)]);
+    return snapshot({ newLeads: count, unreadMessages: unread.unreadConversations });
 }
 
 /** The 5 most recent notifications, newest first. */

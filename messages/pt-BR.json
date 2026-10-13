@@ -131,7 +131,32 @@
         "goHomeBeforeBirth": "A entrega não pode ser antes do nascimento.",
         "puppyCountRange": "Informe um número inteiro de 0 a {max}.",
         "breedHasPuppies": "Esta ninhada já tem filhotes de outra raça. Desvincule-os antes (na página de cada filhote).",
-        "puppyNotLinkable": "Não foi possível vincular esse filhote: ele pode já estar em uma ninhada ou ser de outra raça."
+        "puppyNotLinkable": "Não foi possível vincular esse filhote: ele pode já estar em uma ninhada ou ser de outra raça.",
+        "contactRequired": "Informe um e-mail ou um telefone.",
+        "invalidEmail": "Informe um e-mail como nome@exemplo.com.",
+        "invalidPhone": "Use de 8 a 20 caracteres: números, espaços, +, -, ( e ).",
+        "preferredNeedsEmail": "Informe um e-mail ou escolha outra forma de contato.",
+        "preferredNeedsPhone": "Informe um telefone ou escolha e-mail.",
+        "invalidLitterForBreed": "Escolha uma das suas ninhadas desta raça.",
+        "invalidDogForBreed": "Escolha um dos seus cães desta raça.",
+        "pastFollowUp": "A data de retorno não pode estar no passado.",
+        "duplicateLeadEmail": "Já existe um interessado com este e-mail.",
+        "duplicateLead": "{name} já usa este e-mail.",
+        "leadIsLost": "Este interessado está marcado como perdido. Reabra-o antes.",
+        "releasePuppyFirst": "{dogName} está reservado para este interessado. Libere o filhote antes de excluir.",
+        "alreadyHoldsPuppy": "Este interessado já tem um filhote reservado. Libere-o antes.",
+        "puppyJustReserved": "{dogName} acabou de ser reservado por outra pessoa. Escolha outro filhote.",
+        "puppyNoLongerAvailable": "Esse filhote não está mais disponível. Escolha outro.",
+        "noPuppyHeld": "Este interessado não tem filhote reservado.",
+        "alreadyOnWaitlist": "Este interessado já está nessa lista de espera.",
+        "choosePuppy": "Escolha um filhote para reservar.",
+        "followUpLeadLost": "Este interessado está marcado como perdido. Reabra-o para marcar um retorno.",
+        "messageRequired": "Escreva uma mensagem primeiro.",
+        "chooseDog": "Escolha um cão para compartilhar.",
+        "invalidVideoUrl": "Cole um link do YouTube ou do Vimeo (youtube.com/watch, youtu.be, youtube.com/shorts ou vimeo.com).",
+        "dogBreedMismatch": "Esse cão não é da raça escolhida.",
+        "tooManySelected": "Selecione no máximo {max} itens por vez.",
+        "nothingSelected": "Selecione pelo menos um item."
       }
     },
     "overview": {
@@ -484,7 +509,8 @@
           "sire": "Pai",
           "notSet": "Não informado",
           "setInEdit": "Informar em Editar ninhada",
-          "meta": "{breed}, {age}"
+          "meta": "{breed}, {age}",
+          "archived": "Arquivado"
         }
       },
       "puppies": {
@@ -568,7 +594,496 @@
           "confirm": "Excluir ninhada",
           "cancel": "Cancelar",
           "working": "Excluindo…"
+        },
+        "archivedParent": "{name} (arquivado)"
+      }
+    },
+    "leads": {
+      "list": {
+        "title": "Interessados",
+        "subtitle": "Todo mundo que perguntou sobre seus cães, do primeiro contato à venda.",
+        "addLead": "Adicionar interessado"
+      },
+      "stages": {
+        "NEW": "Novo",
+        "CONTACTED": "Contatado",
+        "INTERESTED": "Com interesse",
+        "FOLLOW_UP": "Acompanhamento",
+        "RESERVED": "Reservado",
+        "SOLD": "Vendido",
+        "LOST": "Perdido"
+      },
+      "sources": {
+        "PUBLIC_FORM": "Formulário público",
+        "DIRECTORY": "Diretório",
+        "REFERRAL": "Indicação",
+        "OTHER": "Outro"
+      },
+      "contact": {
+        "EMAIL": "E-mail",
+        "PHONE": "Telefone",
+        "WHATSAPP": "WhatsApp"
+      },
+      "notices": {
+        "created": "Interessado adicionado.",
+        "deleted": "Interessado excluído."
+      },
+      "banner": {
+        "title": "{count, plural, one {# retorno pendente.} other {# retornos pendentes.}}",
+        "names": "{count, plural, one {{names} está esperando seu contato.} other {{names} estão esperando seu contato.}}",
+        "namesMore": "{names} e mais {more} estão esperando seu contato.",
+        "show": "Ver quem"
+      },
+      "view": {
+        "label": "Visualização",
+        "board": "Quadro",
+        "list": "Lista"
+      },
+      "filters": {
+        "searchLabel": "Buscar interessados",
+        "searchPlaceholder": "Buscar por nome, e-mail ou cão",
+        "breedLabel": "Raça",
+        "allBreeds": "Todas as raças",
+        "sourceLabel": "Origem",
+        "allSources": "Todas as origens",
+        "followUpLabel": "Retorno",
+        "anyFollowUp": "Qualquer retorno",
+        "followUp": {
+          "due": "Para hoje ou atrasado",
+          "set": "Com data marcada",
+          "none": "Sem data"
+        },
+        "stageLabel": "Etapa",
+        "anyStage": "Qualquer etapa"
+      },
+      "empty": {
+        "all": {
+          "title": "Nenhum interessado ainda",
+          "description": "Quem pergunta sobre seus cães no KennelOS aparece aqui. Você também pode adicionar alguém que ligou ou mandou mensagem.",
+          "cta": "Adicionar o primeiro interessado"
+        },
+        "filtered": {
+          "title": "Nenhum interessado com esses filtros",
+          "description": "Tente outra busca ou limpe os filtros para ver todos.",
+          "clear": "Limpar filtros"
         }
+      },
+      "card": {
+        "unread": "Mensagem não lida",
+        "interestWithLink": "{note}, {link}",
+        "moveTo": "Mover {name} para outra etapa",
+        "moveMenu": "Mover {name} para"
+      },
+      "board": {
+        "moved": "{name} foi para {stage}",
+        "moveFailed": "Não foi possível mover {name}. O card voltou ao lugar; tente de novo.",
+        "columnCount": "{count, plural, one {# interessado} other {# interessados}}",
+        "emptyColumn": "Ninguém aqui",
+        "olderSold": "Vendas mais antigas estão na lista"
+      },
+      "due": {
+        "overdue": "Atrasado há {days, plural, one {# dia} other {# dias}}",
+        "today": "Retorno hoje",
+        "tomorrow": "Retorno amanhã",
+        "inDays": "Retorno em {days} dias",
+        "on": "Retorno em {date}"
+      },
+      "table": {
+        "columns": {
+          "name": "Nome",
+          "stage": "Etapa",
+          "interest": "Interesse",
+          "source": "Origem",
+          "followUp": "Retorno",
+          "lastActivity": "Última atividade",
+          "actions": "Ações",
+          "reason": "Motivo"
+        },
+        "noFollowUp": "Sem data",
+        "open": "Abrir",
+        "showing": "Mostrando {shown} de {total} {total, plural, one {interessado} other {interessados}}",
+        "paginationLabel": "Páginas",
+        "previous": "Anterior",
+        "next": "Próxima"
+      },
+      "form": {
+        "title": "Adicionar interessado",
+        "subtitle": "Alguém que ligou, mandou mensagem ou conversou com você pessoalmente.",
+        "crumb": "Novo interessado",
+        "submit": "Adicionar interessado",
+        "openExisting": "Abrir {name}",
+        "anyLitter": "Qualquer ninhada",
+        "noDog": "Nenhum cão específico",
+        "chooseBreedFirst": "Escolha a raça primeiro",
+        "sections": {
+          "contact": "Contato",
+          "pipeline": "Funil",
+          "interest": "O que procura"
+        },
+        "fields": {
+          "name": "Nome",
+          "email": "E-mail",
+          "phone": "Telefone",
+          "preferredContact": "Contato preferido",
+          "city": "Cidade",
+          "state": "Estado",
+          "source": "Origem",
+          "stage": "Etapa",
+          "followUpAt": "Data de retorno",
+          "interestBreed": "Raça",
+          "litter": "Ninhada",
+          "dog": "Cão",
+          "interestNote": "Preferência"
+        },
+        "placeholders": {
+          "phone": "+55 11 99999 0000",
+          "breed": "Escolha uma raça",
+          "interestNote": "ex.: Fêmea chocolate"
+        },
+        "help": {
+          "emailOrPhone": "Informe um e-mail, um telefone ou os dois.",
+          "followUpAt": "Opcional. O lembrete aparece no quadro e na visão geral.",
+          "breed": "Só as raças que seu canil cria.",
+          "interestNote": "Nas palavras da pessoa: cor, sexo, temperamento…"
+        },
+        "submitEdit": "Salvar alterações",
+        "editTitle": "Editar {name}",
+        "editSubtitle": "Contato, o que procura e data de retorno. A etapa muda na página do interessado.",
+        "editCrumb": "Editar"
+      },
+      "lostReasons": {
+        "NO_RESPONSE": "Sem resposta",
+        "BOUGHT_ELSEWHERE": "Comprou em outro canil",
+        "CHANGED_MIND": "Mudou de ideia",
+        "TOO_FAR": "Muito longe",
+        "OTHER": "Outro"
+      },
+      "detail": {
+        "sendMessage": "Enviar mensagem",
+        "cancel": "Cancelar",
+        "since": "Interessado desde {date}",
+        "notProvided": "Não informado",
+        "notices": {
+          "saved": "Alterações salvas."
+        },
+        "more": {
+          "edit": "Editar interessado",
+          "lost": "Marcar como perdido",
+          "delete": "Excluir interessado",
+          "label": "Mais ações para {name}",
+          "menu": "Ações para {name}"
+        },
+        "reserve": {
+          "button": "Reservar filhote",
+          "title": "Reservar um filhote para {name}",
+          "description": "Filhotes disponíveis, começando pela raça que a pessoa procura.",
+          "none": "Não há filhotes disponíveis para reservar agora.",
+          "pick": "Filhote",
+          "submit": "Reservar",
+          "pending": "Reservando…"
+        },
+        "lost": {
+          "title": "Marcar {name} como perdido",
+          "description": "A pessoa sai do quadro e o retorno é apagado. Dá para reabrir depois.",
+          "reason": "Motivo",
+          "choose": "Escolha um motivo",
+          "release": "Deixar {dog} disponível de novo",
+          "submit": "Marcar como perdido",
+          "pending": "Salvando…"
+        },
+        "delete": {
+          "title": "Excluir {name}?",
+          "description": "Isso apaga {name} com anotações, histórico, mensagens e lugares na lista de espera. Não dá para desfazer.",
+          "confirm": "Excluir interessado",
+          "pending": "Excluindo…"
+        },
+        "lostBanner": {
+          "title": "Marcado como perdido.",
+          "reason": "Motivo: {reason}.",
+          "reopen": "Reabrir",
+          "reopening": "Reabrindo…"
+        },
+        "stage": {
+          "label": "Etapa do funil",
+          "done": "concluída",
+          "change": "Mudar etapa",
+          "changeLabel": "Mudar etapa, atualmente {stage}",
+          "menu": "Etapa de {name}",
+          "failed": "Não foi possível mudar a etapa. Tente de novo."
+        },
+        "lookingFor": {
+          "heading": "O que {name} procura",
+          "breed": "Raça",
+          "preference": "Preferência",
+          "litter": "Ninhada",
+          "dog": "Cão",
+          "source": "Origem",
+          "firstMessage": "Primeira mensagem de {name}"
+        },
+        "notes": {
+          "heading": "Anotações e histórico",
+          "label": "Adicionar anotação",
+          "placeholder": "Anotação privada, como o que {name} contou por telefone",
+          "save": "Salvar anotação",
+          "saving": "Salvando…"
+        },
+        "timeline": {
+          "showAll": "Ver histórico completo",
+          "empty": "Nada por aqui ainda.",
+          "note": "Você adicionou uma anotação",
+          "messageIn": "{name} enviou uma mensagem",
+          "messageOut": "Você enviou uma mensagem",
+          "created": "Interessado criado",
+          "createdDetail": "Origem: {source}",
+          "stageChanged": "Movido para {stage}",
+          "stageChangedDetail": "Antes: {from}",
+          "followUpSet": "Retorno marcado para {date}",
+          "followUpDone": "Retorno concluído",
+          "followUpDoneDetail": "Estava marcado para {date}",
+          "markedLost": "Marcado como perdido",
+          "reopened": "Reaberto",
+          "reopenedDetail": "Voltou para {stage}",
+          "puppyReserved": "{dog} reservado",
+          "puppyReleased": "{dog} liberado",
+          "puppyReleasedDetail": "Disponível de novo",
+          "waitlistAdded": "Entrou na lista de espera da {litter}",
+          "waitlistRemoved": "Saiu da lista de espera da {litter}",
+          "stageChangedAuto": "Automaticamente, após sua primeira resposta",
+          "sharedDog": "Compartilhou {dog}"
+        },
+        "followUp": {
+          "heading": "Retorno",
+          "none": "Nenhum retorno marcado",
+          "overdue": "Atrasado há {days, plural, one {# dia} other {# dias}}",
+          "today": "Para hoje, {date}",
+          "upcoming": "Para {date}",
+          "markDone": "Marcar como concluído",
+          "marking": "Salvando…",
+          "reschedule": "Reagendar",
+          "set": "Marcar retorno",
+          "rescheduleTitle": "Reagendar o retorno",
+          "setTitle": "Marcar um retorno",
+          "dialogDescription": "Escolha o dia do lembrete. Ele aparece no quadro e na visão geral.",
+          "dateLabel": "Data",
+          "save": "Salvar",
+          "saving": "Salvando…",
+          "failed": "Não foi possível atualizar o retorno. Tente de novo.",
+          "lostHint": "Reabra este interessado para marcar um retorno."
+        },
+        "reservation": {
+          "heading": "Reserva",
+          "reserved": "Reservado:",
+          "release": "Liberar filhote",
+          "confirmTitle": "Liberar {dog}?",
+          "confirmDescription": "{dog} volta a ficar disponível e {name} volta para Com interesse.",
+          "pending": "Liberando…"
+        },
+        "contact": {
+          "heading": "Contato",
+          "email": "E-mail",
+          "phone": "Telefone",
+          "preferred": "Contato preferido",
+          "openWhatsapp": "Abrir WhatsApp",
+          "newTab": "(abre em uma nova aba)"
+        },
+        "waitlist": {
+          "heading": "Lista de espera",
+          "empty": "{name} não está em nenhuma lista de espera.",
+          "position": "Posição",
+          "remove": "Remover",
+          "removing": "Removendo…",
+          "removeFrom": "da lista de espera da {litter}",
+          "add": "Adicionar à lista de espera",
+          "noOptions": "Não há ninhadas planejadas, disponíveis ou reservadas para adicionar.",
+          "addTitle": "Adicionar {name} a uma lista de espera",
+          "addSubmit": "Adicionar à lista",
+          "adding": "Adicionando…",
+          "litter": "Ninhada",
+          "chooseLitter": "Escolha uma ninhada",
+          "note": "Observação (opcional)",
+          "notePlaceholder": "ex.: Quer um macho"
+        },
+        "conversation": {
+          "heading": "Conversa",
+          "open": "Abrir",
+          "openFull": "conversa com {name}",
+          "empty": "Nenhuma mensagem ainda.",
+          "theyWrote": "{name} escreveu:",
+          "youWrote": "Você escreveu:",
+          "unread": "não lida",
+          "sharedDog": "Compartilhou {dog}"
+        }
+      }
+    },
+    "messages": {
+      "title": "Mensagens",
+      "subtitle": "Conversas com compradores, ligadas a cada interessado.",
+      "list": {
+        "heading": "Conversas",
+        "searchLabel": "Buscar conversas",
+        "searchPlaceholder": "Buscar mensagens",
+        "filterLabel": "Mostrar",
+        "all": "Todas",
+        "unread": "Não lidas {count}",
+        "noMessages": "Nenhuma mensagem ainda",
+        "sharedDog": "Compartilhou {dog}",
+        "you": "Você: {text}",
+        "unreadCount": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+      },
+      "empty": {
+        "none": "As conversas começam quando um comprador entra em contato.",
+        "noMatches": "Nenhuma conversa encontrada.",
+        "clear": "Limpar filtros"
+      },
+      "thread": {
+        "back": "Voltar para as conversas",
+        "today": "Hoje",
+        "yesterday": "Ontem",
+        "label": "Conversa com {name}",
+        "interestedIn": "Interesse: {interest}",
+        "openLead": "Abrir interessado",
+        "history": "Mensagens",
+        "empty": "Nenhuma mensagem ainda. Escreva a primeira para {name}.",
+        "dogShared": "Cão compartilhado",
+        "none": "Escolha uma conversa.",
+        "notFound": "Esta conversa não existe mais."
+      },
+      "start": {
+        "title": "Ainda não há conversa com {name}",
+        "description": "Comece uma para enviar a primeira mensagem. Ela fica salva aqui, junto do interessado.",
+        "button": "Começar conversa com {name}",
+        "pending": "Começando…"
+      },
+      "composer": {
+        "label": "Responder a {name}",
+        "placeholder": "Escreva uma resposta para {name}",
+        "hint": "Ctrl/⌘ + Enter para enviar",
+        "send": "Enviar",
+        "sending": "Enviando…"
+      },
+      "share": {
+        "title": "Compartilhar um cão",
+        "description": "A pessoa vai ver um cartão com a foto e os dados do cão.",
+        "none": "Ainda não há cães para compartilhar.",
+        "submit": "Compartilhar",
+        "pending": "Compartilhando…",
+        "cancel": "Cancelar",
+        "button": "Compartilhar um cão",
+        "pick": "Cão"
+      },
+      "panel": {
+        "heading": "Dados do interessado",
+        "stage": "Etapa",
+        "lookingFor": "Procura",
+        "dog": "Cão de interesse",
+        "followUp": "Retorno",
+        "noFollowUp": "Sem data",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "moveTo": "Mover para {stage}",
+        "moving": "Movendo…"
+      }
+    },
+    "media": {
+      "title": "Mídia",
+      "subtitle": "As fotos e os vídeos da página pública do seu canil.",
+      "cancel": "Cancelar",
+      "showing": "Mostrando {shown} de {total} {total, plural, one {foto} other {fotos}}",
+      "pagination": "Páginas",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "upload": {
+        "button": "Enviar fotos",
+        "saving": "Salvando fotos…",
+        "saved": "{count, plural, one {# foto adicionada ao final da galeria.} other {# fotos adicionadas ao final da galeria.}}",
+        "failed": "Não foi possível salvar as fotos. Tente de novo.",
+        "areaTitle": "Adicionar fotos: escolha os arquivos ou arraste-os para a janela de envio",
+        "areaHelp": "JPG, PNG ou WebP, até 10 MB cada, {max} por vez. Depois você pode marcar raça ou cão."
+      },
+      "tabs": {
+        "label": "Tipo de mídia",
+        "photos": "Fotos",
+        "videos": "Vídeos"
+      },
+      "filters": {
+        "breed": "Raça",
+        "dog": "Cão",
+        "allDogs": "Todos os cães"
+      },
+      "tags": {
+        "breed": "Raça",
+        "dog": "Cão",
+        "allBreeds": "Todas as raças",
+        "wholeKennel": "Canil todo"
+      },
+      "photo": {
+        "untitled": "Foto {position}",
+        "moved": "{name} foi para a posição {position} de {total}.",
+        "moveFailed": "Não foi possível mover a foto. Ela voltou ao lugar; tente de novo.",
+        "deleted": "{count, plural, one {# foto excluída.} other {# fotos excluídas.}}",
+        "edit": "Editar detalhes",
+        "moveEarlier": "Mover para trás",
+        "moveLater": "Mover para frente",
+        "moveStart": "Mover para o início",
+        "delete": "Excluir",
+        "select": "Selecionar {name}",
+        "dragHint": "Arraste para reordenar",
+        "actions": "Ações para {name}",
+        "dragDisabled": "Com filtros ativos não dá para arrastar. Use o menu de cada foto para movê-la, ou limpe os filtros."
+      },
+      "bulk": {
+        "selected": "{count, plural, one {# selecionada} other {# selecionadas}}",
+        "selectPage": "Selecionar todas desta página",
+        "tag": "Marcar por raça ou cão",
+        "delete": "Excluir",
+        "clear": "Limpar seleção",
+        "tagged": "{count, plural, one {# foto marcada.} other {# fotos marcadas.}}",
+        "tagTitle": "Marcar {count, plural, one {# foto} other {# fotos}}",
+        "tagDescription": "Vale para todas as fotos selecionadas. Deixe os dois vazios para o canil todo.",
+        "tagSubmit": "Aplicar"
+      },
+      "edit": {
+        "title": "Editar detalhes da foto",
+        "videoTitle": "Editar detalhes do vídeo",
+        "save": "Salvar",
+        "saving": "Salvando…",
+        "caption": "Legenda"
+      },
+      "delete": {
+        "title": "{count, plural, one {Excluir esta foto?} other {Excluir # fotos?}}",
+        "description": "{count, plural, one {Ela some da sua página pública. Não dá para desfazer.} other {Elas somem da sua página pública. Não dá para desfazer.}}",
+        "pending": "Excluindo…",
+        "confirm": "Excluir",
+        "videoTitle": "Excluir “{name}”?",
+        "videoDescription": "O link some da sua página pública. O vídeo continua onde está hospedado."
+      },
+      "videos": {
+        "heading": "Vídeos",
+        "add": "Adicionar link de vídeo",
+        "addTitle": "Adicionar link de vídeo",
+        "addDescription": "Cole um link do YouTube ou do Vimeo. O vídeo fica nesses sites; sua página aponta para ele.",
+        "addSubmit": "Adicionar vídeo",
+        "adding": "Adicionando…",
+        "url": "Link",
+        "urlHelp": "youtube.com/watch, youtu.be, youtube.com/shorts ou vimeo.com",
+        "title": "Título",
+        "untitled": "Vídeo sem título",
+        "opensNewTab": "(abre em uma nova aba)",
+        "meta": "Link do {provider} · {breed}",
+        "providers": {
+          "YOUTUBE": "YouTube",
+          "VIMEO": "Vimeo"
+        }
+      },
+      "empty": {
+        "photos": "Nenhuma foto ainda",
+        "photosHelp": "Envie fotos pelo botão acima. Elas aparecem na página pública do canil.",
+        "filtered": "Nenhuma foto com esses filtros",
+        "filteredHelp": "Tente outra raça ou outro cão.",
+        "clear": "Limpar filtros",
+        "videos": "Nenhum vídeo ainda",
+        "videosHelp": "Adicione um link do YouTube ou do Vimeo para mostrar um vídeo na sua página pública.",
+        "filteredVideos": "Nenhum vídeo com esses filtros"
       }
     }
   },

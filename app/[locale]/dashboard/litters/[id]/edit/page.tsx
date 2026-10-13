@@ -24,7 +24,7 @@ export default async function EditLitterPage({ params }: Props) {
     const [litter, detail, options, t] = await Promise.all([
         getLitterForEdit(kennel.id, id),
         getLitterDetail(kennel.id, id),
-        getLitterFormOptions(kennel.id),
+        getLitterFormOptions(kennel.id, id),
         getTranslations("dashboard.litters.form"),
     ]);
     if (!litter || !detail) notFound();

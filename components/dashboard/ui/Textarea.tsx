@@ -14,6 +14,7 @@ export default function Textarea({
     className = "",
     defaultValue,
     onChange,
+    ref,
     ...props
 }: Omit<ComponentProps<"textarea">, "maxLength" | "value"> & { maxLength: number; defaultValue?: string }) {
     const t = useTranslations("dashboard.common.form");
@@ -33,6 +34,9 @@ export default function Textarea({
                 }}
                 // React resets uncontrolled fields after a form action; keep the counter in sync.
                 ref={(node) => {
+                    // Forward to the caller's ref too (e.g. to focus the field after an error).
+                    if (typeof ref === "function") ref(node);
+                    else if (ref) ref.current = node;
                     if (!node) return;
                     const form = node.form;
                     const sync = () => requestAnimationFrame(() => setLength(node.value.length));

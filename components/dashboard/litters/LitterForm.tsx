@@ -122,7 +122,7 @@ export default function LitterForm({
                                     <option value="">{parentPlaceholder}</option>
                                     {females.map((dog) => (
                                         <option key={dog.id} value={dog.id}>
-                                            {dog.name}
+                                            {dog.archived ? t("litters.form.archivedParent", { name: dog.name }) : dog.name}
                                         </option>
                                     ))}
                                 </Select>
@@ -134,7 +134,7 @@ export default function LitterForm({
                                     <option value="">{parentPlaceholder}</option>
                                     {males.map((dog) => (
                                         <option key={dog.id} value={dog.id}>
-                                            {dog.name}
+                                            {dog.archived ? t("litters.form.archivedParent", { name: dog.name }) : dog.name}
                                         </option>
                                     ))}
                                 </Select>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useLayoutEffect, useOptimistic, useRef, useState, useTransition } from "react";
+import { useCallback, useEffect, useId, useLayoutEffect, useOptimistic, useRef, useState, useTransition, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown, Loader2 } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
@@ -12,9 +12,18 @@ const EDGE = 8;
 export type StatusMenuOption = { value: string; label: string };
 
 /**
- * A trigger that opens a menu of statuses (dogs, litters). Choosing one calls
- * `action` (a Server Action, usually bound to the record id), shows the new
- * value optimistically, then refreshes the route.
+ * A trigger that opens a menu of statuses (dogs, litters, lead stages).
+ * Choosing one either calls `action` (a Server Action, usually bound to the
+ * record id; the menu shows the new value optimistically, then refreshes the
+ * route), or, when `onSelect` is given, just reports the choice so the parent
+ * can apply it (e.g. the Leads board, which moves the card itself).
+ *
+ * Triggers: "pill" (colored pill with the current value), "button" (secondary
+ * button with `buttonText`), "icon" (small icon button showing `icon`; give
+ * it an accessible name through `triggerLabels`).
+ *
+ * `kind="actions"` turns it into a plain action menu (e.g. "More": Edit,
+ * Delete): items are `menuitem`s with no current value; use it with onSelect.
  *
  * The menu is portalled to <body> with fixed positioning, so cards/grids
  * can't clip it, and flips above the trigger near the bottom of the viewport.
@@ -27,7 +36,10 @@ export default function StatusMenu({
     value,
     options,
     action,
+    onSelect,
+    icon,
     variant = "pill",
+    kind = "choice",
     pillLabels,
     pillClasses,
     triggerLabels,
@@ -38,9 +50,15 @@ export default function StatusMenu({
     value: string;
     /** Menu items, in order (long labels, e.g. "Available puppy"). */
     options: StatusMenuOption[];
-    action: (value: string) => Promise<SimpleMutationResult>;
-    /** "pill": the trigger is a colored pill showing the current value; "button": a secondary button with `buttonText`. */
-    variant?: "pill" | "button";
+    /** Server Action applied by the menu itself. Give this or `onSelect`. */
+    action?: (value: string) => Promise<SimpleMutationResult>;
+    /** Parent applies the change (no optimistic update or refresh here). */
+    onSelect?: (value: string) => void;
+    /** The icon for variant "icon". */
+    icon?: ReactNode;
+    variant?: "pill" | "button" | "icon";
+    /** "choice": pick one value (current one checked); "actions": a list of commands. */
+    kind?: "choice" | "actions";
     /** Short label per value shown on the pill (e.g. "Available"). */
     pillLabels?: Record<string, string>;
     /** Pill classes per value. */
@@ -114,7 +132,12 @@ export default function StatusMenu({
 
     function choose(next: string) {
         close(true);
-        if (next === shownStatus) return;
+        if (kind === "choice" && next === shownStatus) return;
+        if (onSelect) {
+            onSelect(next);
+            return;
+        }
+        if (!action) return;
         startTransition(async () => {
             setOptimisticStatus(next);
             const result = await action(next);
@@ -162,11 +185,19 @@ export default function StatusMenu({
                 className={
                     variant === "pill"
                         ? `flex items-center gap-1.5 rounded-full py-1.5 pr-2.5 pl-3 text-xs font-semibold transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${pillClasses?.[shownStatus] ?? ""} ${pending ? "opacity-70" : ""}`
-                        : "flex items-center gap-2 rounded-xl border border-accent-soft bg-accent-soft px-4 py-2.25 text-[13px] font-semibold whitespace-nowrap text-accent transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        : variant === "icon"
+                          ? "flex size-7 items-center justify-center rounded-lg text-stone-500 transition-colors hover:bg-stone-100 hover:text-stone-900 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent aria-expanded:bg-stone-100"
+                          : "flex items-center gap-2 rounded-xl border border-accent-soft bg-accent-soft px-4 py-2.25 text-[13px] font-semibold whitespace-nowrap text-accent transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 }
             >
-                {variant === "pill" ? pillLabels?.[shownStatus] : buttonText}
-                {pending ? <Loader2 className="size-3 animate-spin" aria-hidden /> : <ChevronDown className="size-3" strokeWidth={2.5} aria-hidden />}
+                {variant === "icon" ? (
+                    icon
+                ) : (
+                    <>
+                        {variant === "pill" ? pillLabels?.[shownStatus] : buttonText}
+                        {pending ? <Loader2 className="size-3 animate-spin" aria-hidden /> : <ChevronDown className="size-3" strokeWidth={2.5} aria-hidden />}
+                    </>
+                )}
             </button>
             {failed && (
                 <p role="alert" className="mt-1 text-xs font-medium text-status-red">
@@ -186,7 +217,7 @@ export default function StatusMenu({
                         className="fixed z-50 w-52 rounded-xl border border-line bg-white p-1.5 font-body shadow-md"
                     >
                         {options.map((option, index) => {
-                            const current = option.value === shownStatus;
+                            const current = kind === "choice" && option.value === shownStatus;
                             return (
                                 <button
                                     key={option.value}
@@ -194,8 +225,8 @@ export default function StatusMenu({
                                         itemRefs.current[index] = node;
                                     }}
                                     type="button"
-                                    role="menuitemradio"
-                                    aria-checked={current}
+                                    role={kind === "choice" ? "menuitemradio" : "menuitem"}
+                                    aria-checked={kind === "choice" ? current : undefined}
                                     tabIndex={index === focusIndex ? 0 : -1}
                                     onClick={() => choose(option.value)}
                                     onMouseEnter={() => setFocusIndex(index)}

@@ -131,7 +131,32 @@
         "goHomeBeforeBirth": "The go-home date can't be before the birth date.",
         "puppyCountRange": "Enter a whole number from 0 to {max}.",
         "breedHasPuppies": "This litter already has puppies of another breed. Unlink them first (from each puppy's page).",
-        "puppyNotLinkable": "That puppy can't be linked: it may already be in a litter or be a different breed."
+        "puppyNotLinkable": "That puppy can't be linked: it may already be in a litter or be a different breed.",
+        "contactRequired": "Add an email or a phone number.",
+        "invalidEmail": "Enter an email like name@example.com.",
+        "invalidPhone": "Use 8 to 20 characters: digits, spaces, +, -, ( and ).",
+        "preferredNeedsEmail": "Add an email, or choose another way to contact them.",
+        "preferredNeedsPhone": "Add a phone number, or choose email.",
+        "invalidLitterForBreed": "Choose one of your litters of this breed.",
+        "invalidDogForBreed": "Choose one of your dogs of this breed.",
+        "pastFollowUp": "The follow-up date can't be in the past.",
+        "duplicateLeadEmail": "A lead with this email already exists.",
+        "duplicateLead": "{name} already has this email.",
+        "leadIsLost": "This lead is marked as lost. Reopen it first.",
+        "releasePuppyFirst": "{dogName} is reserved for this lead. Release the puppy first, then delete the lead.",
+        "alreadyHoldsPuppy": "This lead already has a puppy reserved. Release it first.",
+        "puppyJustReserved": "{dogName} was just reserved by someone else. Choose another puppy.",
+        "puppyNoLongerAvailable": "That puppy is no longer available. Choose another one.",
+        "noPuppyHeld": "This lead has no reserved puppy.",
+        "alreadyOnWaitlist": "This lead is already on that waitlist.",
+        "choosePuppy": "Choose a puppy to reserve.",
+        "followUpLeadLost": "This lead is marked as lost. Reopen it to plan a follow-up.",
+        "messageRequired": "Write a message first.",
+        "chooseDog": "Choose a dog to share.",
+        "invalidVideoUrl": "Paste a YouTube or Vimeo link (youtube.com/watch, youtu.be, youtube.com/shorts or vimeo.com).",
+        "dogBreedMismatch": "That dog isn't of the chosen breed.",
+        "tooManySelected": "Select at most {max} items at a time.",
+        "nothingSelected": "Select at least one item."
       }
     },
     "overview": {
@@ -484,7 +509,8 @@
           "sire": "Sire",
           "notSet": "Not set",
           "setInEdit": "Set in Edit litter",
-          "meta": "{breed}, {age}"
+          "meta": "{breed}, {age}",
+          "archived": "Archived"
         }
       },
       "puppies": {
@@ -568,7 +594,496 @@
           "confirm": "Delete litter",
           "cancel": "Cancel",
           "working": "Deleting…"
+        },
+        "archivedParent": "{name} (archived)"
+      }
+    },
+    "leads": {
+      "list": {
+        "title": "Leads",
+        "subtitle": "Everyone who has asked about your dogs, from first contact to sale.",
+        "addLead": "Add lead"
+      },
+      "stages": {
+        "NEW": "New",
+        "CONTACTED": "Contacted",
+        "INTERESTED": "Interested",
+        "FOLLOW_UP": "Follow-up",
+        "RESERVED": "Reserved",
+        "SOLD": "Sold",
+        "LOST": "Lost"
+      },
+      "sources": {
+        "PUBLIC_FORM": "Public form",
+        "DIRECTORY": "Directory",
+        "REFERRAL": "Referral",
+        "OTHER": "Other"
+      },
+      "contact": {
+        "EMAIL": "Email",
+        "PHONE": "Phone",
+        "WHATSAPP": "WhatsApp"
+      },
+      "notices": {
+        "created": "Lead added.",
+        "deleted": "Lead deleted."
+      },
+      "banner": {
+        "title": "{count, plural, one {# follow-up is due.} other {# follow-ups are due.}}",
+        "names": "{count, plural, one {{names} is waiting to hear from you.} other {{names} are waiting to hear from you.}}",
+        "namesMore": "{names} and {more} more are waiting to hear from you.",
+        "show": "Show them"
+      },
+      "view": {
+        "label": "View",
+        "board": "Board",
+        "list": "List"
+      },
+      "filters": {
+        "searchLabel": "Search leads",
+        "searchPlaceholder": "Search by name, email or dog",
+        "breedLabel": "Breed",
+        "allBreeds": "All breeds",
+        "sourceLabel": "Source",
+        "allSources": "All sources",
+        "followUpLabel": "Follow-up",
+        "anyFollowUp": "Any follow-up",
+        "followUp": {
+          "due": "Due today or overdue",
+          "set": "Has a date",
+          "none": "None set"
+        },
+        "stageLabel": "Stage",
+        "anyStage": "Any stage"
+      },
+      "empty": {
+        "all": {
+          "title": "No leads yet",
+          "description": "People who ask about your dogs on KennelOS show up here. You can also add someone who called or messaged you.",
+          "cta": "Add your first lead"
+        },
+        "filtered": {
+          "title": "No leads match these filters",
+          "description": "Try a different search, or clear the filters to see everyone.",
+          "clear": "Clear filters"
         }
+      },
+      "card": {
+        "unread": "Unread message",
+        "interestWithLink": "{note}, {link}",
+        "moveTo": "Move {name} to another stage",
+        "moveMenu": "Move {name} to"
+      },
+      "board": {
+        "moved": "{name} moved to {stage}",
+        "moveFailed": "Couldn't move {name}. It's back where it was; try again.",
+        "columnCount": "{count, plural, one {# lead} other {# leads}}",
+        "emptyColumn": "No leads",
+        "olderSold": "Older sold leads are in the list view"
+      },
+      "due": {
+        "overdue": "Overdue {days, plural, one {# day} other {# days}}",
+        "today": "Due today",
+        "tomorrow": "Due tomorrow",
+        "inDays": "Due in {days} days",
+        "on": "Due {date}"
+      },
+      "table": {
+        "columns": {
+          "name": "Name",
+          "stage": "Stage",
+          "interest": "Interest",
+          "source": "Source",
+          "followUp": "Follow-up",
+          "lastActivity": "Last activity",
+          "actions": "Actions",
+          "reason": "Reason"
+        },
+        "noFollowUp": "None",
+        "open": "Open",
+        "showing": "Showing {shown} of {total} {total, plural, one {lead} other {leads}}",
+        "paginationLabel": "Pages",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "form": {
+        "title": "Add a lead",
+        "subtitle": "Someone who called, messaged you or met you in person.",
+        "crumb": "New lead",
+        "submit": "Add lead",
+        "openExisting": "Open {name}",
+        "anyLitter": "Any litter",
+        "noDog": "No specific dog",
+        "chooseBreedFirst": "Choose a breed first",
+        "sections": {
+          "contact": "Contact",
+          "pipeline": "Pipeline",
+          "interest": "What they're looking for"
+        },
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "phone": "Phone",
+          "preferredContact": "Preferred contact",
+          "city": "City",
+          "state": "State",
+          "source": "Source",
+          "stage": "Stage",
+          "followUpAt": "Follow-up date",
+          "interestBreed": "Breed",
+          "litter": "Litter",
+          "dog": "Dog",
+          "interestNote": "Preference"
+        },
+        "placeholders": {
+          "phone": "+55 11 99999 0000",
+          "breed": "Choose a breed",
+          "interestNote": "e.g. Chocolate female"
+        },
+        "help": {
+          "emailOrPhone": "Add an email, a phone number or both.",
+          "followUpAt": "Optional. A reminder shows on the board and on Overview.",
+          "breed": "Only breeds your kennel raises.",
+          "interestNote": "In their words: colour, sex, temperament…"
+        },
+        "submitEdit": "Save changes",
+        "editTitle": "Edit {name}",
+        "editSubtitle": "Contact details, what they're looking for and the follow-up date. Change the stage on the lead page.",
+        "editCrumb": "Edit"
+      },
+      "lostReasons": {
+        "NO_RESPONSE": "No response",
+        "BOUGHT_ELSEWHERE": "Bought elsewhere",
+        "CHANGED_MIND": "Changed their mind",
+        "TOO_FAR": "Too far away",
+        "OTHER": "Other"
+      },
+      "detail": {
+        "sendMessage": "Send message",
+        "cancel": "Cancel",
+        "since": "Lead since {date}",
+        "notProvided": "Not provided",
+        "notices": {
+          "saved": "Changes saved."
+        },
+        "more": {
+          "edit": "Edit lead",
+          "lost": "Mark as lost",
+          "delete": "Delete lead",
+          "label": "More actions for {name}",
+          "menu": "Actions for {name}"
+        },
+        "reserve": {
+          "button": "Reserve a puppy",
+          "title": "Reserve a puppy for {name}",
+          "description": "Available puppies, starting with the breed they asked about.",
+          "none": "There are no available puppies to reserve right now.",
+          "pick": "Puppy",
+          "submit": "Reserve",
+          "pending": "Reserving…"
+        },
+        "lost": {
+          "title": "Mark {name} as lost",
+          "description": "They leave the board and their follow-up is cleared. You can reopen them later.",
+          "reason": "Reason",
+          "choose": "Choose a reason",
+          "release": "Make {dog} available again",
+          "submit": "Mark as lost",
+          "pending": "Saving…"
+        },
+        "delete": {
+          "title": "Delete {name}?",
+          "description": "This removes {name} with their notes, history, messages and waitlist places. It can't be undone.",
+          "confirm": "Delete lead",
+          "pending": "Deleting…"
+        },
+        "lostBanner": {
+          "title": "Marked as lost.",
+          "reason": "Reason: {reason}.",
+          "reopen": "Reopen",
+          "reopening": "Reopening…"
+        },
+        "stage": {
+          "label": "Pipeline stage",
+          "done": "done",
+          "change": "Change stage",
+          "changeLabel": "Change stage, currently {stage}",
+          "menu": "Stage for {name}",
+          "failed": "Couldn't change the stage. Try again."
+        },
+        "lookingFor": {
+          "heading": "What {name} is looking for",
+          "breed": "Breed",
+          "preference": "Preference",
+          "litter": "Litter",
+          "dog": "Dog",
+          "source": "Source",
+          "firstMessage": "{name}’s first message"
+        },
+        "notes": {
+          "heading": "Notes and timeline",
+          "label": "Add a note",
+          "placeholder": "Add a private note, like what {name} told you on the phone",
+          "save": "Save note",
+          "saving": "Saving…"
+        },
+        "timeline": {
+          "showAll": "Show full history",
+          "empty": "Nothing here yet.",
+          "note": "You added a note",
+          "messageIn": "{name} sent a message",
+          "messageOut": "You sent a message",
+          "created": "Lead created",
+          "createdDetail": "From {source}",
+          "stageChanged": "Moved to {stage}",
+          "stageChangedDetail": "From {from}",
+          "followUpSet": "Follow-up set for {date}",
+          "followUpDone": "Follow-up done",
+          "followUpDoneDetail": "It was due {date}",
+          "markedLost": "Marked as lost",
+          "reopened": "Reopened",
+          "reopenedDetail": "Back to {stage}",
+          "puppyReserved": "Reserved {dog}",
+          "puppyReleased": "Released {dog}",
+          "puppyReleasedDetail": "Available again",
+          "waitlistAdded": "Added to the {litter} waitlist",
+          "waitlistRemoved": "Removed from the {litter} waitlist",
+          "stageChangedAuto": "Automatically, after your first reply",
+          "sharedDog": "Shared {dog}"
+        },
+        "followUp": {
+          "heading": "Follow-up",
+          "none": "No follow-up set",
+          "overdue": "Overdue {days, plural, one {# day} other {# days}}",
+          "today": "Due today, {date}",
+          "upcoming": "Due {date}",
+          "markDone": "Mark done",
+          "marking": "Saving…",
+          "reschedule": "Reschedule",
+          "set": "Set follow-up",
+          "rescheduleTitle": "Reschedule the follow-up",
+          "setTitle": "Set a follow-up",
+          "dialogDescription": "Pick the day you want to be reminded. It shows on the board and on Overview.",
+          "dateLabel": "Date",
+          "save": "Save",
+          "saving": "Saving…",
+          "failed": "Couldn't update the follow-up. Try again.",
+          "lostHint": "Reopen this lead to plan a follow-up."
+        },
+        "reservation": {
+          "heading": "Reservation",
+          "reserved": "Reserved:",
+          "release": "Release puppy",
+          "confirmTitle": "Release {dog}?",
+          "confirmDescription": "{dog} goes back to Available and {name} moves back to Interested.",
+          "pending": "Releasing…"
+        },
+        "contact": {
+          "heading": "Contact",
+          "email": "Email",
+          "phone": "Phone",
+          "preferred": "Preferred contact",
+          "openWhatsapp": "Open WhatsApp",
+          "newTab": "(opens in a new tab)"
+        },
+        "waitlist": {
+          "heading": "Waitlist",
+          "empty": "{name} isn't on any waitlist.",
+          "position": "Position",
+          "remove": "Remove",
+          "removing": "Removing…",
+          "removeFrom": "from the {litter} waitlist",
+          "add": "Add to waitlist",
+          "noOptions": "There are no planned, available or reserved litters left to add them to.",
+          "addTitle": "Add {name} to a waitlist",
+          "addSubmit": "Add to waitlist",
+          "adding": "Adding…",
+          "litter": "Litter",
+          "chooseLitter": "Choose a litter",
+          "note": "Note (optional)",
+          "notePlaceholder": "e.g. Wants a male"
+        },
+        "conversation": {
+          "heading": "Conversation",
+          "open": "Open",
+          "openFull": "conversation with {name}",
+          "empty": "No messages yet.",
+          "theyWrote": "{name} wrote:",
+          "youWrote": "You wrote:",
+          "unread": "unread",
+          "sharedDog": "Shared {dog}"
+        }
+      }
+    },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Conversations with buyers, linked to their lead.",
+      "list": {
+        "heading": "Conversations",
+        "searchLabel": "Search conversations",
+        "searchPlaceholder": "Search messages",
+        "filterLabel": "Show",
+        "all": "All",
+        "unread": "Unread {count}",
+        "noMessages": "No messages yet",
+        "sharedDog": "Shared {dog}",
+        "you": "You: {text}",
+        "unreadCount": "{count, plural, one {# unread message} other {# unread messages}}"
+      },
+      "empty": {
+        "none": "Conversations start when a buyer contacts you.",
+        "noMatches": "No conversations match.",
+        "clear": "Clear filters"
+      },
+      "thread": {
+        "back": "Back to conversations",
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "label": "Conversation with {name}",
+        "interestedIn": "Interested in {interest}",
+        "openLead": "Open lead",
+        "history": "Messages",
+        "empty": "No messages yet. Write the first one to {name}.",
+        "dogShared": "Dog shared",
+        "none": "Choose a conversation.",
+        "notFound": "This conversation doesn't exist anymore."
+      },
+      "start": {
+        "title": "No conversation with {name} yet",
+        "description": "Start one to send your first message. It's saved here with the lead.",
+        "button": "Start a conversation with {name}",
+        "pending": "Starting…"
+      },
+      "composer": {
+        "label": "Reply to {name}",
+        "placeholder": "Write a reply to {name}",
+        "hint": "Ctrl/⌘ + Enter to send",
+        "send": "Send",
+        "sending": "Sending…"
+      },
+      "share": {
+        "title": "Share a dog",
+        "description": "They'll see a card with the dog's photo and details.",
+        "none": "There are no dogs to share yet.",
+        "submit": "Share",
+        "pending": "Sharing…",
+        "cancel": "Cancel",
+        "button": "Share a dog",
+        "pick": "Dog"
+      },
+      "panel": {
+        "heading": "Lead details",
+        "stage": "Stage",
+        "lookingFor": "Looking for",
+        "dog": "Dog of interest",
+        "followUp": "Follow-up",
+        "noFollowUp": "None set",
+        "email": "Email",
+        "phone": "Phone",
+        "moveTo": "Move to {stage}",
+        "moving": "Moving…"
+      }
+    },
+    "media": {
+      "title": "Media",
+      "subtitle": "The photos and videos on your public kennel page.",
+      "cancel": "Cancel",
+      "showing": "Showing {shown} of {total} {total, plural, one {photo} other {photos}}",
+      "pagination": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "upload": {
+        "button": "Upload photos",
+        "saving": "Saving photos…",
+        "saved": "{count, plural, one {# photo added at the end of your gallery.} other {# photos added at the end of your gallery.}}",
+        "failed": "The photos couldn't be saved. Try again.",
+        "areaTitle": "Add photos: choose files or drag them into the uploader",
+        "areaHelp": "JPG, PNG or WebP, up to 10 MB each, {max} at a time. Tag them by breed or dog afterwards."
+      },
+      "tabs": {
+        "label": "Media type",
+        "photos": "Photos",
+        "videos": "Videos"
+      },
+      "filters": {
+        "breed": "Breed",
+        "dog": "Dog",
+        "allDogs": "All dogs"
+      },
+      "tags": {
+        "breed": "Breed",
+        "dog": "Dog",
+        "allBreeds": "All breeds",
+        "wholeKennel": "Whole kennel"
+      },
+      "photo": {
+        "untitled": "Photo {position}",
+        "moved": "{name} moved to position {position} of {total}.",
+        "moveFailed": "Couldn't move the photo. It's back where it was; try again.",
+        "deleted": "{count, plural, one {# photo deleted.} other {# photos deleted.}}",
+        "edit": "Edit details",
+        "moveEarlier": "Move earlier",
+        "moveLater": "Move later",
+        "moveStart": "Move to start",
+        "delete": "Delete",
+        "select": "Select {name}",
+        "dragHint": "Drag to reorder",
+        "actions": "Actions for {name}",
+        "dragDisabled": "Filters are on: drag to reorder is off. Use each photo's menu to move it, or clear the filters."
+      },
+      "bulk": {
+        "selected": "{count} selected",
+        "selectPage": "Select all on this page",
+        "tag": "Tag breed or dog",
+        "delete": "Delete",
+        "clear": "Clear selection",
+        "tagged": "{count, plural, one {# photo tagged.} other {# photos tagged.}}",
+        "tagTitle": "Tag {count, plural, one {# photo} other {# photos}}",
+        "tagDescription": "Applies to every selected photo. Leave both empty for the whole kennel.",
+        "tagSubmit": "Apply tags"
+      },
+      "edit": {
+        "title": "Edit photo details",
+        "videoTitle": "Edit video details",
+        "save": "Save",
+        "saving": "Saving…",
+        "caption": "Caption"
+      },
+      "delete": {
+        "title": "{count, plural, one {Delete this photo?} other {Delete # photos?}}",
+        "description": "{count, plural, one {It disappears from your public page. This can't be undone.} other {They disappear from your public page. This can't be undone.}}",
+        "pending": "Deleting…",
+        "confirm": "Delete",
+        "videoTitle": "Delete “{name}”?",
+        "videoDescription": "The link disappears from your public page. The video itself stays where it's hosted."
+      },
+      "videos": {
+        "heading": "Videos",
+        "add": "Add video link",
+        "addTitle": "Add a video link",
+        "addDescription": "Paste a YouTube or Vimeo link. Videos stay on those sites; your page links to them.",
+        "addSubmit": "Add video",
+        "adding": "Adding…",
+        "url": "Link",
+        "urlHelp": "youtube.com/watch, youtu.be, youtube.com/shorts or vimeo.com",
+        "title": "Title",
+        "untitled": "Untitled video",
+        "opensNewTab": "(opens in a new tab)",
+        "meta": "{provider} link · {breed}",
+        "providers": {
+          "YOUTUBE": "YouTube",
+          "VIMEO": "Vimeo"
+        }
+      },
+      "empty": {
+        "photos": "No photos yet",
+        "photosHelp": "Upload photos with the button above. They show on your public kennel page.",
+        "filtered": "No photos match these filters",
+        "filteredHelp": "Try another breed or dog.",
+        "clear": "Clear filters",
+        "videos": "No videos yet",
+        "videosHelp": "Add a YouTube or Vimeo link to show a video on your public page.",
+        "filteredVideos": "No videos match these filters"
       }
     }
   },

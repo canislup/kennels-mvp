@@ -57,6 +57,8 @@ export function validateLitterInput(
         males: ParentOption[];
         /** Breeds of the puppies already linked to this litter (edit only). */
         linkedPuppyBreeds?: string[];
+        /** The litter's saved parents (edit only): the only archived dogs allowed as parents. */
+        current?: { damId: string | null; sireId: string | null };
     },
 ): { ok: true; input: LitterInput } | { ok: false; fieldErrors: LitterFieldErrors } {
     const errors: LitterFieldErrors = {};
@@ -71,12 +73,14 @@ export function validateLitterInput(
 
     if (!LITTER_STATUSES.includes(values.status as LitterStatus)) errors.status = { key: values.status ? "invalidChoice" : "required" };
 
-    // Parents: an adult of the right sex and the litter's breed, from this kennel.
+    // Parents: an adult of the right sex and the litter's breed, from this
+    // kennel. An archived dog is accepted only as the litter's unchanged parent.
     const checkParent = (field: "damId" | "sireId", options: ParentOption[], key: string) => {
         const id = values[field];
         if (!id) return;
         const parent = options.find((option) => option.id === id);
-        if (!parent || (values.breed && parent.breed !== values.breed)) errors[field] = { key };
+        const keptArchived = parent?.archived && context.current?.[field] === id;
+        if (!parent || (parent.archived && !keptArchived) || (values.breed && parent.breed !== values.breed)) errors[field] = { key };
     };
     checkParent("damId", context.females, "invalidDam");
     checkParent("sireId", context.males, "invalidSire");

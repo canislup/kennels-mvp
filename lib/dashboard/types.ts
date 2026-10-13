@@ -81,8 +81,8 @@ export type ActivityItem =
 export type ActivityType = ActivityItem["type"];
 
 export type UpcomingItem =
-    | { id: string; type: "LEAD_FOLLOW_UP"; params: { leadName: string }; dueAt: ISODateString }
-    | { id: string; type: "LITTER_GO_HOME"; params: { litterName: string; puppyCount: number; reservedCount: number }; dueAt: ISODateString };
+    | { id: string; type: "LEAD_FOLLOW_UP"; params: { leadId: string; leadName: string }; dueAt: ISODateString }
+    | { id: string; type: "LITTER_GO_HOME"; params: { litterId: string; litterName: string; puppyCount: number; reservedCount: number }; dueAt: ISODateString };
 
 export type Overview = {
     setupSteps: SetupStep[];
@@ -230,6 +230,7 @@ export type DogAge = { unit: "weeks" | "months" | "years"; count: number };
 export type LitterParentSummary = {
     id: string;
     name: string;
+    archived: boolean; // Dog.archivedAt != null
     breed: string;
     /** Translated in the UI with dashboard.common.age.{unit}. null when no birth date. */
     ageLabelParts: DogAge | null;
@@ -277,7 +278,13 @@ export type LitterForEdit = {
 /** Validated, whitelisted input for createLitter / updateLitter. */
 export type LitterInput = Omit<LitterForEdit, "id">;
 
-export type ParentOption = { id: string; name: string; breed: string };
+export type ParentOption = {
+    id: string;
+    name: string;
+    breed: string;
+    /** Only the litter's current parent can be archived (kept so saving doesn't clear it). */
+    archived: boolean;
+};
 
 export type LitterFormOptions = {
     breeds: KennelBreedOption[];
@@ -307,4 +314,252 @@ export type SimpleMutationResult = { ok: true } | MutationFailure;
 
 export type LitterFormField = keyof LitterInput;
 
+// --- Leads -------------------------------------------------------------------
+
+/** NEW ENUM (Prisma `LeadStage`). The first six are the board columns, in order; LOST is never a column. */
+export type LeadStage = "NEW" | "CONTACTED" | "INTERESTED" | "FOLLOW_UP" | "RESERVED" | "SOLD" | "LOST";
+
+/** The six pipeline stages (board columns, stepper, "Move to…"). */
+export type BoardStage = Exclude<LeadStage, "LOST">;
+
+/** NEW ENUM (Prisma `LostReason`). */
+export type LostReason = "NO_RESPONSE" | "BOUGHT_ELSEWHERE" | "CHANGED_MIND" | "TOO_FAR" | "OTHER";
+
+/** NEW ENUM (Prisma `LeadSource`). */
+export type LeadSource = "PUBLIC_FORM" | "DIRECTORY" | "REFERRAL" | "OTHER";
+
+/** NEW ENUM (Prisma `PreferredContact`). */
+export type PreferredContact = "EMAIL" | "PHONE" | "WHATSAPP";
+
+/** NEW MODEL: Lead. */
+export type Lead = {
+    id: string;
+    name: string;
+    email: string | null; // unique per kennel, compared lower-cased
+    phone: string | null;
+    preferredContact: PreferredContact;
+    city: string | null;
+    state: string | null;
+    source: LeadSource;
+    stage: LeadStage;
+    interestBreed: string; // a KennelBreed name
+    interestNote: string | null; // free text, e.g. "Chocolate female"
+    litterId: string | null; // → Litter
+    dogId: string | null; // → Dog
+    /** Calendar day, "YYYY-MM-DD". Maps to a `@db.Date` column so time zones can't shift it. */
+    followUpAt: DateOnlyString | null;
+    firstMessage: string | null; // from the public contact form
+    lostReason: LostReason | null; // NEW FIELD; set only while stage is LOST
+    createdAt: ISODateString;
+    lastActivityAt: ISODateString;
+};
+
+/**
+ * NEW MODEL: LeadEvent, the lead's activity log. Stored as type + params,
+ * translated in the UI. Notes and messages live in their own tables; the
+ * timeline is the union of events, notes and messages (see TimelineItem).
+ */
+export type LeadEvent =
+    | { id: string; leadId: string; type: "CREATED"; params: { source: LeadSource }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "STAGE_CHANGED"; params: { from: LeadStage; to: LeadStage; /** Moved by the system, e.g. New → Contacted on the first reply. */ auto?: boolean }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "FOLLOW_UP_SET"; params: { date: DateOnlyString }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "FOLLOW_UP_DONE"; params: { date: DateOnlyString }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "MARKED_LOST"; params: { from: LeadStage; reason: LostReason }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "REOPENED"; params: { to: LeadStage }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "PUPPY_RESERVED"; params: { dogId: string; dogName: string }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "PUPPY_RELEASED"; params: { dogId: string; dogName: string }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "WAITLIST_ADDED"; params: { litterId: string; litterName: string }; createdAt: ISODateString }
+    | { id: string; leadId: string; type: "WAITLIST_REMOVED"; params: { litterId: string; litterName: string }; createdAt: ISODateString };
+
+export type LeadEventType = LeadEvent["type"];
+
+/** One card on the board / one row in the list view. */
+export type LeadCard = {
+    id: string;
+    name: string;
+    stage: LeadStage;
+    source: LeadSource;
+    interestBreed: string;
+    interestNote: string | null;
+    litterName: string | null; // via Lead.litterId
+    dogName: string | null; // via Lead.dogId
+    followUpAt: DateOnlyString | null;
+    lastActivityAt: ISODateString;
+    /** Derived: the lead's conversation has an inbound message with readAt null. */
+    hasUnread: boolean;
+    lostReason: LostReason | null;
+};
+
+export type LeadFollowUpFilter = "any" | "due" | "set" | "none";
+
+export type LeadFilters = {
+    /** Name, email, interest note, linked dog or litter name; case- and accent-insensitive. */
+    q?: string;
+    breed?: string;
+    source?: LeadSource;
+    followUp?: LeadFollowUpFilter;
+    /** List view only. Omitted = every stage except LOST; "LOST" = only lost leads. */
+    stage?: LeadStage;
+};
+
+export type LeadBoardColumn = {
+    stage: BoardStage;
+    /** Leads in this stage matching the filters (for Sold: only those in `cards`). */
+    count: number;
+    cards: LeadCard[];
+    /** Sold only: older sold leads exist that the board leaves out (they're in the list view). */
+    truncated: boolean;
+};
+
+export type LeadBoard = { columns: LeadBoardColumn[] };
+
+export type LeadTableResult = { items: LeadCard[]; total: number; page: number; pageSize: number };
+
+export type FollowUpSummary = { dueCount: number; names: string[] };
+
+export type UpcomingFollowUp = { leadId: string; name: string; followUpAt: DateOnlyString };
+
+export type LeadFormOptions = {
+    breeds: KennelBreedOption[];
+    litters: { id: string; name: string; breed: string }[];
+    dogs: { id: string; name: string; breed: string }[]; // non-archived
+};
+
+/** Validated, whitelisted input for createLead (updateLead ignores `stage`). */
+export type LeadInput = Omit<Lead, "id" | "firstMessage" | "lostReason" | "createdAt" | "lastActivityAt">;
+
+export type LeadFormField = keyof LeadInput;
+
+export type LeadMutationResult = { ok: true; lead: { id: string } } | MutationFailure<LeadFormField>;
+
 export type LitterMutationResult = { ok: true; litter: { id: string } } | MutationFailure<LitterFormField>;
+
+// --- Lead detail (Step 4b) -------------------------------------------------------
+
+/** NEW MODEL: LeadNote. Private to the kennel. */
+export type LeadNote = { id: string; leadId: string; body: string; createdAt: ISODateString };
+
+/** NEW MODEL: Conversation (one per lead). */
+export type Conversation = { id: string; leadId: string; lastMessageAt: ISODateString };
+
+export type MessageDirection = "INBOUND" | "OUTBOUND";
+
+/** NEW MODEL: Message. INBOUND = from the buyer; readAt null = unread by the kennel. */
+export type Message = {
+    id: string;
+    conversationId: string;
+    direction: MessageDirection;
+    /** May be empty when the message only shares a dog. */
+    body: string;
+    sharedDogId: string | null; // NEW FIELD: Message.sharedDogId → Dog (the dog card in the thread)
+    createdAt: ISODateString;
+    readAt: ISODateString | null;
+};
+
+/** One row of the lead timeline: the union of LeadEvent, LeadNote and Message, newest first. */
+export type TimelineItem =
+    | { id: string; kind: "event"; type: LeadEvent["type"]; params: LeadEvent["params"]; createdAt: ISODateString }
+    | { id: string; kind: "note"; body: string; createdAt: ISODateString }
+    | { id: string; kind: "message"; direction: MessageDirection; body: string; sharedDogName: string | null; createdAt: ISODateString };
+
+export type LeadWaitlistEntry = { entryId: string; litterId: string; litterName: string; position: number };
+
+export type LeadDetail = Lead & {
+    litter: { id: string; name: string } | null;
+    dog: { id: string; name: string; status: DogStatus } | null;
+    /** The puppy this lead holds (reserved for them). NEW FIELD in the real schema: Dog.reservedForLeadId. */
+    reservation: { dogId: string; dogName: string } | null;
+    hasUnread: boolean;
+    timeline: TimelineItem[];
+    /** More than the returned timeline exists (the page offers "Show full history"). */
+    timelineHasMore: boolean;
+    recentMessages: ThreadMessage[]; // the last 3, oldest first
+    conversationId: string | null;
+    waitlists: LeadWaitlistEntry[];
+};
+
+export type WaitlistOption = { id: string; name: string; breed: string; status: LitterStatus };
+
+export type ReservablePuppy = {
+    id: string;
+    name: string;
+    sex: DogSex;
+    breed: string;
+    litterName: string | null;
+    coverPhotoUrl: string | null;
+};
+
+/** Result of a form submitted from a dialog or an inline form (useActionState). */
+export type ActionState = {
+    status: "idle" | "error" | "done";
+    fieldErrors: Record<string, FieldError>;
+    formError?: FieldError;
+    /** Increments on every submit, so the client can react to each result once. */
+    submission: number;
+};
+
+// --- Messages (Step 5) ---------------------------------------------------------------
+
+export type SharedDogSummary = { id: string; name: string; breed: string; sex: DogSex; ageParts: DogAge | null; coverPhotoUrl: string | null };
+
+export type ThreadMessage = Message & { sharedDog: SharedDogSummary | null };
+
+export type ConversationListItem = {
+    id: string;
+    leadId: string;
+    leadName: string;
+    initials: string;
+    /** The last message: its text, or a marker the UI translates ("Shared Mocha"). */
+    lastMessagePreview: { kind: "text"; text: string; direction: MessageDirection } | { kind: "dog"; dogName: string; direction: MessageDirection } | { kind: "none" };
+    lastMessageAt: ISODateString;
+    unreadCount: number;
+};
+
+export type ConversationLeadSummary = {
+    id: string;
+    name: string;
+    stage: LeadStage;
+    interestBreed: string;
+    interestNote: string | null;
+    litterName: string | null;
+    dog: { id: string; name: string; litterName: string | null } | null; // dog of interest (Lead.dogId)
+    followUpAt: DateOnlyString | null;
+    email: string | null;
+    phone: string | null;
+};
+
+export type ConversationThread = {
+    conversation: Conversation;
+    lead: ConversationLeadSummary;
+    messages: ThreadMessage[]; // oldest first
+};
+
+export type ShareableDog = { id: string; name: string; breed: string; sex: DogSex; status: DogStatus; coverPhotoUrl: string | null };
+
+export type UnreadSummary = { unreadConversations: number; oldestUnreadAt: ISODateString | null };
+
+// --- Media (Step 5) --------------------------------------------------------------------
+
+export type MediaKind = "PHOTO" | "VIDEO";
+export type VideoProvider = "YOUTUBE" | "VIMEO";
+
+/** Kennel gallery item (existing `Media` model). */
+export type MediaItem = {
+    id: string;
+    type: MediaKind;
+    url: string | null; // Media.url (required in the schema; null only in fixtures → gradient)
+    caption: string | null; // NEW FIELD: Media.caption (photo caption / video title, ≤ 120)
+    breed: string | null; // via Media.breedId (null = all breeds)
+    dogId: string | null; // Media.dogId (null = whole kennel)
+    dogName: string | null;
+    position: number; // NEW FIELD: Media.position (photos: gallery order)
+    createdAt: ISODateString;
+    provider: VideoProvider | null; // NEW FIELD: Media.provider (videos only)
+    thumbnailUrl: string | null; // NEW FIELD: Media.thumbnailUrl (videos only)
+};
+
+export type MediaListResult = { items: MediaItem[]; total: number; page: number; pageSize: number };
+
+export type MediaFilterOptions = { breeds: KennelBreedOption[]; dogs: { id: string; name: string; breed: string }[] };
+
+export type PhotoUpload = { url: string; width?: number; height?: number };

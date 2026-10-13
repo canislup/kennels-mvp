@@ -6,6 +6,9 @@
 // Dogs.dc.html. Times are relative to "now" so the dashboard always looks current.
 import { buildDogFixtures, KENNEL_BREEDS } from "./dogs";
 import { buildLitterFixtures, buildWaitlistFixtures } from "./litters";
+import { buildLeadFixtures } from "./leads";
+import { buildConversationFixtures } from "./conversations";
+import { buildMediaFixtures } from "./media";
 import type { ActivityItem, DashboardNotification, NavCounts, OverviewMetrics, SetupStep, UpcomingItem } from "../types";
 
 const MINUTE = 60_000;
@@ -22,7 +25,8 @@ const dayFromToday = (days: number, hour = 10) => {
 };
 
 export function buildFixtures() {
-    const navCounts: NavCounts = { newLeads: 7, unreadMessages: 3 };
+    // Both derived in getNavCounts() (leads and conversations stores).
+    const navCounts: NavCounts = { newLeads: 0, unreadMessages: 0 };
 
     const notifications: DashboardNotification[] = [
         { id: "ntf_1", type: "NEW_LEAD", params: { name: "Ricardo Alves" }, createdAt: ago(12 * MINUTE), read: false },
@@ -42,8 +46,10 @@ export function buildFixtures() {
     ];
 
     const metrics: OverviewMetrics = {
-        newLeads: { count: 7, sinceYesterday: 3 },
-        unreadMessages: { count: 3, oldestUnreadAt: ago(2 * DAY + 2 * HOUR) },
+        // newLeads is derived from the leads store in getOverview().
+        newLeads: { count: 0, sinceYesterday: 0 },
+        // unreadMessages is derived from the conversations store in getOverview().
+        unreadMessages: { count: 0, oldestUnreadAt: null },
         // availablePuppies is derived from the dogs store in getOverview().
         availablePuppies: { count: 0, litterCount: 0 },
         activeLitters: { count: 2, nextGoHomeAt: dayFromToday(12) },
@@ -57,11 +63,18 @@ export function buildFixtures() {
         { id: "act_5", type: "LITTER_BORN", params: { damName: "Frida", puppyCount: 7 }, createdAt: ago(2 * DAY + 3 * HOUR) },
     ];
 
-    const upcoming: UpcomingItem[] = [
-        { id: "up_1", type: "LEAD_FOLLOW_UP", params: { leadName: "Ricardo Alves" }, dueAt: dayFromToday(0) },
-        { id: "up_2", type: "LEAD_FOLLOW_UP", params: { leadName: "Marina Costa" }, dueAt: dayFromToday(1) },
-        { id: "up_3", type: "LEAD_FOLLOW_UP", params: { leadName: "Camila Torres" }, dueAt: dayFromToday(3) },
-    ];
+    // Coming up is derived from leads' follow-ups and litters' go-home dates in getOverview().
+    const upcoming: UpcomingItem[] = [];
+    const { leads, events: leadEvents, notes: leadNotes, reservations } = buildLeadFixtures();
+    const { conversations, messages } = buildConversationFixtures();
+
+    // Waitlist entries show up in the lead timelines too.
+    const litters = buildLitterFixtures();
+    const waitlist = buildWaitlistFixtures();
+    for (const entry of waitlist) {
+        const litterName = litters.find((l) => l.id === entry.litterId)?.name ?? "";
+        leadEvents.push({ id: `evt_${entry.id}_added`, leadId: entry.leadId, type: "WAITLIST_ADDED", params: { litterId: entry.litterId, litterName }, createdAt: entry.createdAt });
+    }
 
     return {
         navCounts,
@@ -71,9 +84,16 @@ export function buildFixtures() {
         recentActivity,
         upcoming,
         kennelBreeds: KENNEL_BREEDS,
-        litters: buildLitterFixtures(),
-        waitlist: buildWaitlistFixtures(),
+        litters,
+        waitlist,
         dogs: buildDogFixtures(),
+        leads,
+        leadEvents,
+        leadNotes,
+        reservations,
+        conversations,
+        messages,
+        media: buildMediaFixtures(),
     };
 }
 

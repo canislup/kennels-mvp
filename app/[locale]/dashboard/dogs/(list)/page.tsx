@@ -10,7 +10,7 @@ import EmptyState from "@/components/dashboard/ui/EmptyState";
 import Notice from "@/components/dashboard/ui/Notice";
 import PageHeader from "@/components/dashboard/ui/PageHeader";
 import DogCard from "@/components/dashboard/dogs/DogCard";
-import DogFilters from "@/components/dashboard/dogs/DogFilters";
+import UrlFilters from "@/components/dashboard/ui/UrlFilters";
 import { SEX_PARAM, STAGE_PARAM, STATUS_ORDER, STATUS_PARAM, fromParam } from "@/components/dashboard/dogs/dogMeta";
 
 const PAGE_SIZE = 12;
@@ -117,7 +117,39 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
                         </ul>
                     </nav>
 
-                    <DogFilters breeds={breeds.map((b) => b.name)} />
+                    <UrlFilters
+                        searchLabel={t("dogs.list.filters.searchLabel")}
+                        searchPlaceholder={t("dogs.list.filters.searchPlaceholder")}
+                        selects={[
+                            {
+                                param: "breed",
+                                label: t("dogs.list.filters.breedLabel"),
+                                allLabel: t("dogs.list.filters.allBreeds"),
+                                options: breeds.map((b) => ({ value: b.name, label: b.name })),
+                                className: "flex-[1_1_160px] sm:flex-none",
+                            },
+                            {
+                                param: "sex",
+                                label: t("dogs.list.filters.sexLabel"),
+                                allLabel: t("dogs.list.filters.anySex"),
+                                options: [
+                                    { value: "male", label: t("dogs.list.filters.male") },
+                                    { value: "female", label: t("dogs.list.filters.female") },
+                                ],
+                                className: "flex-[1_1_120px] sm:flex-none",
+                            },
+                            {
+                                param: "stage",
+                                label: t("dogs.list.filters.stageLabel"),
+                                allLabel: t("dogs.list.filters.anyStage"),
+                                options: [
+                                    { value: "puppy", label: t("dogs.list.filters.puppy") },
+                                    { value: "adult", label: t("dogs.list.filters.adult") },
+                                ],
+                                className: "flex-[1_1_140px] sm:flex-none",
+                            },
+                        ]}
+                    />
 
                     {result.items.length === 0 && archived && !(q || breed || sex || stage) ? (
                         <EmptyState title={t("dogs.list.emptyArchived.title")} description={t("dogs.list.emptyArchived.description")} />

@@ -67,7 +67,7 @@ const toListItem = (litter: MockLitter): LitterListItem => ({
 
 const toParent = (dog: MockDog | undefined): LitterParentSummary | null =>
     dog
-        ? { id: dog.id, name: dog.name, breed: dog.breed, ageLabelParts: ageOf(dog.birthDate, new Date()), coverPhotoUrl: dog.photos[0] ?? null }
+        ? { id: dog.id, name: dog.name, archived: dog.archivedAt !== null, breed: dog.breed, ageLabelParts: ageOf(dog.birthDate, new Date()), coverPhotoUrl: dog.photos[0] ?? null }
         : null;
 
 const toPuppy = (dog: MockDog): LitterPuppy => ({ id: dog.id, name: dog.name, sex: dog.sex, status: dog.status, coverPhotoUrl: dog.photos[0] ?? null });
@@ -118,7 +118,14 @@ export async function getLitterWaitlist(kennelId: string, litterId: string): Pro
         getMockStore()
             .waitlist.filter((entry) => entry.litterId === litterId)
             .sort((a, b) => a.position - b.position)
-            .map(({ id, position, leadId, name, note, createdAt }) => ({ id, position, leadId, name, note, createdAt })),
+            .map(({ id, position, leadId, note, createdAt }) => ({
+                id,
+                position,
+                leadId,
+                name: getMockStore().leads.find((lead) => lead.id === leadId)?.name ?? "",
+                note,
+                createdAt,
+            })),
     );
 }
 
@@ -130,15 +137,22 @@ export async function getLitterForEdit(kennelId: string, litterId: string): Prom
     return snapshot({ id, name, breed, status, damId, sireId, birthDate, expectedGoHomeDate, puppyCount });
 }
 
-/** Breeds plus possible parents: adult, non-archived dogs of each sex, with their breed. */
-export async function getLitterFormOptions(kennelId: string): Promise<LitterFormOptions> {
+/**
+ * Breeds plus possible parents: adult, non-archived dogs of each sex, with
+ * their breed. When editing (`litterId`), the litter's current dam and sire
+ * are always included, flagged `archived` if they are, so saving the form
+ * doesn't silently drop them.
+ */
+export async function getLitterFormOptions(kennelId: string, litterId?: string): Promise<LitterFormOptions> {
     void kennelId;
     const store = getMockStore();
+    const litter = litterId ? store.litters.find((l) => l.id === litterId) : undefined;
+    const currentParents = new Set([litter?.damId, litter?.sireId].filter(Boolean));
     const adults = store.dogs
-        .filter((dog) => dog.lifeStage === "ADULT" && dog.archivedAt === null)
+        .filter((dog) => (dog.lifeStage === "ADULT" && dog.archivedAt === null) || currentParents.has(dog.id))
         .sort((a, b) => a.name.localeCompare(b.name))
-        .map((dog) => ({ id: dog.id, name: dog.name, breed: dog.breed, sex: dog.sex }));
-    const strip = ({ id, name, breed }: (typeof adults)[number]) => ({ id, name, breed });
+        .map((dog) => ({ id: dog.id, name: dog.name, breed: dog.breed, sex: dog.sex, archived: dog.archivedAt !== null }));
+    const strip = ({ id, name, breed, archived }: (typeof adults)[number]) => ({ id, name, breed, archived });
     return snapshot({
         breeds: [...store.kennelBreeds].sort((a, b) => a.name.localeCompare(b.name)),
         females: adults.filter((dog) => dog.sex === "FEMALE").map(strip),

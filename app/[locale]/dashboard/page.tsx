@@ -14,6 +14,8 @@ import ProgressBar from "@/components/dashboard/ui/ProgressBar";
 import Greeting from "@/components/dashboard/overview/Greeting";
 import { serverDayPeriod } from "@/components/dashboard/overview/dayPeriod";
 import { calendarDaysBetween, formatRelativeTime } from "@/components/dashboard/relativeTime";
+import { leadHref } from "@/components/dashboard/hrefs";
+import { daysBetween, getViewerToday } from "@/lib/dashboard/viewerDate";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("dashboard.shell.nav");
@@ -50,6 +52,7 @@ export default async function OverviewPage() {
     const [tTime, tCommon] = await Promise.all([getTranslations("dashboard.common.time"), getTranslations("dashboard.common")]);
     const statusLabel = (status: DogStatus) => tCommon(`dogStatus.${status}`);
     const now = new Date();
+    const today = await getViewerToday();
     const firstName = kennel.ownerName.trim().split(/\s+/)[0] ?? kennel.ownerName;
 
     return (
@@ -112,9 +115,16 @@ export default async function OverviewPage() {
                         <ul className="flex flex-col gap-3">
                             {overview.upcoming.map((item) => {
                                 const due = new Date(item.dueAt);
-                                const { title, detail } = upcomingText(item, t, calendarDaysBetween(now, due));
+                                // Both are calendar days: dueAt is a date at noon UTC, today is the viewer's day.
+                                const { title, detail } = upcomingText(item, t, daysBetween(today, item.dueAt.slice(0, 10)));
+                                const href =
+                                    item.type === "LEAD_FOLLOW_UP" ? leadHref(item.params.leadId) : `/dashboard/litters?litter=${encodeURIComponent(item.params.litterId)}`;
                                 return (
-                                    <li key={item.id} className="flex items-center gap-3 rounded-xl bg-stone-50 p-3">
+                                    <li key={item.id}>
+                                        <Link
+                                            href={href}
+                                            className="flex items-center gap-3 rounded-xl bg-stone-50 p-3 transition-colors hover:bg-stone-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                                        >
                                         <time
                                             dateTime={item.dueAt}
                                             className="flex w-13 shrink-0 flex-col rounded-[10px] border border-line bg-white py-1.5 text-center"
@@ -128,13 +138,14 @@ export default async function OverviewPage() {
                                             <p className="text-sm font-medium text-stone-900">{title}</p>
                                             <p className="mt-0.5 text-xs text-stone-500">{detail}</p>
                                         </div>
+                                        </Link>
                                     </li>
                                 );
                             })}
                         </ul>
                     )}
                     <Link
-                        href="/dashboard/leads"
+                        href="/dashboard/leads?followUp=set"
                         className="mt-4 inline-block rounded text-[13px] font-semibold text-accent hover:text-accent-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                         {t("upcoming.seeAll")}
@@ -217,7 +228,7 @@ function MetricCards({ metrics, now, t, format }: { metrics: Overview["metrics"]
         },
         {
             key: "unreadMessages",
-            href: "/dashboard/messages",
+            href: "/dashboard/messages?filter=unread",
             value: metrics.unreadMessages.count,
             note: oldest === null ? t("metrics.unreadMessages.noneWaiting") : t("metrics.unreadMessages.note", { days: oldest }),
         },

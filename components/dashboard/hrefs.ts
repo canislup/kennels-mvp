@@ -1,9 +1,6 @@
-// Dashboard links that point at screens not built yet live here, so each
-// has exactly one place to update.
+// Dashboard links shared by several screens, so each has one place to update.
 
-/** "Open lead" (Litters waitlist). */
+/** A lead's page (board cards, litter waitlists, Overview follow-ups). */
 export function leadHref(leadId: string): string {
-    void leadId;
-    // TODO(step 4): return `/dashboard/leads/${leadId}` once Leads-Detail exists.
-    return "/dashboard/leads";
+    return `/dashboard/leads/${encodeURIComponent(leadId)}`;
 }

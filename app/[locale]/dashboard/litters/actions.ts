@@ -14,6 +14,7 @@ import {
     deleteLitter,
     getLitterDetail,
     getLitterFormOptions,
+    getLitterForEdit,
     linkPuppyToLitter,
     updateLitter,
     updateLitterStatus,
@@ -46,13 +47,14 @@ export async function saveLitterAction(litterId: string | null, previous: Litter
     const existing = litterId ? await getLitterDetail(kennelId, litterId) : null;
     if (litterId && !existing) return { status: "error", values, fieldErrors: {}, formError: { key: "notFound" }, submission };
 
-    const options = await getLitterFormOptions(kennelId);
+    const [options, saved] = await Promise.all([getLitterFormOptions(kennelId, litterId ?? undefined), litterId ? getLitterForEdit(kennelId, litterId) : null]);
     const validation = validateLitterInput(values, {
         breedNames: options.breeds.map((b) => b.name),
         females: options.females,
         males: options.males,
         // Linked puppies all have the litter's current breed, so changing the breed is refused while any are linked.
         linkedPuppyBreeds: existing && existing.puppies.length > 0 ? [existing.breed] : undefined,
+        current: saved ? { damId: saved.damId, sireId: saved.sireId } : undefined,
     });
     if (!validation.ok) return { status: "error", values, fieldErrors: validation.fieldErrors, submission };
 

@@ -22,8 +22,7 @@ export type MockLitter = {
 export type MockWaitlistEntry = {
     id: string;
     litterId: string;
-    leadId: string; // stable ids, reused by the Leads fixtures (Step 4)
-    name: string; // Lead name (the real query joins Lead)
+    leadId: string; // → Lead (mock/leads.ts); the name comes from the lead
     position: number;
     note: string | null;
     createdAt: string; // ISO
@@ -87,8 +86,8 @@ export function buildLitterFixtures(): MockLitter[] {
 
 export function buildWaitlistFixtures(): MockWaitlistEntry[] {
     return [
-        { id: "wl_1", litterId: "ltr_autumn", leadId: "lead-ricardo-alves", name: "Ricardo Alves", position: 1, note: "Wants a male, any colour.", createdAt: ago(0.01) },
-        { id: "wl_2", litterId: "ltr_autumn", leadId: "lead-marina-costa", name: "Marina Costa", position: 2, note: "Prefers a chocolate female. Deposit not yet paid.", createdAt: ago(2) },
-        { id: "wl_3", litterId: "ltr_autumn", leadId: "lead-camila-torres", name: "Camila Torres", position: 3, note: "Asked about Mocha.", createdAt: ago(3) },
+        { id: "wl_1", litterId: "ltr_autumn", leadId: "lead-ricardo-alves", position: 1, note: "Wants a male, any colour.", createdAt: ago(0.01) },
+        { id: "wl_2", litterId: "ltr_autumn", leadId: "lead-marina-costa", position: 2, note: "Prefers a chocolate female. Deposit not yet paid.", createdAt: ago(2) },
+        { id: "wl_3", litterId: "ltr_autumn", leadId: "lead-camila-torres", position: 3, note: "Asked about Mocha.", createdAt: ago(3) },
     ];
 }

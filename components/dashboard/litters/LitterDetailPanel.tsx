@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import type { LinkablePuppy, LitterDetail, LitterParentSummary, WaitlistEntry } from "@/lib/dashboard/types";
 import { changeLitterStatusAction, linkPuppyAction } from "@/app/[locale]/dashboard/litters/actions";
 import Button from "@/components/dashboard/ui/Button";
+import Badge from "@/components/dashboard/ui/Badge";
 import Card from "@/components/dashboard/ui/Card";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
 import StatusMenu from "@/components/dashboard/ui/StatusMenu";
@@ -231,7 +232,10 @@ function ParentCard({ role, parent, editHref, t, tDash }: { role: "dam" | "sire"
             </span>
             <span className="min-w-0">
                 {roleLabel}
-                <span className="block truncate text-[15px] font-semibold text-stone-900">{parent.name}</span>
+                <span className="flex min-w-0 items-center gap-1.5">
+                    <span className="truncate text-[15px] font-semibold text-stone-900">{parent.name}</span>
+                    {parent.archived && <Badge className="shrink-0">{t("detail.parents.archived")}</Badge>}
+                </span>
                 <span className="block text-xs text-stone-500">{age ? t("detail.parents.meta", { breed: parent.breed, age }) : parent.breed}</span>
             </span>
         </Link>

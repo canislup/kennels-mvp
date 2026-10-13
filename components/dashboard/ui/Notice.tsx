@@ -17,7 +17,7 @@ const TONES: Record<NoticeTone, { box: string; icon: typeof Info }> = {
 /**
  * Banner announced politely to screen readers. Dismissible by default; pass
  * `clearParam` to also drop that search param from the URL on dismiss
- * (e.g. `?notice=created`), so a reload doesn't bring it back.
+ * (e.g. `?notice=created`; an array drops several), so a reload doesn't bring it back.
  */
 export default function Notice({
     tone = "info",
@@ -29,7 +29,7 @@ export default function Notice({
     tone?: NoticeTone;
     children: ReactNode;
     dismissible?: boolean;
-    clearParam?: string;
+    clearParam?: string | string[];
     className?: string;
 }) {
     const t = useTranslations("dashboard.common");
@@ -42,7 +42,7 @@ export default function Notice({
         setVisible(false);
         if (clearParam) {
             const params = new URLSearchParams(window.location.search);
-            params.delete(clearParam);
+            for (const name of ([] as string[]).concat(clearParam)) params.delete(name);
             const query = params.toString();
             router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
         }
