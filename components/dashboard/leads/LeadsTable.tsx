@@ -66,7 +66,7 @@ export default async function LeadsTable({
                                         {lead.followUp ? (
                                             <span className={`rounded-full px-2.25 py-0.75 text-xs font-semibold whitespace-nowrap ${DUE_BADGE[lead.followUp.tone]}`}>{lead.followUp.label}</span>
                                         ) : (
-                                            <span className="text-stone-400">{t("table.noFollowUp")}</span>
+                                            <span className="text-stone-500">{t("table.noFollowUp")}</span>
                                         )}
                                     </td>
                                     <td className="px-3 py-3 whitespace-nowrap text-stone-500">{lead.activity}</td>

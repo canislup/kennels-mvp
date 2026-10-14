@@ -55,7 +55,7 @@ export type NotificationType = DashboardNotification["type"];
 
 // --- Overview --------------------------------------------------------------
 
-export type SetupStepKey = "kennelDetails" | "logoAndCover" | "breeds" | "firstDog" | "photos" | "verification";
+export type SetupStepKey = "kennelDetails" | "logoAndCover" | "breeds" | "firstDog" | "firstLitter" | "photos" | "verification";
 
 export type SetupStep = {
     key: SetupStepKey;
@@ -664,3 +664,47 @@ export type VerificationView = {
     /** The kennel's CBKC number on file (Kennel.cbkcRegistration), to prefill the form. */
     cbkcOnFile: string | null;
 };
+
+// --- Settings: kennel profile (Step 6b) -----------------------------------------------
+
+export type RegistrationType = "CNPJ" | "CPF";
+
+export type ContactChannel = "phone" | "email" | "website" | "instagram" | "whatsapp";
+
+/** One contact row. NEW FIELDS: Kennel.contactPhone/…, plus one `…Public Boolean` each (or a KennelContact model). */
+export type ContactSetting = { value: string; isPublic: boolean };
+
+/** A kennel breed with what's attached to it (removing it keeps the dogs and litters). */
+export type ProfileBreed = { id: string; name: string; dogCount: number; litterCount: number };
+
+/** What Settings → Kennel profile edits. Registration numbers are masked: the full number never reaches the browser. */
+export type KennelProfile = {
+    name: string;
+    slug: string;
+    city: string;
+    state: string; // two-letter Brazilian state code
+    description: string;
+    logo: { url: string; publicId: string | null } | null; // Kennel.logoUrl; NEW FIELD Kennel.logoPublicId
+    cover: { url: string; publicId: string | null } | null; // NEW FIELDS Kennel.coverUrl, Kennel.coverPublicId
+    breeds: ProfileBreed[]; // KennelBreed → Breed, 1 to 3
+    registration: {
+        type: RegistrationType | null; // null = nothing on file
+        maskedNumber: string | null; // e.g. "••.•••.•••/••••-10"
+        cbkcRegistration: string | null; // Kennel.cbkcRegistration
+        breedingSince: number | null; // NEW FIELD Kennel.breedingSince Int?
+    };
+    contact: Record<ContactChannel, ContactSetting>;
+    location: { address: string; latitude: number | null; longitude: number | null }; // NEW FIELD Kennel.address; latitude/longitude exist
+    timeZone: string; // NEW FIELD Kennel.timeZone (IANA)
+    verificationStatus: VerificationStatus;
+    /** "/kennel/<saved slug>" (locale-relative), or null without a saved slug. */
+    publicPagePath: string | null;
+};
+
+export type GeocodeResult = { lat: number; lng: number; formatted: string };
+
+export type SlugAvailability = { available: boolean; reason?: "taken" | "reserved" | "invalid" };
+
+export type ProfileStrengthKey = "identity" | "logo" | "cover" | "description" | "breeds" | "contact" | "location" | "verification";
+
+export type ProfileStrength = { percent: number; missing: { key: ProfileStrengthKey; href: string }[] };

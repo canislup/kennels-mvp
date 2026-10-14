@@ -8,6 +8,8 @@ import { computeLitterStats } from "./litters";
 import { countNewLeads, getUpcomingFollowUps } from "./leads";
 import { getUnreadSummary } from "./messages";
 import { getVerificationStatus } from "./verification";
+import { getProfileStrength } from "./kennelProfile";
+import { getViewerToday } from "./viewerDate";
 import type { ActivityItem, Overview, UpcomingItem } from "./types";
 
 /**
@@ -20,7 +22,8 @@ export async function getOverview(kennelId: string): Promise<Overview> {
     // Derived from the dogs/litters stores so Overview agrees with Dogs and Litters.
     const availablePuppies = store.dogs.filter((dog) => dog.archivedAt === null && dog.status === "AVAILABLE_PUPPY");
     const activeLitters = store.litters.filter((litter) => litter.status === "AVAILABLE" || litter.status === "RESERVED");
-    const today = new Date().toISOString().slice(0, 10);
+    // Date-only go-home dates compare with the kennel's "today", never a UTC date.
+    const today = await getViewerToday();
     const goHomes = activeLitters
         .filter((litter) => litter.expectedGoHomeDate && litter.expectedGoHomeDate >= today)
         .sort((a, b) => a.expectedGoHomeDate!.localeCompare(b.expectedGoHomeDate!));
@@ -35,12 +38,15 @@ export async function getOverview(kennelId: string): Promise<Overview> {
         };
     });
 
-    const [newLeads, followUps, unread, verificationStatus] = await Promise.all([
+    const [newLeads, followUps, unread, verificationStatus, strength] = await Promise.all([
         countNewLeads(kennelId),
         getUpcomingFollowUps(kennelId, 4),
         getUnreadSummary(kennelId),
         getVerificationStatus(kennelId),
+        getProfileStrength(kennelId),
     ]);
+    // Profile steps come from the same completeness rules as Settings → Kennel profile.
+    const missing = new Set(strength.missing.map((item) => item.key));
     const followUpItems: UpcomingItem[] = followUps.map((item) => ({
         id: `up_followup_${item.leadId}`,
         type: "LEAD_FOLLOW_UP",
@@ -57,8 +63,16 @@ export async function getOverview(kennelId: string): Promise<Overview> {
     }));
 
     return snapshot({
-        // "Request verification" is done once a request is pending or approved.
-        setupSteps: [...store.setupSteps, { key: "verification", done: verificationStatus === "PENDING" || verificationStatus === "APPROVED" }],
+        setupSteps: [
+            { key: "kennelDetails", done: !missing.has("identity") && !missing.has("description") },
+            { key: "logoAndCover", done: !missing.has("logo") && !missing.has("cover") },
+            { key: "breeds", done: !missing.has("breeds") },
+            { key: "firstDog", done: store.dogs.some((dog) => dog.archivedAt === null) },
+            { key: "firstLitter", done: store.litters.length > 0 },
+            { key: "photos", done: store.media.some((item) => item.type === "PHOTO") },
+            // "Request verification" is done once a request is pending or approved.
+            { key: "verification", done: verificationStatus === "PENDING" || verificationStatus === "APPROVED" },
+        ],
         metrics: {
             ...store.metrics,
             newLeads,

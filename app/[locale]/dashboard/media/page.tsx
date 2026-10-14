@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Link, redirect } from "@/i18n/navigation";
 import { getCurrentKennel } from "@/lib/dashboard/kennel";
 import { getMediaCounts, getMediaFilterOptions, listMedia } from "@/lib/dashboard/media";
 import EmptyState from "@/components/dashboard/ui/EmptyState";
@@ -53,6 +53,8 @@ export default async function MediaPage({ searchParams }: { searchParams: Promis
         { key: "VIDEO", param: "videos", label: t("tabs.videos"), count: counts.videos },
     ] as const;
     const lastPage = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
+    // A page past the end (old link, items removed) goes to the last page instead of looking empty.
+    if (page > lastPage) redirect({ href: hrefWith({ page: String(lastPage) }), locale: await getLocale() });
     const notice = one(raw.notice);
     const added = Math.max(1, Number.parseInt(one(raw.added) ?? "1", 10) || 1);
 

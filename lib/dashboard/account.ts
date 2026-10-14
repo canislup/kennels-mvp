@@ -8,6 +8,7 @@
 // session user (CurrentKennel.ownerId), never a value from the browser.
 import { prisma } from "@/lib/db";
 import { getMockStore } from "./mock/store";
+import { savedShellOverrides } from "./kennelProfile";
 import { validateDeletionConfirm, validatePasswordChange } from "./validation/account";
 import type { Account, PasswordChangeInput, SimpleMutationResult } from "./types";
 
@@ -47,7 +48,8 @@ export async function changePassword(ownerId: string, input: PasswordChangeInput
 export async function requestAccountDeletion(ownerId: string, kennelId: string, input: { confirmName: string }): Promise<SimpleMutationResult> {
     const kennel = await prisma.kennel.findFirst({ where: { id: kennelId, ownerId }, select: { name: true } });
     if (!kennel) return { ok: false, fieldErrors: {}, formError: { key: "notFound" } };
-    const error = validateDeletionConfirm(input.confirmName, kennel.name);
+    // TEMPORARY (mock): the name saved on Settings → Kennel profile is the one on screen.
+    const error = validateDeletionConfirm(input.confirmName, savedShellOverrides(kennelId)?.name ?? kennel.name);
     if (error) return { ok: false, fieldErrors: { confirmName: error } };
     return { ok: true };
 }

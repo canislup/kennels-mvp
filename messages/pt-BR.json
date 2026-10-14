@@ -21,8 +21,8 @@
         "media": "Mídia",
         "reviews": "Avaliações",
         "settings": "Configurações",
-        "newLeadsBadge": "{count, plural, one {# novo interessado} other {# novos interessados}}",
-        "unreadMessagesBadge": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+        "newLeadsBadge": "{count, plural, =0 {# novos interessados} one {# novo interessado} other {# novos interessados}}",
+        "unreadMessagesBadge": "{count, plural, =0 {# mensagens não lidas} one {# mensagem não lida} other {# mensagens não lidas}}"
       },
       "viewPublicPage": "Ver página pública",
       "opensInNewTab": "(abre em uma nova aba)",
@@ -68,7 +68,7 @@
       "time": {
         "justNow": "Agora mesmo",
         "yesterday": "Ontem",
-        "daysAgo": "{count, plural, one {há # dia} other {há # dias}}"
+        "daysAgo": "{count, plural, =0 {há # dias} one {há # dia} other {há # dias}}"
       },
       "dogStatus": {
         "BREEDING_STOCK": "Reprodutor",
@@ -93,16 +93,17 @@
         "ADULT": "Adulto"
       },
       "age": {
-        "weeks": "{count, plural, one {# semana} other {# semanas}}",
-        "months": "{count, plural, one {# mês} other {# meses}}",
-        "years": "{count, plural, one {# ano} other {# anos}}"
+        "weeks": "{count, plural, =0 {# semanas} one {# semana} other {# semanas}}",
+        "months": "{count, plural, =0 {# meses} one {# mês} other {# meses}}",
+        "years": "{count, plural, =0 {# anos} one {# ano} other {# anos}}"
       },
       "form": {
-        "characterCount": "{count} / {max}",
+        "characterCount": "{count, number} / {max, number}",
         "unsavedChanges": "Você tem alterações não salvas",
         "allSaved": "Tudo salvo",
         "cancel": "Cancelar",
-        "saving": "Salvando…"
+        "saving": "Salvando…",
+        "discard": "Descartar"
       },
       "errors": {
         "required": "Campo obrigatório.",
@@ -164,7 +165,28 @@
         "invalidUpload": "Um dos arquivos não foi enviado corretamente. Remova e envie de novo.",
         "verificationNotEditable": "Esta solicitação não pode ser alterada agora.",
         "verificationNotPending": "Não há solicitação em análise para cancelar.",
-        "registrationMissing": "Cadastre o CNPJ ou CPF no Perfil do canil primeiro."
+        "registrationMissing": "Cadastre o CNPJ ou CPF no Perfil do canil primeiro.",
+        "tooShort": "Use pelo menos {min} caracteres.",
+        "slugInvalid": "Use de {min} a {max} letras minúsculas, números e hífens simples (não no início nem no fim).",
+        "slugReserved": "Este endereço é reservado. Escolha outro.",
+        "slugTaken": "Outro canil já usa este endereço.",
+        "logoRequired": "Seu canil precisa de um logo. Substitua em vez de remover.",
+        "breedsRequired": "Escolha pelo menos uma raça.",
+        "tooManyBreeds": "Escolha no máximo {max} raças.",
+        "unknownBreed": "Uma das raças não existe mais. Remova e escolha de novo.",
+        "cnpjInvalid": "Este CNPJ não é válido. Confira os 14 dígitos.",
+        "cpfInvalid": "Este CPF não é válido. Confira os 11 dígitos.",
+        "cnpjRequired": "Digite o CNPJ, ou volte à opção anterior para manter o número cadastrado.",
+        "cpfRequired": "Digite o CPF, ou volte à opção anterior para manter o número cadastrado.",
+        "registrationTaken": "Outro canil já está registrado com este número.",
+        "yearRange": "Digite um ano entre {min} e {max}.",
+        "phoneDigits": "Use de 10 a 15 dígitos, com um + opcional no início.",
+        "instagramInvalid": "Digite um perfil do Instagram, como @seucanil.",
+        "publicNeedsValue": "Preencha o campo ou mude para Oculto.",
+        "coordinatesPair": "Preencha latitude e longitude, ou deixe as duas em branco.",
+        "latitudeRange": "A latitude deve ser um número entre -90 e 90.",
+        "longitudeRange": "A longitude deve ser um número entre -180 e 180.",
+        "kennelNotFound": "Não encontramos seu canil. Recarregue a página e tente de novo."
       }
     },
     "overview": {
@@ -193,6 +215,7 @@
           "logoAndCover": "Logo e capa",
           "breeds": "Raças",
           "firstDog": "Primeiro cão",
+          "firstLitter": "Primeira ninhada",
           "photos": "Fotos",
           "verification": "Pedir verificação"
         },
@@ -244,7 +267,7 @@
         },
         "litterBorn": {
           "title": "Ninhada de {damName} registrada como nascida",
-          "detail": "{count, plural, one {# filhote, agora listado como disponível} other {# filhotes, agora listados como disponíveis}}"
+          "detail": "{count, plural, =0 {# filhotes, agora listados como disponíveis} one {# filhote, agora listado como disponível} other {# filhotes, agora listados como disponíveis}}"
         }
       },
       "upcoming": {
@@ -258,7 +281,7 @@
         },
         "goHome": {
           "title": "Entrega: {litterName}",
-          "detail": "{puppies, plural, one {# filhote} other {# filhotes}}, {reserved, plural, one {# reservado} other {# reservados}}"
+          "detail": "{puppies, plural, =0 {# filhotes} one {# filhote} other {# filhotes}}, {reserved, plural, =0 {# reservados} one {# reservado} other {# reservados}}"
         }
       }
     },
@@ -295,7 +318,7 @@
         "changeStatus": "Mudar o status de {name}, atualmente {status}",
         "statusMenuLabel": "Status de {name}",
         "statusFailed": "Não foi possível mudar o status. Tente de novo.",
-        "showing": "Mostrando {shown} de {total} {total, plural, one {cão} other {cães}}",
+        "showing": "Mostrando {shown} de {total} {total, plural, =0 {cães} one {cão} other {cães}}",
         "filteredNote": "(filtrado)",
         "paginationLabel": "Páginas",
         "previous": "Anterior",
@@ -388,7 +411,7 @@
         },
         "documents": {
           "heading": "Documentos de saúde",
-          "count": "{count, plural, one {# enviado} other {# enviados}}",
+          "count": "{count, plural, =0 {# enviados} one {# enviado} other {# enviados}}",
           "description": "Envie fotos ou digitalizações dos resultados de exames. Os compradores veem como uma galeria na página pública.",
           "upload": "Enviar documento de saúde",
           "labelField": "Nome do documento",
@@ -637,8 +660,8 @@
         "deleted": "Interessado excluído."
       },
       "banner": {
-        "title": "{count, plural, one {# retorno pendente.} other {# retornos pendentes.}}",
-        "names": "{count, plural, one {{names} está esperando seu contato.} other {{names} estão esperando seu contato.}}",
+        "title": "{count, plural, =0 {# retornos pendentes.} one {# retorno pendente.} other {# retornos pendentes.}}",
+        "names": "{count, plural, =0 {{names} estão esperando seu contato.} one {{names} está esperando seu contato.} other {{names} estão esperando seu contato.}}",
         "namesMore": "{names} e mais {more} estão esperando seu contato.",
         "show": "Ver quem"
       },
@@ -685,12 +708,12 @@
       "board": {
         "moved": "{name} foi para {stage}",
         "moveFailed": "Não foi possível mover {name}. O card voltou ao lugar; tente de novo.",
-        "columnCount": "{count, plural, one {# interessado} other {# interessados}}",
+        "columnCount": "{count, plural, =0 {# interessados} one {# interessado} other {# interessados}}",
         "emptyColumn": "Ninguém aqui",
         "olderSold": "Vendas mais antigas estão na lista"
       },
       "due": {
-        "overdue": "Atrasado há {days, plural, one {# dia} other {# dias}}",
+        "overdue": "Atrasado há {days, plural, =0 {# dias} one {# dia} other {# dias}}",
         "today": "Retorno hoje",
         "tomorrow": "Retorno amanhã",
         "inDays": "Retorno em {days} dias",
@@ -709,7 +732,7 @@
         },
         "noFollowUp": "Sem data",
         "open": "Abrir",
-        "showing": "Mostrando {shown} de {total} {total, plural, one {interessado} other {interessados}}",
+        "showing": "Mostrando {shown} de {total} {total, plural, =0 {interessados} one {interessado} other {interessados}}",
         "paginationLabel": "Páginas",
         "previous": "Anterior",
         "next": "Próxima"
@@ -862,7 +885,7 @@
         "followUp": {
           "heading": "Retorno",
           "none": "Nenhum retorno marcado",
-          "overdue": "Atrasado há {days, plural, one {# dia} other {# dias}}",
+          "overdue": "Atrasado há {days, plural, =0 {# dias} one {# dia} other {# dias}}",
           "today": "Para hoje, {date}",
           "upcoming": "Para {date}",
           "markDone": "Marcar como concluído",
@@ -936,7 +959,7 @@
         "noMessages": "Nenhuma mensagem ainda",
         "sharedDog": "Compartilhou {dog}",
         "you": "Você: {text}",
-        "unreadCount": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}"
+        "unreadCount": "{count, plural, =0 {# mensagens não lidas} one {# mensagem não lida} other {# mensagens não lidas}}"
       },
       "empty": {
         "none": "As conversas começam quando um comprador entra em contato.",
@@ -996,14 +1019,14 @@
       "title": "Mídia",
       "subtitle": "As fotos e os vídeos da página pública do seu canil.",
       "cancel": "Cancelar",
-      "showing": "Mostrando {shown} de {total} {total, plural, one {foto} other {fotos}}",
+      "showing": "Mostrando {shown} de {total} {total, plural, =0 {fotos} one {foto} other {fotos}}",
       "pagination": "Páginas",
       "previous": "Anterior",
       "next": "Próxima",
       "upload": {
         "button": "Enviar fotos",
         "saving": "Salvando fotos…",
-        "saved": "{count, plural, one {# foto adicionada ao final da galeria.} other {# fotos adicionadas ao final da galeria.}}",
+        "saved": "{count, plural, =0 {# fotos adicionadas ao final da galeria.} one {# foto adicionada ao final da galeria.} other {# fotos adicionadas ao final da galeria.}}",
         "failed": "Não foi possível salvar as fotos. Tente de novo.",
         "areaTitle": "Adicionar fotos: escolha os arquivos ou arraste-os para a janela de envio",
         "areaHelp": "JPG, PNG ou WebP, até 10 MB cada, {max} por vez. Depois você pode marcar raça ou cão."
@@ -1028,7 +1051,7 @@
         "untitled": "Foto {position}",
         "moved": "{name} foi para a posição {position} de {total}.",
         "moveFailed": "Não foi possível mover a foto. Ela voltou ao lugar; tente de novo.",
-        "deleted": "{count, plural, one {# foto excluída.} other {# fotos excluídas.}}",
+        "deleted": "{count, plural, =0 {# fotos excluídas.} one {# foto excluída.} other {# fotos excluídas.}}",
         "edit": "Editar detalhes",
         "moveEarlier": "Mover para trás",
         "moveLater": "Mover para frente",
@@ -1040,13 +1063,13 @@
         "dragDisabled": "Com filtros ativos não dá para arrastar. Use o menu de cada foto para movê-la, ou limpe os filtros."
       },
       "bulk": {
-        "selected": "{count, plural, one {# selecionada} other {# selecionadas}}",
+        "selected": "{count, plural, =0 {# selecionadas} one {# selecionada} other {# selecionadas}}",
         "selectPage": "Selecionar todas desta página",
         "tag": "Marcar por raça ou cão",
         "delete": "Excluir",
         "clear": "Limpar seleção",
-        "tagged": "{count, plural, one {# foto marcada.} other {# fotos marcadas.}}",
-        "tagTitle": "Marcar {count, plural, one {# foto} other {# fotos}}",
+        "tagged": "{count, plural, =0 {# fotos marcadas.} one {# foto marcada.} other {# fotos marcadas.}}",
+        "tagTitle": "Marcar {count, plural, =0 {# fotos} one {# foto} other {# fotos}}",
         "tagDescription": "Vale para todas as fotos selecionadas. Deixe os dois vazios para o canil todo.",
         "tagSubmit": "Aplicar"
       },
@@ -1058,8 +1081,8 @@
         "caption": "Legenda"
       },
       "delete": {
-        "title": "{count, plural, one {Excluir esta foto?} other {Excluir # fotos?}}",
-        "description": "{count, plural, one {Ela some da sua página pública. Não dá para desfazer.} other {Elas somem da sua página pública. Não dá para desfazer.}}",
+        "title": "{count, plural, =0 {Excluir # fotos?} one {Excluir esta foto?} other {Excluir # fotos?}}",
+        "description": "{count, plural, =0 {Elas somem da sua página pública. Não dá para desfazer.} one {Ela some da sua página pública. Não dá para desfazer.} other {Elas somem da sua página pública. Não dá para desfazer.}}",
         "pending": "Excluindo…",
         "confirm": "Excluir",
         "videoTitle": "Excluir “{name}”?",
@@ -1100,9 +1123,9 @@
       "summary": {
         "heading": "Resumo das avaliações",
         "outOf": "{average} de 5",
-        "count": "{count, plural, one {# avaliação} other {# avaliações}}",
+        "count": "{count, plural, =0 {# avaliações} one {# avaliação} other {# avaliações}}",
         "distribution": "Avaliações por nota",
-        "bar": "{stars, plural, one {# estrela} other {# estrelas}}: {count, plural, one {# avaliação} other {# avaliações}}"
+        "bar": "{stars, plural, =0 {# estrelas} one {# estrela} other {# estrelas}}: {count, plural, =0 {# avaliações} one {# avaliação} other {# avaliações}}"
       },
       "invite": {
         "heading": "Convidar um comprador",
@@ -1126,7 +1149,7 @@
         "replied": "Respondidas",
         "reported": "Denunciadas"
       },
-      "showing": "Mostrando {shown} de {total, plural, one {# avaliação} other {# avaliações}}",
+      "showing": "Mostrando {shown} de {total, plural, =0 {# avaliações} one {# avaliação} other {# avaliações}}",
       "pagination": "Páginas",
       "previous": "Anterior",
       "next": "Próxima",
@@ -1194,8 +1217,167 @@
         "verification": "Verificação"
       },
       "profile": {
-        "title": "A aba Perfil do canil está sendo redesenhada",
-        "description": "Em breve você vai poder editar aqui o nome, o logo, a descrição e o registro do canil."
+        "save": "Salvar alterações",
+        "identity": {
+          "heading": "Identidade",
+          "sub": "O básico que os compradores veem primeiro.",
+          "name": "Nome do canil",
+          "slug": "Endereço da página",
+          "city": "Cidade",
+          "state": "Estado",
+          "statePlaceholder": "Escolha um estado",
+          "description": "Sobre o seu canil",
+          "slugStatus": {
+            "short": {
+              "checking": "Verificando…",
+              "available": "Disponível",
+              "taken": "Em uso",
+              "reserved": "Reservado",
+              "invalid": "Inválido"
+            },
+            "long": {
+              "available": "Este endereço de página está disponível.",
+              "taken": "Outro canil já usa este endereço.",
+              "reserved": "Este endereço é reservado. Escolha outro.",
+              "invalid": "Use de 3 a 40 letras minúsculas, números e hífens simples."
+            },
+            "breaksLinks": "Mudar o endereço quebra os links antigos para a sua página."
+          }
+        },
+        "images": {
+          "logo": "Logo",
+          "logoAlt": "Logo do seu canil",
+          "replace": "Substituir",
+          "uploadLogo": "Enviar logo",
+          "logoHelp": "Quadrado, recortado no envio.",
+          "cover": "Imagem de capa",
+          "coverAlt": "Sua imagem de capa",
+          "remove": "Remover",
+          "replaceAndCrop": "Substituir e recortar",
+          "uploadCover": "Enviar capa",
+          "coverHelp": "Fotos largas funcionam melhor, com pelo menos 1600 px de largura.",
+          "removeCoverTitle": "Remover a imagem de capa?",
+          "removeCoverDescription": "Sua página pública vai mostrar uma faixa simples no lugar. A mudança é salva quando você clicar em Salvar alterações.",
+          "removeCoverConfirm": "Remover capa",
+          "cancel": "Cancelar"
+        },
+        "breeds": {
+          "heading": "Raças",
+          "sub": "Escolha até {max} raças. Cada uma ganha sua própria aba na página pública.",
+          "chosenLabel": "Raças escolhidas",
+          "remove": "Remover {name}",
+          "add": "Adicionar raça",
+          "count": "{count} de {max} escolhidas",
+          "searchLabel": "Buscar raça",
+          "searchPlaceholder": "Digite para buscar",
+          "noMatches": "Nenhuma raça encontrada.",
+          "limitReached": "Você escolheu {max} raças. Remova uma para adicionar outra.",
+          "removeWarning": "Seus {dogs, plural, =0 {# cães} one {# cão} other {# cães}} e {litters, plural, =0 {# ninhadas} one {# ninhada} other {# ninhadas}} de {name} continuam, mas a aba {name} vai sumir da sua página pública."
+        },
+        "registration": {
+          "heading": "Registro",
+          "sub": "Usado para verificar seu canil. Não aparece para os compradores.",
+          "registeredAs": "Registrado como",
+          "types": {
+            "CNPJ": "Empresa (CNPJ)",
+            "CPF": "Pessoa física (CPF)"
+          },
+          "help": {
+            "onFile": "Cadastrado: {masked}. Deixe em branco para manter, ou digite um novo número.",
+            "replace": {
+              "CNPJ": "Digite o CNPJ para substituir o {saved} cadastrado.",
+              "CPF": "Digite o CPF para substituir o {saved} cadastrado."
+            },
+            "new": "Mude para CPF se você cria como pessoa física."
+          },
+          "cbkc": "Registro na CBKC",
+          "breedingSince": "Cria desde",
+          "breedingSincePlaceholder": "ex.: 2015",
+          "reviewNotice": "Salvar um novo número de registro manda seu canil de volta para a análise de verificação. (Apenas prévia: o status da sua verificação ainda não vai mudar.)"
+        },
+        "contact": {
+          "heading": "Contato e redes sociais",
+          "sub": "Escolha o que os compradores podem ver. As mensagens sempre chegam à sua caixa de entrada.",
+          "channels": {
+            "phone": "Telefone público",
+            "email": "E-mail público",
+            "website": "Site",
+            "instagram": "Instagram",
+            "whatsapp": "WhatsApp"
+          },
+          "placeholders": {
+            "phone": "+55 41 3333 4455",
+            "email": "contato@seucanil.com.br",
+            "website": "https://",
+            "instagram": "@seucanil",
+            "whatsapp": "+55 41 98877 1122"
+          },
+          "showLabel": "Mostrar {channel} na sua página",
+          "shown": "Visível na página",
+          "hidden": "Oculto"
+        },
+        "location": {
+          "heading": "Localização no mapa",
+          "sub": "Usada no filtro de distância do diretório.",
+          "address": "Endereço",
+          "lookUp": "Buscar",
+          "lookingUp": "Buscando…",
+          "found": "Encontrado: {place}. As coordenadas abaixo foram atualizadas.",
+          "notFound": "Não encontramos esse endereço. Tente cidade e estado, como “Curitiba, PR”, ou digite as coordenadas.",
+          "failed": "A busca não funcionou. Tente de novo.",
+          "readout": "Latitude {lat} · Longitude {lng}",
+          "noCoordinates": "Sem coordenadas ainda",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "coordinatesHelp": "Preenchidas pelo botão Buscar. Você também pode digitá-las."
+        },
+        "timeZone": {
+          "heading": "Fuso horário",
+          "label": "Fuso horário",
+          "help": "Usado nos lembretes de retorno e no “hoje” do seu painel.",
+          "zones": {
+            "saoPaulo": "Brasília (São Paulo, Rio, Curitiba…)",
+            "fortaleza": "Fortaleza (Nordeste)",
+            "eastern": "EUA – Leste (Nova York)",
+            "central": "EUA – Central (Chicago)",
+            "mountain": "EUA – Montanhas (Denver)",
+            "arizona": "Arizona (Phoenix)",
+            "pacific": "EUA – Pacífico (Los Angeles)",
+            "alaska": "Alasca (Anchorage)",
+            "hawaii": "Havaí (Honolulu)"
+          }
+        },
+        "preview": {
+          "heading": "Prévia ao vivo",
+          "openPage": "Abrir página",
+          "newTab": "(abre em uma nova aba)",
+          "noPage": "Salve um endereço de página primeiro.",
+          "specialists": "Especialistas em {breeds}",
+          "namePlaceholder": "Nome do seu canil",
+          "breedTabs": "Abas de raça",
+          "descriptionPlaceholder": "Sua descrição vai aparecer aqui.",
+          "note": "Prévia da sua página pública, incluindo alterações não salvas."
+        },
+        "strength": {
+          "heading": "Força do perfil",
+          "valueText": "{percent} completo",
+          "missingHeading": "Para completar seu perfil:",
+          "missing": {
+            "identity": "Complete o nome, o endereço e a localização do canil",
+            "logo": "Adicione um logo",
+            "cover": "Adicione uma imagem de capa",
+            "description": "Escreva pelo menos 150 caracteres sobre o seu canil",
+            "breeds": "Escolha suas raças",
+            "contact": "Mostre pelo menos uma forma de contato",
+            "location": "Defina sua localização no mapa"
+          },
+          "verification": {
+            "NOT_SUBMITTED": "Peça a verificação para ganhar o selo Verificado e aparecer mais alto no diretório.",
+            "PENDING": "Seu pedido de verificação está em análise.",
+            "REJECTED": "Seu pedido de verificação precisa de ajustes. Veja o que corrigir e envie de novo."
+          },
+          "goToVerification": "Ir para a verificação"
+        }
       },
       "common": {
         "saving": "Salvando…",
@@ -1334,6 +1516,20 @@
           "submitted": "Solicitação de verificação enviada.",
           "withdrawn": "Solicitação cancelada. Você pode enviar de novo quando quiser."
         }
+      }
+    },
+    "boundaries": {
+      "notFound": {
+        "title": "Não encontramos essa página",
+        "description": "Ela pode ter sido excluída, ou o link pode estar desatualizado.",
+        "back": "Voltar para a Visão geral"
+      },
+      "error": {
+        "title": "Algo deu errado",
+        "description": "Esta página não carregou. Tente de novo e, se continuar acontecendo, volte em alguns minutos.",
+        "reference": "Referência: {digest}",
+        "retry": "Tentar de novo",
+        "back": "Voltar para a Visão geral"
       }
     }
   },

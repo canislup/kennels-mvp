@@ -11,7 +11,7 @@ import { buildFixtures, type MockFixtures } from "./fixtures";
 
 // Bump when the fixture shape changes, so a running dev server rebuilds the
 // store instead of serving an old shape from globalThis.
-const STORE_VERSION = 7;
+const STORE_VERSION = 9;
 const STORE_KEY = Symbol.for(`kennelos.dashboard.mockStore.v${STORE_VERSION}`);
 
 type GlobalWithStore = typeof globalThis & { [STORE_KEY]?: MockFixtures };

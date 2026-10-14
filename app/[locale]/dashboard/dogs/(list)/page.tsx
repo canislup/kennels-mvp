@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Link, redirect } from "@/i18n/navigation";
 import { getCurrentKennel } from "@/lib/dashboard/kennel";
 import { getDogStatusCounts, getKennelBreeds, listDogs } from "@/lib/dashboard/dogs";
 import type { DogStatus, DogStatusCounts } from "@/lib/dashboard/types";
@@ -73,6 +73,8 @@ export default async function DogsPage({ searchParams }: { searchParams: Promise
     ];
 
     const lastPage = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
+    // A page past the end (old link, items removed) goes to the last page instead of looking empty.
+    if (page > lastPage) redirect({ href: hrefWith({ page: String(lastPage) }), locale: await getLocale() });
     const hasPrevious = page > 1;
     const hasNext = page < lastPage;
 

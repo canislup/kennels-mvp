@@ -98,11 +98,12 @@
         "years": "{count, plural, one {# year} other {# years}}"
       },
       "form": {
-        "characterCount": "{count} / {max}",
+        "characterCount": "{count, number} / {max, number}",
         "unsavedChanges": "You have unsaved changes",
         "allSaved": "All changes saved",
         "cancel": "Cancel",
-        "saving": "Saving…"
+        "saving": "Saving…",
+        "discard": "Discard"
       },
       "errors": {
         "required": "This field is required.",
@@ -164,7 +165,28 @@
         "invalidUpload": "One of the files didn't upload correctly. Remove it and upload it again.",
         "verificationNotEditable": "This request can't be changed right now.",
         "verificationNotPending": "There's no pending request to withdraw.",
-        "registrationMissing": "Add your CNPJ or CPF in Kennel profile first."
+        "registrationMissing": "Add your CNPJ or CPF in Kennel profile first.",
+        "tooShort": "Use at least {min} characters.",
+        "slugInvalid": "Use {min} to {max} lowercase letters, numbers and single hyphens (not at the start or end).",
+        "slugReserved": "This address is reserved. Choose another one.",
+        "slugTaken": "Another kennel already uses this address.",
+        "logoRequired": "Your kennel needs a logo. Replace it instead of removing it.",
+        "breedsRequired": "Choose at least one breed.",
+        "tooManyBreeds": "Choose at most {max} breeds.",
+        "unknownBreed": "One of the breeds no longer exists. Remove it and choose again.",
+        "cnpjInvalid": "This CNPJ isn't valid. Check the 14 digits.",
+        "cpfInvalid": "This CPF isn't valid. Check the 11 digits.",
+        "cnpjRequired": "Enter the CNPJ, or switch back to keep the number on file.",
+        "cpfRequired": "Enter the CPF, or switch back to keep the number on file.",
+        "registrationTaken": "Another kennel is already registered with this number.",
+        "yearRange": "Enter a year from {min} to {max}.",
+        "phoneDigits": "Use 10 to 15 digits, with an optional + at the start.",
+        "instagramInvalid": "Enter an Instagram handle like @yourkennel.",
+        "publicNeedsValue": "Add a value, or switch this to Hidden.",
+        "coordinatesPair": "Enter both latitude and longitude, or leave both empty.",
+        "latitudeRange": "Latitude must be a number from -90 to 90.",
+        "longitudeRange": "Longitude must be a number from -180 to 180.",
+        "kennelNotFound": "We couldn't find your kennel. Reload the page and try again."
       }
     },
     "overview": {
@@ -193,6 +215,7 @@
           "logoAndCover": "Logo and cover",
           "breeds": "Breeds",
           "firstDog": "First dog",
+          "firstLitter": "First litter",
           "photos": "Photos",
           "verification": "Request verification"
         },
@@ -1194,8 +1217,167 @@
         "verification": "Verification"
       },
       "profile": {
-        "title": "The Kennel profile tab is being redesigned",
-        "description": "Editing your kennel's name, logo, description and registration will be back here soon."
+        "save": "Save changes",
+        "identity": {
+          "heading": "Identity",
+          "sub": "The basics buyers see first.",
+          "name": "Kennel name",
+          "slug": "Page address",
+          "city": "City",
+          "state": "State",
+          "statePlaceholder": "Choose a state",
+          "description": "About your kennel",
+          "slugStatus": {
+            "short": {
+              "checking": "Checking…",
+              "available": "Available",
+              "taken": "Taken",
+              "reserved": "Reserved",
+              "invalid": "Not valid"
+            },
+            "long": {
+              "available": "This page address is available.",
+              "taken": "Another kennel already uses this address.",
+              "reserved": "This address is reserved. Choose another one.",
+              "invalid": "Use 3 to 40 lowercase letters, numbers and single hyphens."
+            },
+            "breaksLinks": "Changing this breaks old links to your page."
+          }
+        },
+        "images": {
+          "logo": "Logo",
+          "logoAlt": "Your kennel logo",
+          "replace": "Replace",
+          "uploadLogo": "Upload logo",
+          "logoHelp": "Square, cropped when you upload.",
+          "cover": "Cover image",
+          "coverAlt": "Your cover image",
+          "remove": "Remove",
+          "replaceAndCrop": "Replace and crop",
+          "uploadCover": "Upload a cover",
+          "coverHelp": "Wide photos work best, at least 1600 px across.",
+          "removeCoverTitle": "Remove the cover image?",
+          "removeCoverDescription": "Your public page will show a plain banner instead. The change is saved when you click Save changes.",
+          "removeCoverConfirm": "Remove cover",
+          "cancel": "Cancel"
+        },
+        "breeds": {
+          "heading": "Breeds",
+          "sub": "Pick up to {max} breeds. Each one gets its own tab on your public page.",
+          "chosenLabel": "Chosen breeds",
+          "remove": "Remove {name}",
+          "add": "Add a breed",
+          "count": "{count} of {max} chosen",
+          "searchLabel": "Find a breed",
+          "searchPlaceholder": "Type to search",
+          "noMatches": "No breed matches that.",
+          "limitReached": "You've chosen {max} breeds. Remove one to add another.",
+          "removeWarning": "Your {dogs, plural, one {# dog} other {# dogs}} and {litters, plural, one {# litter} other {# litters}} of {name} stay, but the {name} tab will disappear from your public page."
+        },
+        "registration": {
+          "heading": "Registration",
+          "sub": "Used to verify your kennel. Not shown to buyers.",
+          "registeredAs": "Registered as",
+          "types": {
+            "CNPJ": "Company (CNPJ)",
+            "CPF": "Individual (CPF)"
+          },
+          "help": {
+            "onFile": "On file: {masked}. Leave this empty to keep it, or type a new number.",
+            "replace": {
+              "CNPJ": "Type the CNPJ to replace the {saved} on file.",
+              "CPF": "Type the CPF to replace the {saved} on file."
+            },
+            "new": "Switch to CPF if you breed as an individual."
+          },
+          "cbkc": "CBKC registration",
+          "breedingSince": "Breeding since",
+          "breedingSincePlaceholder": "e.g. 2015",
+          "reviewNotice": "Saving a new registration number sends your kennel back to verification review. (Preview only: your verification status won't change yet.)"
+        },
+        "contact": {
+          "heading": "Contact and social",
+          "sub": "Choose what buyers can see. Messages always reach your inbox.",
+          "channels": {
+            "phone": "Public phone",
+            "email": "Public email",
+            "website": "Website",
+            "instagram": "Instagram",
+            "whatsapp": "WhatsApp"
+          },
+          "placeholders": {
+            "phone": "+55 41 3333 4455",
+            "email": "contact@yourkennel.com",
+            "website": "https://",
+            "instagram": "@yourkennel",
+            "whatsapp": "+55 41 98877 1122"
+          },
+          "showLabel": "Show {channel} on your page",
+          "shown": "Shown on your page",
+          "hidden": "Hidden"
+        },
+        "location": {
+          "heading": "Map location",
+          "sub": "Powers the distance filter in the directory.",
+          "address": "Address",
+          "lookUp": "Look up",
+          "lookingUp": "Looking up…",
+          "found": "Found {place}. The coordinates below were updated.",
+          "notFound": "We couldn't find that address. Try a city and state, like “Curitiba, PR”, or type the coordinates.",
+          "failed": "The lookup didn't work. Please try again.",
+          "readout": "Latitude {lat} · Longitude {lng}",
+          "noCoordinates": "No coordinates yet",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "coordinatesHelp": "Filled in by Look up. You can also type them yourself."
+        },
+        "timeZone": {
+          "heading": "Time zone",
+          "label": "Time zone",
+          "help": "Used for follow-up reminders and “today” in your dashboard.",
+          "zones": {
+            "saoPaulo": "Brasília (São Paulo, Rio, Curitiba…)",
+            "fortaleza": "Fortaleza (Northeast Brazil)",
+            "eastern": "US Eastern (New York)",
+            "central": "US Central (Chicago)",
+            "mountain": "US Mountain (Denver)",
+            "arizona": "Arizona (Phoenix)",
+            "pacific": "US Pacific (Los Angeles)",
+            "alaska": "Alaska (Anchorage)",
+            "hawaii": "Hawaii (Honolulu)"
+          }
+        },
+        "preview": {
+          "heading": "Live preview",
+          "openPage": "Open page",
+          "newTab": "(opens in a new tab)",
+          "noPage": "Save a page address first.",
+          "specialists": "{breeds} specialists",
+          "namePlaceholder": "Your kennel name",
+          "breedTabs": "Breed tabs",
+          "descriptionPlaceholder": "Your description will show here.",
+          "note": "Preview of your public page, including unsaved changes."
+        },
+        "strength": {
+          "heading": "Profile strength",
+          "valueText": "{percent} complete",
+          "missingHeading": "To finish your profile:",
+          "missing": {
+            "identity": "Complete your kennel's name, address and location",
+            "logo": "Add a logo",
+            "cover": "Add a cover image",
+            "description": "Write at least 150 characters about your kennel",
+            "breeds": "Choose your breeds",
+            "contact": "Show at least one way to contact you",
+            "location": "Set your map location"
+          },
+          "verification": {
+            "NOT_SUBMITTED": "Request verification to earn the Verified badge and rank higher in the directory.",
+            "PENDING": "Your verification request is being reviewed.",
+            "REJECTED": "Your verification request needs changes. Check what to fix and send it again."
+          },
+          "goToVerification": "Go to verification"
+        }
       },
       "common": {
         "saving": "Saving…",
@@ -1334,6 +1516,20 @@
           "submitted": "Verification request submitted.",
           "withdrawn": "Request withdrawn. You can submit again at any time."
         }
+      }
+    },
+    "boundaries": {
+      "notFound": {
+        "title": "We couldn't find that page",
+        "description": "It may have been deleted, or the link may be out of date.",
+        "back": "Back to Overview"
+      },
+      "error": {
+        "title": "Something went wrong",
+        "description": "This page didn't load. Try again, and if it keeps happening, come back in a few minutes.",
+        "reference": "Reference: {digest}",
+        "retry": "Try again",
+        "back": "Back to Overview"
       }
     }
   },

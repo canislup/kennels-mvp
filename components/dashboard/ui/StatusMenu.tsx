@@ -75,6 +75,8 @@ export default function StatusMenu({
     const [focusIndex, setFocusIndex] = useState(0);
     const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
     const [failed, setFailed] = useState(false);
+    // After a successful change through `action`: the new status, for screen readers (onSelect parents announce their own).
+    const [announcement, setAnnouncement] = useState("");
     const [pending, startTransition] = useTransition();
     const [shownStatus, setOptimisticStatus] = useOptimistic(value);
     const values = options.map((option) => option.value);
@@ -142,6 +144,7 @@ export default function StatusMenu({
             setOptimisticStatus(next);
             const result = await action(next);
             if (!result.ok) setFailed(true);
+            else setAnnouncement(triggerLabels[next] ?? "");
             router.refresh();
         });
     }
@@ -199,6 +202,9 @@ export default function StatusMenu({
                     </>
                 )}
             </button>
+            <span className="sr-only" role="status" aria-live="polite">
+                {announcement}
+            </span>
             {failed && (
                 <p role="alert" className="mt-1 text-xs font-medium text-status-red">
                     {failedMessage}

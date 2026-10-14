@@ -20,7 +20,8 @@ export default async function SettingsLayout({ children }: { children: ReactNode
         <>
             <PageHeader title={t("title")} subtitle={t("subtitle")} />
             <SettingsTabs tabs={tabs} label={t("tabs.label")} />
-            <div className="max-w-215">{children}</div>
+            {/* Kennel profile is two columns: its page marks itself data-wide to lift the limit. */}
+            <div className="max-w-215 has-[[data-wide]]:max-w-none">{children}</div>
         </>
     );
 }

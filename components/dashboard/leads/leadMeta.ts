@@ -37,7 +37,7 @@ export const STAGE_PILL: Record<LeadStage, string> = {
     FOLLOW_UP: "bg-status-amber-bg text-status-amber",
     RESERVED: "bg-status-pink-bg text-status-pink",
     SOLD: "bg-stone-200 text-stone-600",
-    LOST: "bg-stone-100 text-stone-500",
+    LOST: "bg-stone-100 text-stone-600",
 };
 
 /** URL values (`?source=public-form`) <-> domain values. */

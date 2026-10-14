@@ -189,7 +189,7 @@ export default function PhotoGrid({ items, totalPhotos, canDrag, options }: { it
                                 </div>
                                 <figcaption className="px-0.5 pt-2">
                                     <div className="flex items-start justify-between gap-2">
-                                        <span className={`min-w-0 text-[13px] font-medium ${item.caption ? "text-stone-900" : "text-stone-400"}`}>{label(item)}</span>
+                                        <span className={`min-w-0 text-[13px] font-medium ${item.caption ? "text-stone-900" : "text-stone-500"}`}>{label(item)}</span>
                                         <StatusMenu
                                             variant="icon"
                                             kind="actions"

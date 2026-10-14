@@ -26,6 +26,7 @@ Pages and components never import from `mock/`, so swapping a body needs no UI c
 - **Output:** `{ id, ownerId, name, slug, city, state, logoUrl, ownerName, ownerInitials }`, or `null` when there's no session or the owner hasn't created a kennel yet. `ownerId` (Step 6a) is what the account-level functions take.
 - **Prisma:** `Kennel` (`id`, `ownerId`, `name`, `slug`, `city`, `state`, `logoUrl`) + `Owner.fullName`. No schema change.
 - **TEMPORARY mock part (Step 6a):** `ownerName` takes the name saved on Settings → Account from the mock store (`accountOverrides`). Delete those lines once `updateAccount` writes `Owner.fullName`.
+- **TEMPORARY mock part (Step 6b):** `name`, `slug`, `city`, `state` and `logoUrl` take the values saved on Settings → Kennel profile (`savedShellOverrides`). Delete those lines once the profile writes reach Prisma.
 - **Notes:** `ownerInitials` is derived from the first and last words of `fullName`. Wrapped in React `cache()`, so the layout and page share one query per request.
 
 ### `getNavCounts(kennelId): Promise<NavCounts>`: MOCK, read
@@ -57,15 +58,16 @@ Pages and components never import from `mock/`, so swapping a body needs no UI c
 
 Returns four independent parts. Each can become its own query; `Promise.all` them.
 
-**`setupSteps: SetupStep[]`.** Six `{ key, done }` items, always in this order. The page computes the percentage and hides the card when all are done.
+**`setupSteps: SetupStep[]`.** Seven `{ key, done }` items, always in this order, derived from real state (Step 7a; no stored flags). The page computes the percentage, links each unfinished step to where it's done, and hides the card when all are done.
 
-| key | Suggested `done` rule |
+| key | `done` rule |
 | --- | --- |
-| `kennelDetails` | `Kennel.description` is non-empty and `city`/`state` are set |
-| `logoAndCover` | `Kennel.logoUrl` is set, plus a cover photo (no cover field exists yet: maybe the first kennel-level `Media` photo, or a new `Kennel.coverUrl`) |
+| `kennelDetails` | profile strength has neither `identity` nor `description` missing (name, slug, city, state set; description ≥ 150 characters) |
+| `logoAndCover` | `Kennel.logoUrl` and the new `Kennel.coverUrl` are both set |
 | `breeds` | the kennel has ≥ 1 `KennelBreed` |
-| `firstDog` | the kennel has ≥ 1 `Dog` |
-| `photos` | the kennel has ≥ N `Media` rows of type `PHOTO` (pick N) |
+| `firstDog` | the kennel has ≥ 1 non-archived `Dog` |
+| `firstLitter` | the kennel has ≥ 1 `Litter` |
+| `photos` | the kennel has ≥ 1 `Media` row of type `PHOTO` |
 | `verification` | the kennel's `VerificationRequest.status` is `PENDING` or `APPROVED` (Step 6a, derived in `getOverview` from `getVerificationStatus`). Keep `Kennel.isVerified` in sync when a request is approved (it drives the public badge) |
 
 **`metrics: OverviewMetrics`**
@@ -327,7 +329,7 @@ Names are snapshotted into `params`, so the history stays right after a dog or l
 `followUpAt` is a calendar day. "Due" means `followUpAt <= today`. Compare date-only values with date-only values only (in SQL: `"followUpAt" <= $today::date`), never with `now()` in UTC.
 
 - **Real backend: today comes from a new `Kennel.timeZone` field** (NEW FIELD, an IANA name such as `America/Sao_Paulo` or `America/Denver`, set during kennel setup). Compute it on the server as `today = (now() AT TIME ZONE kennel.timeZone)::date`. Background work such as follow-up reminders and digest emails has no browser, so it can't depend on a cookie.
-- The mock uses `getViewerToday()` (`lib/dashboard/viewerDate.ts`): the `kennelos_tz` cookie the Overview greeting saves, falling back to `America/Sao_Paulo`. Replace its body with the kennel's zone once `Kennel.timeZone` exists.
+- `getViewerToday()` / `getViewerTimeZone()` (`lib/dashboard/viewerDate.ts`, Step 7a) already use the kennel's zone from `getKennelTimeZone(kennelId)` (Settings → Kennel profile), falling back to the `kennelos_tz` cookie the Overview greeting saves, then `America/Sao_Paulo`. **The server must do the same:** every "today", "overdue" and date-only comparison (follow-ups, go-home dates, reminders, digests) uses `Kennel.timeZone`, never the server's zone or a UTC date.
 
 ### Reads
 
@@ -556,7 +558,7 @@ model VerificationRequest {       // NEW MODEL (one current request per kennel)
 }
 ```
 
-How the kennel is registered: `Kennel.cnpj` exists; **a CPF is a NEW FIELD** (`Kennel.cpf String? @unique`, or a `registrationType` + `registrationNumber` pair). Both are set on the Kennel profile tab (Step 6b).
+How the kennel is registered: `Kennel.cnpj` exists; **a CPF is a NEW FIELD** (`Kennel.cpf String? @unique`, or a `registrationType` + `registrationNumber` pair). Both are set on the Kennel profile tab (see Kennel profile). The mock reads them from the real Kennel row until the profile tab saves new ones (`readRegistration` in `kennelProfile.ts`, shared by both tabs).
 
 | Function | Output / writes | Notes |
 | --- | --- | --- |
@@ -568,6 +570,63 @@ How the kennel is registered: `Kennel.cnpj` exists; **a CPF is a NEW FIELD** (`K
 Approving or rejecting (setting `decidedAt`, `reviewerNote`, and `Kennel.isVerified`) is an admin/moderation task, out of scope.
 
 **DEV-ONLY testing aid — delete when the real function is written.** In development builds only (`NODE_ENV !== "production"`), the Verification page passes `?state=none|pending|rejected|approved` and `?registration=cnpj|cpf|none` to `getVerification`, which **puts the mock store in that state** (so the screen's actions work from it). Production builds ignore both params. The code is marked `DEV-ONLY TESTING AID` in `verification.ts` and in the page.
+
+---
+
+## Kennel profile (`kennelProfile.ts`)
+
+**Partly real today.** The first read builds the profile from the real `Kennel` row, its `KennelBreed` rows and the owner's email/phone; the slug check reads real kennels; breed options come from the real `Breed` table and the dog/litter counts from real `Dog` / `Litter` rows. **Saved changes live in the mock store** (`kennelProfiles[kennelId]`, `registration`) and nothing is written to the database. `getCurrentKennel()` applies the saved name, slug, city, state and logo (temporary, so the sidebar updates), and `requestAccountDeletion` compares against the saved name.
+
+**Security (all mutations):**
+
+- `kennelId` comes **only from the verified session** (`getCurrentKennel()` → `verifyKennelSession()`), never from the form or a URL.
+- **Whitelist the fields.** `parseKennelProfile` reads named fields into an explicit typed object; never spread the request body into a Prisma `update`.
+- **Re-check slug uniqueness at write time** and rely on the existing `@unique` index on `Kennel.slug`: catch Prisma `P2002` on `slug` and return `fieldErrors.slug = slugTaken`. The client's live check is only a hint. Same for `cnpj` (`@unique`, exists) and the new `cpf` (`registrationTaken`).
+- A new logo/cover URL must be a `https://res.cloudinary.com/` upload (the saved URL may stay as it is).
+
+### Field mapping (form → Prisma)
+
+| Form field | Prisma | Rule |
+| --- | --- | --- |
+| `name` | `Kennel.name` | 2–80 |
+| `slug` | `Kennel.slug` (`@unique`) | 3–40, `[a-z0-9]` and single hyphens, no leading/trailing hyphen; not reserved (`dashboard`, `admin`, `api`, `login`, `signup`, `kennel`, `kennels`, `settings`); not used by another kennel |
+| `city`, `state` | `Kennel.city`, `Kennel.state` | city required (≤ 80); state one of the 27 Brazilian UF codes. **Also update `Kennel.location`** (`"City, ST"`, the public card's display string) |
+| `description` | `Kennel.description` | ≤ 1000 |
+| `logoUrl` / `logoPublicId` | `Kennel.logoUrl`, **NEW FIELD** `Kennel.logoPublicId String?` | square, cropped in the widget. A saved logo can be replaced, not removed (`logoRequired`) |
+| `coverUrl` / `coverPublicId` | **NEW FIELDS** `Kennel.coverUrl String?`, `Kennel.coverPublicId String?` | wide (3:1 crop); removable after a confirmation |
+| `breedIds[]` | `KennelBreed` rows | 1–3 ids of existing `Breed` rows |
+| `registrationType` + `registrationNumber` | `Kennel.cnpj` (exists) / **NEW FIELD** `Kennel.cpf String? @unique` (or `registrationType` + `registrationNumber`, as Step 6a noted) | digits only; CNPJ 14 digits with both check digits, CPF 11 with both (hand-written validators in `validation/kennelProfile.ts`). Empty number = keep what's on file |
+| `cbkcRegistration` | `Kennel.cbkcRegistration` | ≤ 40 |
+| `breedingSince` | **NEW FIELD** `Kennel.breedingSince Int?` | 1950–current year |
+| `phone`, `email`, `website`, `instagram`, `whatsapp` + `…Public` | **NEW FIELDS** one value + one `Boolean` each (`contactPhone`/`contactPhonePublic`, …), or a `KennelContact` model (`kennelId`, `channel` enum, `value`, `isPublic`, `@@unique([kennelId, channel])`) | phone/WhatsApp: 10–15 digits with an optional `+` (spaces, dashes, dots and parentheses allowed); email well-formed (stored lower-case); website http(s); Instagram handle (stored without `@`). **A row can be public only with a value** (`publicNeedsValue`). The public page shows only public rows; messages always go to the inbox |
+| `address` | **NEW FIELD** `Kennel.address String?` | ≤ 200 |
+| `latitude`, `longitude` | `Kennel.latitude`, `Kennel.longitude` (exist) | both or neither; −90..90 / −180..180 (accepts a comma decimal) |
+| `timeZone` | **NEW FIELD** `Kennel.timeZone String @default("America/Sao_Paulo")` | one of: `America/Sao_Paulo`, `America/Fortaleza`, `America/New_York`, `America/Chicago`, `America/Denver`, `America/Phoenix`, `America/Los_Angeles`, `America/Anchorage`, `Pacific/Honolulu` |
+
+### Functions
+
+| Function | Output / writes | Notes |
+| --- | --- | --- |
+| `getKennelProfile(kennelId)` | `KennelProfile` (or null) | identity, logo/cover (`{ url, publicId }`), breeds with `dogCount` / `litterCount` (matched with `isSameBreed`, since `Dog.breed` is free text), registration (**`maskedNumber` only**), contact, location, `timeZone`, `verificationStatus`, `publicPagePath` |
+| `listBreedOptions()` | `{ id, name }[]` | REAL: every `Breed` row, by name |
+| `getKennelTimeZone(kennelId)` | `string \| null` | `Kennel.timeZone`; null when none is set. Read by `getViewerToday()` |
+| `checkSlugAvailability(kennelId, slug)` | `{ available, reason?: "taken" \| "reserved" \| "invalid" }` | format + reserved list + other kennels. Called by a Server Action from the client 400 ms after typing stops |
+| `saveKennelProfile(kennelId, input)` | all sections (rows below) | **the only mutation; the form's action calls it.** (Step 7a removed the per-section `updateKennel…` functions: no screen used them. Split it again if a screen ever saves one section.) Every database check first (slug, breeds exist, registration number not used elsewhere), then every write. **Real version: one `prisma.$transaction`**, so a failed save writes nothing |
+| ↳ identity section | name, slug, city, state, description, timeZone | re-checks the slug |
+| ↳ images section | URLs + publicIds | **the real version deletes the replaced/removed Cloudinary assets** (Admin API with the server secret, by `publicId`), after the transaction commits, or through a queue. The mock deletes nothing |
+| ↳ breeds section | `KennelBreed` | **in one transaction:** `deleteMany` the kennel's rows not in the list, `createMany` the new ones (`skipDuplicates`). Removing a breed keeps its dogs and litters (they're free text); its public tab disappears. Stop dual-writing `Kennel.primaryBreeds` (deprecated) or write it in the same transaction |
+| ↳ registration section (`{ type, number, cbkcRegistration, breedingSince }`) | `cnpj` / `cpf`, `cbkcRegistration`, `breedingSince` | `number: null` keeps the stored number. Saving a number of the other type clears the old one. **Real backend: a new number while verification is `PENDING` or `APPROVED` sets the request back to review** (`PENDING`, clear `decidedAt`, `Kennel.isVerified = false` until re-approved). The mock never changes the status; the UI says so |
+| ↳ contact section | contact rows | |
+| ↳ location section (`{ address, latitude, longitude }`) | `address`, `latitude`, `longitude` | |
+| `lookupAddress(address)` | `{ lat, lng, formatted } \| null` | **MOCK ONLY, no network call:** a table of Brazilian city centers, then a state code (`…, PR`) → that state's capital, else null. **Real version:** call a geocoding provider **server-side** (key in a server env var, rate-limited), and **round the result to about 3 decimals (≈ 100 m) before storing**, for the breeder's privacy |
+| `getProfileStrength(kennelId)` | `{ percent, missing: { key, href }[] }` | from **saved** data. Weights (sum 100): identity 10, logo 15, cover 10, description ≥ 150 characters 15, ≥ 1 breed 10, ≥ 1 public contact 10, coordinates 10, verification 20 (`APPROVED`; `PENDING` earns 10). Verification is the card's separate nudge, not a `missing` item |
+| `getKennelPublicPreview(values)` (`kennelPreview.ts`) | preview data | pure, runs on the client from the unsaved form |
+
+**Registration masking rule.** The full CNPJ/CPF never reaches the browser on this tab: `getKennelProfile` returns `maskedNumber` (`••.•••.•••/••••-10`, `•••.•••.•••-09`), the field starts empty with the mask as placeholder, and the action never echoes a typed number after a successful save. (Verification still shows a CNPJ in full, per Step 6a.)
+
+**Slug changes and old links.** Nothing redirects old slugs yet; the form warns "Changing this breaks old links to your page." **Recommended:** a `KennelSlugHistory` model (`slug @unique`, `kennelId`, `createdAt`) written in the same transaction when the slug changes, and `/kennel/[slug]` doing a permanent redirect (308) from a historical slug to the current one. A historical slug should stay unavailable to other kennels (check it in `checkSlugAvailability`).
+
+**Time zone.** `Kennel.timeZone` is what the server uses for "today" in follow-ups and reminders (Leads' "Today", overdue checks, reminder emails). `getViewerToday()` already reads it through `getKennelTimeZone(kennelId)` (mock: the saved profile's zone, or null), with the cookie and the default as fallbacks.
 
 ---
 
@@ -583,3 +642,4 @@ None are made in this step. Collected here for planning:
 - Step 5: `Message.sharedDogId String?` (→ `Dog`, `onDelete: SetNull`); `Media.caption String?`, `Media.position Int` (also Step 2), enum `VideoProvider` + `Media.provider VideoProvider?`, `Media.thumbnailUrl String?`, possibly `Media.publicId String?` (Cloudinary deletion) and `Media.width/height Int?`. Optional `auto` key in `STAGE_CHANGED` params (JSON, no migration).
 - Step 6a: models `Review` (with reply + report columns, or a `ReviewReply` model), `ReviewInvite`, `NotificationPreference`, `VerificationRequest`; enums `ReviewReportReason`, `NotificationPreferenceType`, `VerificationStatus`; `Owner.locale String?`; `Kennel.cpf String? @unique` (or a registration type + number); recommended aggregates `Kennel.ratingAverage Float`, `Kennel.reviewCount Int`; for real deletion possibly `deletionRequestedAt` (grace period) and an asset-deletion queue. Replaces the earlier `Kennel.verificationRequestedAt` idea.
 - Step 3: `Dog.registrationNumber String?`; new model `WaitlistEntry` (`litterId` → `Litter` with `onDelete: Cascade`, `leadId` → `Lead`, `position`, `note`, `createdAt`). Not new: `Litter.name`, `Litter.bornAt` (exist). Consider making `Litter.name` required.
+- Step 6b: `Kennel.logoPublicId String?`, `Kennel.coverUrl String?`, `Kennel.coverPublicId String?`, `Kennel.breedingSince Int?`, `Kennel.address String?`, `Kennel.timeZone String @default("America/Sao_Paulo")` (same field as Step 4b), `Kennel.cpf String? @unique` (or registration type + number, as in Step 6a), contact fields (five values + five `…Public Boolean`, or a `KennelContact` model with a `ContactChannel` enum), recommended `KennelSlugHistory` (old-slug redirects). Keep `Kennel.location` in sync with city/state. Replaces the earlier "possibly `Kennel.coverUrl`".

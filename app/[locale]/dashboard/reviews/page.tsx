@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { BadgeCheck, Flag, MessageSquareQuote } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getCurrentKennel } from "@/lib/dashboard/kennel";
 import { getReviewSummary, listReviews, REVIEWS_PAGE_SIZE } from "@/lib/dashboard/reviews";
 import { initialsOf } from "@/lib/dashboard/messages";
@@ -55,6 +55,8 @@ export default async function ReviewsPage({ searchParams }: { searchParams: Prom
         const query = params.toString();
         return `/dashboard/reviews${query ? `?${query}` : ""}`;
     };
+    // A page past the end (old link, items removed) goes to the last page instead of looking empty.
+    if (page > lastPage) redirect({ href: hrefFor({ page: lastPage }), locale: await getLocale() });
     const averageText = format.number(summary.average, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
     return (

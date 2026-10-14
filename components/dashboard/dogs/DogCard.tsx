@@ -25,7 +25,7 @@ export default async function DogCard({ dog, now }: { dog: DogListItem; now: Dat
             </div>
             <div className="flex flex-1 flex-col p-4">
                 <div className="mb-1 flex items-center justify-between gap-2">
-                    <h3 className={`min-w-0 truncate font-display text-[19px] font-bold ${dog.archived ? "text-stone-500" : "text-stone-900"}`}>{dog.name}</h3>
+                    <h2 className={`min-w-0 truncate font-display text-[19px] font-bold ${dog.archived ? "text-stone-500" : "text-stone-900"}`}>{dog.name}</h2>
                     <div className="flex shrink-0 gap-1.5">
                         {dog.archived && <Badge className="px-2.5">{t("dogs.list.archivedBadge")}</Badge>}
                         <Badge tone={dog.sex === "MALE" ? "blue" : "pink"} className="px-2.5">

@@ -11,7 +11,7 @@ import { buildConversationFixtures } from "./conversations";
 import { buildMediaFixtures } from "./media";
 import { buildReviewFixtures } from "./reviews";
 import { buildSettingsFixtures } from "./settings";
-import type { ActivityItem, DashboardNotification, NavCounts, OverviewMetrics, SetupStep, UpcomingItem } from "../types";
+import type { ActivityItem, DashboardNotification, NavCounts, OverviewMetrics, UpcomingItem } from "../types";
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -41,15 +41,6 @@ export function buildFixtures() {
         { id: "ntf_3", type: "NEW_REVIEW", params: { reviewerName: newestReview.reviewerName, rating: newestReview.rating }, createdAt: newestReview.createdAt, read: false },
         { id: "ntf_4", type: "FOLLOW_UP_DUE", params: { leadName: "Ricardo Alves" }, createdAt: ago(5 * HOUR), read: false },
         { id: "ntf_5", type: "VERIFICATION_REMINDER", params: {}, createdAt: ago(2 * DAY), read: true },
-    ];
-
-    const setupSteps: SetupStep[] = [
-        { key: "kennelDetails", done: true },
-        { key: "logoAndCover", done: true },
-        { key: "breeds", done: true },
-        { key: "firstDog", done: true },
-        { key: "photos", done: true },
-        // "verification" is derived from the verification request in getOverview().
     ];
 
     const metrics: OverviewMetrics = {
@@ -86,7 +77,6 @@ export function buildFixtures() {
     return {
         navCounts,
         notifications,
-        setupSteps,
         metrics,
         recentActivity,
         upcoming,

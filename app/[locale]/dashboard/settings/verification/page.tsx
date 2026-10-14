@@ -28,8 +28,8 @@ const STEP_LOOK: Record<StepState, { box: string; title: string; icon: LucideIco
     todo: { box: "border-line", title: "text-stone-500", icon: Circle },
 };
 
-/** Changing the CNPJ/CPF happens on the Kennel profile tab (Step 6b); until then it's the placeholder at /settings. */
-const KENNEL_PROFILE_HREF = "/dashboard/settings";
+/** Changing the CNPJ/CPF happens on the Kennel profile tab, in its Registration section. */
+const KENNEL_PROFILE_HREF = "/dashboard/settings#registration";
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("dashboard.settings");

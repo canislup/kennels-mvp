@@ -159,8 +159,16 @@ export default async function OverviewPage() {
 type T = Awaited<ReturnType<typeof getTranslations<"dashboard.overview">>>;
 type Format = Awaited<ReturnType<typeof getFormatter>>;
 
-/** Checklist steps that have a screen to finish them on (the others land with later steps). */
-const STEP_HREFS: Partial<Record<Overview["setupSteps"][number]["key"], string>> = { verification: "/dashboard/settings/verification" };
+/** Where each unfinished step is completed. */
+const STEP_HREFS: Record<Overview["setupSteps"][number]["key"], string> = {
+    kennelDetails: "/dashboard/settings#profile-identity",
+    logoAndCover: "/dashboard/settings#profile-logo",
+    breeds: "/dashboard/settings#profile-breeds",
+    firstDog: "/dashboard/dogs/new",
+    firstLitter: "/dashboard/litters/new",
+    photos: "/dashboard/media",
+    verification: "/dashboard/settings/verification",
+};
 
 function SetupChecklist({ steps, t }: { steps: Overview["setupSteps"]; t: T }) {
     const done = steps.filter((step) => step.done).length;
@@ -205,8 +213,8 @@ function SetupChecklist({ steps, t }: { steps: Overview["setupSteps"]; t: T }) {
                                 {state === "done" && <Check className="size-3 text-white" strokeWidth={3.5} />}
                             </span>
                             <span className={`text-[13px] font-medium ${state === "done" ? "text-stone-600" : "text-stone-900"}`}>
-                                {!step.done && STEP_HREFS[step.key] ? (
-                                    <Link href={STEP_HREFS[step.key]!} className="rounded underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+                                {!step.done ? (
+                                    <Link href={STEP_HREFS[step.key]} className="rounded underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                                         {t(`setup.steps.${step.key}`)}
                                     </Link>
                                 ) : (

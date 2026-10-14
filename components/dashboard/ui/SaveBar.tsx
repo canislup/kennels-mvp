@@ -12,19 +12,23 @@ function serialize(form: HTMLFormElement): string {
 
 /**
  * Sticky footer for a form: "You have unsaved changes" only when the form's
- * FormData differs from its baseline, Cancel and Submit. Warns before leaving
+ * FormData differs from its baseline, Cancel (a link) or Discard (`onDiscard`,
+ * enabled while dirty; the form resets itself, then changes `resetKey`) and Submit. Warns before leaving
  * the page while dirty. Place it inside the <form>. Controls that change
  * hidden inputs from React state should dispatch a bubbling "input" event
  * (see notifyFormChange) so the bar notices.
  */
 export default function SaveBar({
     cancelHref,
+    onDiscard,
     submitLabel,
     pending,
     saved,
     resetKey,
 }: {
-    cancelHref: string;
+    cancelHref?: string;
+    /** Shows Discard instead of the Cancel link. */
+    onDiscard?: () => void;
     submitLabel: string;
     pending: boolean;
     /** Show "All changes saved" while clean. */
@@ -83,9 +87,17 @@ export default function SaveBar({
                 ) : null}
             </div>
             <div className="ml-auto flex gap-2.5">
-                <Button href={cancelHref} variant="secondary">
-                    {t("cancel")}
-                </Button>
+                {onDiscard ? (
+                    <Button variant="secondary" onClick={onDiscard} disabled={!dirty || pending}>
+                        {t("discard")}
+                    </Button>
+                ) : (
+                    cancelHref && (
+                        <Button href={cancelHref} variant="secondary">
+                            {t("cancel")}
+                        </Button>
+                    )
+                )}
                 <Button type="submit" disabled={pending} aria-busy={pending}>
                     {pending ? t("saving") : submitLabel}
                 </Button>

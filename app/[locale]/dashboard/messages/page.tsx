@@ -330,7 +330,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                             {[thread.lead.dog.name, thread.lead.dog.litterName].filter(Boolean).join(", ")}
                         </Link>
                     ) : (
-                        <span className="text-stone-400">{t("leads.detail.notProvided")}</span>
+                        <span className="text-stone-500">{t("leads.detail.notProvided")}</span>
                     )}
                 </PanelRow>
                 <PanelRow label={t("messages.panel.followUp")}>
@@ -340,7 +340,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                             return <span className={`rounded-full px-2.25 py-0.75 text-xs font-semibold ${DUE_BADGE[due.tone]}`}>{due.label}</span>;
                         })()
                     ) : (
-                        <span className="text-stone-400">{t("messages.panel.noFollowUp")}</span>
+                        <span className="text-stone-500">{t("messages.panel.noFollowUp")}</span>
                     )}
                 </PanelRow>
                 <PanelRow label={t("messages.panel.email")}>
@@ -349,7 +349,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                             {thread.lead.email}
                         </a>
                     ) : (
-                        <span className="text-stone-400">{t("leads.detail.notProvided")}</span>
+                        <span className="text-stone-500">{t("leads.detail.notProvided")}</span>
                     )}
                 </PanelRow>
                 <PanelRow label={t("messages.panel.phone")}>
@@ -358,7 +358,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                             {thread.lead.phone}
                         </a>
                     ) : (
-                        <span className="text-stone-400">{t("leads.detail.notProvided")}</span>
+                        <span className="text-stone-500">{t("leads.detail.notProvided")}</span>
                     )}
                 </PanelRow>
             </dl>

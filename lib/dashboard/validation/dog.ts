@@ -19,8 +19,8 @@ export const DOG_LIMITS = {
 } as const;
 
 export const DOG_STATUSES: readonly DogStatus[] = ["BREEDING_STOCK", "AVAILABLE_PUPPY", "RESERVED", "SOLD"];
-export const DOG_SEXES: readonly DogSex[] = ["MALE", "FEMALE"];
-export const DOG_LIFE_STAGES: readonly DogLifeStage[] = ["PUPPY", "ADULT"];
+const DOG_SEXES: readonly DogSex[] = ["MALE", "FEMALE"];
+const DOG_LIFE_STAGES: readonly DogLifeStage[] = ["PUPPY", "ADULT"];
 
 /** Raw form values as typed (strings), echoed back on errors so nothing the user typed is lost. */
 export type DogFormValues = {

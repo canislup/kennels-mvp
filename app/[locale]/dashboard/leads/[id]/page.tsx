@@ -145,7 +145,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
                                 return (
                                     <li key={stage} aria-current={current ? "step" : undefined} className="text-center">
                                         <div className={`mb-2 h-1.5 rounded-full ${index <= stageIndex ? "bg-accent" : "bg-line"}`} aria-hidden />
-                                        <div className={`text-[13px] ${current ? "font-bold text-stone-900" : index < stageIndex ? "font-medium text-stone-600" : "font-medium text-stone-400"}`}>
+                                        <div className={`text-[13px] ${current ? "font-bold text-stone-900" : index < stageIndex ? "font-medium text-stone-600" : "font-medium text-stone-500"}`}>
                                             {tLeads(`stages.${stage}`)}
                                             {index < stageIndex && <span className="sr-only"> ({t("stage.done")})</span>}
                                         </div>
@@ -178,7 +178,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
                             {lookingFor.map((row) => (
                                 <div key={row.key}>
                                     <dt className="mb-1 text-xs font-semibold tracking-[0.4px] text-stone-500 uppercase">{t(`lookingFor.${row.key}`)}</dt>
-                                    <dd className="text-[15px] font-medium text-stone-900">{row.value || <span className="font-normal text-stone-400">{t("notProvided")}</span>}</dd>
+                                    <dd className="text-[15px] font-medium text-stone-900">{row.value || <span className="font-normal text-stone-500">{t("notProvided")}</span>}</dd>
                                 </div>
                             ))}
                         </dl>
@@ -233,7 +233,7 @@ export default async function LeadDetailPage({ params, searchParams }: Props) {
                             {contactRows.map((row) => (
                                 <div key={row.key}>
                                     <dt className="mb-0.5 text-xs font-semibold tracking-[0.4px] text-stone-500 uppercase">{t(`contact.${row.key}`)}</dt>
-                                    <dd className="break-words">{row.value || <span className="text-sm text-stone-400">{t("notProvided")}</span>}</dd>
+                                    <dd className="break-words">{row.value || <span className="text-sm text-stone-500">{t("notProvided")}</span>}</dd>
                                 </div>
                             ))}
                         </dl>

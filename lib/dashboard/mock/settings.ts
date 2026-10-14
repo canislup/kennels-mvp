@@ -5,6 +5,7 @@
 // notification preferences, the kennel's registration numbers and its
 // verification request. Keyed by owner id where the real model is per owner.
 import type { Account, NotificationPreferenceType, VerificationRequest, VerificationStatus } from "../types";
+import type { KennelContactInput, KennelIdentityInput, KennelImagesInput, KennelLocationInput } from "../validation/kennelProfile";
 
 const DAY = 24 * 60 * 60_000;
 
@@ -19,9 +20,23 @@ export const DEFAULT_NOTIFICATION_PREFERENCES: Record<NotificationPreferenceType
 
 /**
  * Registration numbers on file. `cnpj` and `cbkcRegistration` exist on Kennel;
- * `cpf` is a NEW FIELD. Digits only. The demo kennel is a company (design).
+ * `cpf` is a NEW FIELD. Digits only. One at most of `cnpj` / `cpf` is set.
  */
 export type MockRegistration = { cnpj: string | null; cpf: string | null; cbkcRegistration: string | null };
+
+/**
+ * The saved Kennel profile, by kennel id. Created from the real Kennel row the
+ * first time it's read (kennelProfile.ts), then edited here; nothing is
+ * written to the database. getCurrentKennel() applies name, slug, city, state
+ * and logo so the sidebar updates.
+ */
+export type MockKennelProfile = KennelIdentityInput &
+    KennelImagesInput & {
+        breedIds: string[];
+        breedingSince: number | null; // NEW FIELD
+        contact: KennelContactInput; // NEW FIELDS
+        location: KennelLocationInput; // address is a NEW FIELD
+    };
 
 const DOCS = ["cnpj-cartao.jpg", "cbkc-certificado.jpg"].map((name) => `https://res.cloudinary.com/kennelos-demo/image/upload/v1/verification/${name}`);
 
@@ -54,7 +69,9 @@ export function buildSettingsFixtures() {
         accountOverrides: {} as Record<string, Partial<Account>>,
         /** Saved preferences by owner id; missing = defaults. */
         notificationPreferences: {} as Record<string, Record<NotificationPreferenceType, boolean>>,
-        registration: { cnpj: "12345678000190", cpf: null, cbkcRegistration: "CBKC-48213" } as MockRegistration,
+        /** null until saved: the numbers come from the real Kennel row (cnpj, cbkcRegistration). */
+        registration: null as MockRegistration | null,
+        kennelProfiles: {} as Record<string, MockKennelProfile>,
         verification: verificationFixture("NOT_SUBMITTED"),
     };
 }

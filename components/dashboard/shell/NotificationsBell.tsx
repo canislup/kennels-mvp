@@ -102,7 +102,7 @@ export default function NotificationsBell({ notifications }: { notifications: Da
                                             {!n.read && <span className="sr-only"> ({t("unread")})</span>}
                                         </p>
                                         <p className="mt-0.5 truncate text-xs text-stone-500">{detail}</p>
-                                        <p className="mt-1 text-xs text-stone-400">
+                                        <p className="mt-1 text-xs text-stone-500">
                                             <time dateTime={n.createdAt}>{formatRelativeTime(format, tTime, n.createdAt, new Date(openedAt))}</time>
                                         </p>
                                     </div>

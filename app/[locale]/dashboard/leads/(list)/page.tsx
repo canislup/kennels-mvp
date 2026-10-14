@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { Clock } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, redirect } from "@/i18n/navigation";
 import { getCurrentKennel } from "@/lib/dashboard/kennel";
 import { getKennelBreeds } from "@/lib/dashboard/dogs";
 import { getFollowUpSummary, listLeadsBoard, listLeadsTable } from "@/lib/dashboard/leads";
@@ -74,6 +74,10 @@ export default async function LeadsPage({ searchParams }: { searchParams: Promis
         view === "list" ? listLeadsTable(kennel.id, filters, { page, pageSize: TABLE_PAGE_SIZE }) : null,
         filtered ? listLeadsTable(kennel.id, {}, { page: 1, pageSize: 1 }) : null,
     ]);
+    // A page past the end (old link, items removed) goes to the last page instead of looking empty.
+    if (table && page > 1 && page > Math.ceil(table.total / TABLE_PAGE_SIZE)) {
+        redirect({ href: hrefWith({ page: String(Math.max(1, Math.ceil(table.total / TABLE_PAGE_SIZE))) }), locale: await getLocale() });
+    }
     // A board whose only matches are old sold leads still shows (its Sold column links to the list).
     const hasResults = board ? board.columns.some((column) => column.count > 0 || column.truncated) : table!.total > 0;
     const anyLeads = filtered ? unfiltered!.total > 0 : hasResults;

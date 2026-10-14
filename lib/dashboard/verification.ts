@@ -6,6 +6,7 @@
 // app/[locale]/dashboard/settings/verification/actions.ts.
 import { verificationFixture } from "./mock/settings";
 import { getMockStore, snapshot } from "./mock/store";
+import { readRegistration } from "./kennelProfile";
 import type { RegistrationSummary, SimpleMutationResult, VerificationStatus, VerificationView } from "./types";
 
 /** "12.345.678/0001-90". A CNPJ is a public company number, so it's shown in full. */
@@ -18,8 +19,9 @@ function maskCpf(digits: string): string {
     return `***.${digits.slice(3, 6)}.${digits.slice(6, 9)}-**`;
 }
 
-function registrationSummary(): RegistrationSummary | null {
-    const { cnpj, cpf } = getMockStore().registration;
+/** The numbers are shared with Settings → Kennel profile (real Kennel row until saved there). */
+async function registrationSummary(kennelId: string): Promise<RegistrationSummary | null> {
+    const { cnpj, cpf } = await readRegistration(kennelId);
     if (cnpj) return { type: "CNPJ", maskedNumber: formatCnpj(cnpj) };
     if (cpf) return { type: "CPF", maskedNumber: maskCpf(cpf) };
     return null;
@@ -38,22 +40,22 @@ const DEV_REGISTRATIONS: Record<string, { cnpj: string | null; cpf: string | nul
     none: { cnpj: null, cpf: null },
 };
 
-function applyDevPreview(preview: VerificationDevPreview | undefined) {
+async function applyDevPreview(kennelId: string, preview: VerificationDevPreview | undefined) {
     if (process.env.NODE_ENV === "production" || !preview) return;
     const store = getMockStore();
     const status = preview.state ? DEV_STATES[preview.state] : undefined;
     if (status && store.verification.status !== status) store.verification = verificationFixture(status);
     const registration = preview.registration ? DEV_REGISTRATIONS[preview.registration] : undefined;
-    if (registration) Object.assign(store.registration, registration);
+    if (registration) store.registration = { ...(await readRegistration(kennelId)), ...registration };
 }
 // --- end of dev-only testing aid ----------------------------------------------------
 
 export async function getVerification(kennelId: string, devPreview?: VerificationDevPreview): Promise<VerificationView> {
-    void kennelId;
-    applyDevPreview(devPreview);
+    await applyDevPreview(kennelId, devPreview);
     const store = getMockStore();
-    const registration = registrationSummary();
-    return snapshot({ request: store.verification, registration, registrationMissing: registration === null, cbkcOnFile: store.registration.cbkcRegistration });
+    const registration = await registrationSummary(kennelId);
+    const { cbkcRegistration } = await readRegistration(kennelId);
+    return snapshot({ request: store.verification, registration, registrationMissing: registration === null, cbkcOnFile: cbkcRegistration });
 }
 
 /** For the Overview checklist: requested = PENDING or APPROVED. */
@@ -64,11 +66,10 @@ export async function getVerificationStatus(kennelId: string): Promise<Verificat
 
 /** From NOT_SUBMITTED or REJECTED, with a CNPJ or CPF on file. Input already validated (1–5 documents). */
 export async function submitVerification(kennelId: string, input: { cbkcRegistration: string | null; documentUrls: string[] }): Promise<SimpleMutationResult> {
-    void kennelId;
     const store = getMockStore();
     const { status } = store.verification;
     if (status !== "NOT_SUBMITTED" && status !== "REJECTED") return { ok: false, fieldErrors: {}, formError: { key: "verificationNotEditable" } };
-    if (!registrationSummary()) return { ok: false, fieldErrors: {}, formError: { key: "registrationMissing" } };
+    if (!(await registrationSummary(kennelId))) return { ok: false, fieldErrors: {}, formError: { key: "registrationMissing" } };
     store.verification = {
         ...store.verification,
         status: "PENDING",

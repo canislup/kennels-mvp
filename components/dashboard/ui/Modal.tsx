@@ -4,9 +4,12 @@ import { useEffect, useId, useRef, type ReactNode } from "react";
 
 /**
  * Modal on the native <dialog> element. showModal() makes the page behind it
- * inert (focus is trapped inside), Escape and a backdrop click call
- * `onClose`, and the browser returns focus to the trigger on close.
+ * inert, Escape and a backdrop click call `onClose`, and the browser returns
+ * focus to the trigger on close. Tab and Shift+Tab wrap inside the dialog
+ * (natively they would leave it for the browser's own controls).
  */
+
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 export default function Modal({
     open,
     title,
@@ -44,6 +47,20 @@ export default function Modal({
                 if (dismissible) onClose();
             }}
             onClick={(event) => event.target === ref.current && dismissible && onClose()}
+            onKeyDown={(event) => {
+                if (event.key !== "Tab" || !ref.current) return;
+                const items = [...ref.current.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => el.getClientRects().length > 0);
+                if (items.length === 0) return;
+                const first = items[0]!;
+                const last = items[items.length - 1]!;
+                if (event.shiftKey && (document.activeElement === first || document.activeElement === ref.current)) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }}
             className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-2xl border border-line bg-white p-0 text-stone-900 shadow-md backdrop:bg-stone-900/40"
         >
             <div className="p-6">

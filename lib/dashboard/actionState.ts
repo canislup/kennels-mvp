@@ -3,8 +3,6 @@
 import { refresh } from "next/cache";
 import type { ActionState, FieldError, SimpleMutationResult } from "./types";
 
-export const INITIAL_ACTION_STATE: ActionState = { status: "idle", fieldErrors: {}, submission: 0 };
-
 export function failed(previous: ActionState, fieldErrors: Record<string, FieldError>, formError?: FieldError): ActionState {
     return { status: "error", fieldErrors, formError, submission: previous.submission + 1 };
 }
