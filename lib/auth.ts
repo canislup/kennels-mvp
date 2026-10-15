@@ -21,6 +21,8 @@ export const verifyKennelSession = async () => {
     const verifiedToken = await jwtVerify(token.value, secret);
 
     console.log("✅ Session successfully verified");
+
+    // RETURNS THE USER ID FROM THE TOKEN PAYLOAD
     return verifiedToken.payload;
 
     // CASE: token and master key don't match return Unauthorized
