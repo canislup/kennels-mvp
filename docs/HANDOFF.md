@@ -1,6 +1,6 @@
 # Handoff (dashboard redesign, after Step 7a)
 
-Read first: `CLAUDE.md`, `lib/dashboard/ENDPOINTS.md`, and the build tracker (Claude Doc: https://claude.ai/code/artifact/58c9f2e8-2134-4766-8660-0288182c7c0b). This file only holds what those don't.
+Read first: `CLAUDE.md`, `lib/dashboard/ENDPOINTS.md`, **`docs/BACKEND_PLAN.md` (the backend build order, Step 7b)**, and the build tracker (Claude Doc: https://claude.ai/code/artifact/58c9f2e8-2134-4766-8660-0288182c7c0b). This file only holds what those don't.
 
 ## Working agreement (per step, from the user)
 - Frontend only. Every read and write goes through `lib/dashboard/*.ts` (mock). The user writes the real backend.
@@ -50,4 +50,4 @@ Read first: `CLAUDE.md`, `lib/dashboard/ENDPOINTS.md`, and the build tracker (Cl
 - Lint: 25 warnings, 0 errors, all known. 22 are `@next/next/no-img-element` (Cloudinary URLs rendered with `<img>` on purpose). 3 are `no-unused-vars` in the legacy `app/api/dogs/route.ts` and `app/api/dogs/[id]/route.ts` (no longer called by the dashboard).
 
 ## Next
-- Step 7b (open).
+- Backend: follow `docs/BACKEND_PLAN.md`, Phase 0 first (migrations are out of sync: the database has no `_prisma_migrations` table).

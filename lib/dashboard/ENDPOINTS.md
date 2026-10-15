@@ -1,5 +1,7 @@
 # Dashboard data functions
 
+> **Building the backend? Start with [`docs/BACKEND_PLAN.md`](../../docs/BACKEND_PLAN.md):** the build order, schema changes ([draft](../../docs/schema-additions.prisma)), cross-cutting rules and security checklist. This file stays the per-function contract.
+
 Every dashboard screen reads and writes data through the async functions in `lib/dashboard/*.ts`. This file is the backend to-do list: one entry per function, with its input, its output type (all types live in [`types.ts`](./types.ts)), and what it implies for the Prisma schema.
 
 **How to replace a mock**

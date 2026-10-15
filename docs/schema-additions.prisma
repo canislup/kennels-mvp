@@ -1,0 +1,561 @@
+// DRAFT — NOT USED BY THE APP. Do not move this file under prisma/ and do not
+// import it. It lists the schema additions and changes the dashboard needs
+// (docs/BACKEND_PLAN.md, section 2), in Prisma 7 syntax, following the
+// conventions of prisma/schema.prisma: String ids with @default(uuid()),
+// camelCase fields, PascalCase models, no @@map.
+//
+// How to read it:
+// - Models marked CHANGED are written out IN FULL (existing fields + new ones)
+//   because Prisma has no "extend model" syntax. Replace the model in
+//   prisma/schema.prisma with the version here. Lines without a marker exist today.
+// - Models and enums marked NEW are added as they are.
+// - "Needed by" names the lib/dashboard functions that read or write the field.
+// - Apply it in phases (BACKEND_PLAN.md section 4), not all at once.
+// - Things Prisma can't express (functional indexes, CHECK constraints, the
+//   unaccent extension) are listed at the end; add them as raw SQL in a migration.
+
+// =============================================================================
+// CHANGED MODELS
+// =============================================================================
+
+// CHANGED: locale, deletion grace period, session invalidation, email change.
+model Owner {
+  id           String   @id @default(uuid())
+  fullName     String
+  email        String   @unique // CHANGED (data): store lower-cased; login and register must lower-case before lookup
+  phoneNumber  String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  kennel       Kennel?
+
+  locale              String? // NEW: "en" | "pt-BR", null = never chosen. Needed by: getAccount, updateAccount
+  deletionRequestedAt DateTime? // NEW: grace-period deletion. Needed by: requestAccountDeletion, the purge job
+  passwordChangedAt   DateTime? // NEW: sessions issued before this are rejected. Needed by: changePassword, verifyKennelSession
+  pendingEmail        String? // NEW (needs an email relay): new address waiting for confirmation. Needed by: updateAccount
+  pendingEmailTokenHash String? @unique // NEW (needs an email relay): sha256 of the confirmation token
+  pendingEmailExpiresAt DateTime? // NEW (needs an email relay)
+
+  notificationPreferences NotificationPreference[] // NEW relation
+}
+
+// CHANGED: profile fields (Step 6b), stored aggregates, time zone, CPF, relations.
+model Kennel {
+  id               String   @id @default(uuid())
+  name             String
+  cnpj             String?  @unique // CHANGED (data): normalize to 14 digits (today: "22.333.444/0001-55"). Needed by: saveKennelProfile, getVerification
+  city             String
+  state            String
+  cbkcRegistration String?
+  ownerId          String   @unique
+  createdAt        DateTime @default(now())
+  dogs             Dog[]
+  owner            Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade) // CHANGED: was RESTRICT; deleting the owner removes the kennel
+
+  slug          String   @unique
+  logoUrl       String?
+  location      String   @default("") // keep in sync with city/state ("City, ST") in saveKennelProfile
+  prestigeScore Int      @default(0)
+  description   String?
+  primaryBreeds String[] @default([]) // DEPRECATED: drop once nothing reads it (public site still may)
+  latitude      Float?
+  longitude     Float?
+  isVerified    Boolean  @default(false) // set by the verification approval, in the same transaction
+  litters       Litter[]
+  breeds        KennelBreed[]
+  media         Media[]
+
+  cpf           String?  @unique // NEW: 11 digits, individual breeders. Exactly one of cnpj/cpf (app rule). Needed by: saveKennelProfile, getKennelProfile, getVerification, submitVerification
+  logoPublicId  String? // NEW: Cloudinary public_id of logoUrl (delete on replace). Needed by: saveKennelProfile
+  coverUrl      String? // NEW. Needed by: getKennelProfile, saveKennelProfile, getProfileStrength, getOverview
+  coverPublicId String? // NEW. Needed by: saveKennelProfile
+  breedingSince Int? // NEW: a year, 1950..current. Needed by: getKennelProfile, saveKennelProfile
+  address       String? // NEW: ≤ 200. Needed by: getKennelProfile, saveKennelProfile
+  timeZone      String   @default("America/Sao_Paulo") // NEW: IANA name. Needed by: getKennelTimeZone, getViewerToday, every "today" comparison, the reminder jobs
+  ratingAverage Float    @default(0) // NEW: stored aggregate, updated with each review. Needed by: the public directory/profile (getReviewSummary can compute live)
+  reviewCount   Int      @default(0) // NEW: same
+
+  contacts            KennelContact[] // NEW relation
+  leads               Lead[] // NEW relation
+  conversations       Conversation[] // NEW relation
+  reviews             Review[] // NEW relation
+  reviewInvites       ReviewInvite[] // NEW relation
+  verificationRequest VerificationRequest? // NEW relation
+  notifications       Notification[] // NEW relation
+  activityEvents      ActivityEvent[] // NEW relation
+  slugHistory         KennelSlugHistory[] // NEW relation
+}
+
+// CHANGED: litter link, registration number, soft delete, reservation, cascade.
+model Dog {
+  id          String    @id @default(uuid())
+  name        String
+  breed       String
+  gender      String // CHANGED (data): backfill to "MALE"/"FEMALE" (today: "Male", "MALE", "Female"); an enum later
+  status      DogStatus @default(BREEDING_STOCK)
+  pedigreeUrl String?
+  lineage     String?
+  photoUrls   String[] // DEPRECATED after Media.position lands: dual-write until the public site reads Media
+  kennelId    String
+  createdAt   DateTime  @default(now())
+  kennel      Kennel    @relation(fields: [kennelId], references: [id], onDelete: Cascade) // CHANGED: was RESTRICT
+
+  damLitters  Litter[] @relation("LitterDam")
+  sireLitters Litter[] @relation("LitterSire")
+
+  slug  String
+  media Media[]
+
+  lifeStage DogLifeStage @default(ADULT)
+  birthDate DateTime?
+  registry  String?
+
+  bio      String?
+  sireName String?
+  damName  String?
+
+  litterId           String? // NEW. Needed by: createDog, updateDog, getDogForEdit, linkPuppyToLitter, deleteLitter, computeLitterStats, getOverview
+  litter             Litter?   @relation("LitterPuppies", fields: [litterId], references: [id], onDelete: SetNull) // NEW
+  registrationNumber String? // NEW: ≤ 40. Needed by: createDog, updateDog, getDogForEdit, listDogs (search)
+  archivedAt         DateTime? // NEW: soft delete. Needed by: archiveDog, restoreDog, listDogs, getDogStatusCounts and every "non-archived" filter
+  reservedForLeadId  String?   @unique // NEW: the lead holding this puppy (source of truth for reservations). Needed by: reservePuppy, releasePuppy, markLeadLost, reopenLead, getLeadDetail, deleteLead
+  reservedForLead    Lead?     @relation("PuppyReservation", fields: [reservedForLeadId], references: [id], onDelete: SetNull) // NEW
+
+  interestedLeads  Lead[]    @relation("LeadInterestDog") // NEW relation (Lead.dogId)
+  sharedInMessages Message[] // NEW relation (Message.sharedDogId)
+
+  @@unique([kennelId, slug])
+  @@index([kennelId, archivedAt, status]) // NEW: the roster query and tab counts
+  @@index([litterId]) // NEW
+}
+
+// CHANGED: puppies and waitlist relations, cascade from the kennel.
+model Litter {
+  id                 String       @id @default(uuid())
+  breed              String
+  puppyCount         Int          @default(0)
+  expectedGoHomeDate DateTime?
+  status             LitterStatus @default(PLANNED)
+  createdAt          DateTime     @default(now())
+  name               String? // the app requires it; consider making it required after a backfill
+  bornAt             DateTime?
+  availableCount     Int? // NOT USED by the dashboard (computed from puppies); the public kennel page reads it. Keep in sync or drop (BACKEND_PLAN D15)
+
+  kennelId String
+  kennel   Kennel @relation(fields: [kennelId], references: [id], onDelete: Cascade) // CHANGED: was RESTRICT
+
+  damId  String?
+  dam    Dog?    @relation("LitterDam", fields: [damId], references: [id]) // already ON DELETE SET NULL in the database
+  sireId String?
+  sire   Dog?    @relation("LitterSire", fields: [sireId], references: [id]) // already ON DELETE SET NULL
+
+  puppies  Dog[]           @relation("LitterPuppies") // NEW relation
+  waitlist WaitlistEntry[] // NEW relation
+  leads    Lead[] // NEW relation (Lead.litterId)
+
+  @@index([kennelId, status]) // NEW
+}
+
+// CHANGED: gallery order, captions, documents, video metadata, Cloudinary id.
+model Media {
+  id        String    @id @default(uuid())
+  type      MediaType
+  url       String
+  createdAt DateTime  @default(now())
+
+  kennelId String
+  kennel   Kennel  @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  breedId  String?
+  breed    Breed?  @relation(fields: [breedId], references: [id], onDelete: SetNull)
+  dogId    String?
+  dog      Dog?    @relation(fields: [dogId], references: [id], onDelete: Cascade)
+
+  category     MediaCategory  @default(GALLERY) // NEW: public queries must filter category = GALLERY. Needed by: getDogForEdit, updateDog (health documents), listMedia
+  position     Int            @default(0) // NEW: 0-based, contiguous per (kennelId, type). Needed by: listMedia, addPhotos, addVideoLink, moveMedia, deleteMedia, updateDog (photo order)
+  caption      String? // NEW: ≤ 120. Needed by: listMedia, updateMedia, addVideoLink
+  label        String? // NEW: health document label. Needed by: getDogForEdit, updateDog
+  fileName     String? // NEW: original upload name. Needed by: getDogForEdit, updateDog
+  provider     VideoProvider? // NEW: videos only. Needed by: addVideoLink, listMedia
+  thumbnailUrl String? // NEW: videos only. Needed by: listMedia
+  publicId     String? // NEW: Cloudinary public_id (asset deletion). Needed by: addPhotos, deleteMedia, updateDog
+  width        Int? // NEW (optional)
+  height       Int? // NEW (optional)
+
+  @@index([kennelId, type])
+  @@index([dogId])
+  @@index([kennelId, type, category, position]) // NEW: the gallery query
+}
+
+// =============================================================================
+// NEW MODELS
+// =============================================================================
+
+// Puppy waitlist. Needed by: getLitterWaitlist, computeLitterStats, getLeadDetail,
+// getWaitlistOptions, addToWaitlist, removeFromWaitlist, deleteLead.
+model WaitlistEntry {
+  id        String   @id @default(uuid())
+  litterId  String
+  litter    Litter   @relation(fields: [litterId], references: [id], onDelete: Cascade)
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  position  Int // 1-based within the litter, contiguous; renumber in the same transaction
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([litterId, leadId])
+  @@index([litterId, position])
+}
+
+// Needed by: every function in lib/dashboard/leads.ts, getNavCounts, getOverview,
+// getConversationThread, getLitterWaitlist.
+model Lead {
+  id               String           @id @default(uuid())
+  kennelId         String
+  kennel           Kennel           @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  name             String
+  email            String? // stored lower-cased (app rule + raw CHECK, see the end)
+  phone            String?
+  preferredContact PreferredContact
+  city             String?
+  state            String?
+  source           LeadSource
+  stage            LeadStage        @default(NEW)
+  interestBreed    String
+  interestNote     String?
+  litterId         String?
+  litter           Litter?          @relation(fields: [litterId], references: [id], onDelete: SetNull)
+  dogId            String? // the dog of INTEREST (not the reservation)
+  dog              Dog?             @relation("LeadInterestDog", fields: [dogId], references: [id], onDelete: SetNull)
+  followUpAt       DateTime?        @db.Date // a calendar day
+  firstMessage     String?
+  lostReason       LostReason? // set only while stage = LOST
+  createdAt        DateTime         @default(now())
+  lastActivityAt   DateTime         @default(now())
+
+  reservedDog     Dog?            @relation("PuppyReservation") // back-relation of Dog.reservedForLeadId
+  events          LeadEvent[]
+  notes           LeadNote[]
+  conversation    Conversation?
+  waitlistEntries WaitlistEntry[]
+
+  @@unique([kennelId, email]) // NULL emails never collide
+  @@index([kennelId, stage, lastActivityAt])
+  @@index([kennelId, followUpAt])
+}
+
+// Lead history (type + params, translated in the UI). Needed by: createLead,
+// updateLead, moveLeadStage, setFollowUp, markFollowUpDone, markLeadLost,
+// reopenLead, reservePuppy, releasePuppy, addToWaitlist, removeFromWaitlist,
+// sendMessage (auto stage change), getLeadDetail.
+model LeadEvent {
+  id        String        @id @default(uuid())
+  leadId    String
+  lead      Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  type      LeadEventType
+  params    Json // names snapshotted, never pre-rendered text
+  createdAt DateTime      @default(now())
+
+  @@index([leadId, createdAt])
+}
+
+// Needed by: addLeadNote, getLeadDetail.
+model LeadNote {
+  id        String   @id @default(uuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  body      String // 1..2000
+  createdAt DateTime @default(now())
+
+  @@index([leadId, createdAt])
+}
+
+// One per lead. kennelId is denormalized (ENDPOINTS.md scoped through the lead)
+// so ownership checks and the inbox query are one indexed lookup.
+// Needed by: lib/dashboard/messages.ts, getLeadDetail, getNavCounts, getOverview.
+model Conversation {
+  id            String    @id @default(uuid())
+  kennelId      String
+  kennel        Kennel    @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  leadId        String    @unique
+  lead          Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lastMessageAt DateTime  @default(now())
+  messages      Message[]
+
+  @@index([kennelId, lastMessageAt])
+}
+
+// Needed by: sendMessage, markConversationRead, getConversationThread,
+// listConversations, getUnreadSummary, getLeadDetail.
+model Message {
+  id             String           @id @default(uuid())
+  conversationId String
+  conversation   Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  direction      MessageDirection
+  body           String // "" allowed when sharedDogId is set
+  sharedDogId    String?
+  sharedDog      Dog?             @relation(fields: [sharedDogId], references: [id], onDelete: SetNull)
+  createdAt      DateTime         @default(now())
+  readAt         DateTime? // null = unread by the kennel (INBOUND only)
+
+  @@index([conversationId, createdAt])
+  @@index([conversationId, direction, readAt]) // unread counts
+}
+
+// Needed by: getReviewSummary, listReviews, postReviewReply, reportReview,
+// getOverview (activity), the public review page (not built).
+model Review {
+  id             String              @id @default(uuid())
+  kennelId       String
+  kennel         Kennel              @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  inviteId       String?             @unique
+  invite         ReviewInvite?       @relation(fields: [inviteId], references: [id], onDelete: SetNull)
+  reviewerName   String
+  purchaseLabel  String?
+  verified       Boolean             @default(false)
+  rating         Int // 1..5 (raw CHECK, see the end)
+  body           String
+  createdAt      DateTime            @default(now())
+  replyBody      String? // the kennel's one public reply, 1..1000 (columns, not a ReviewReply model)
+  replyCreatedAt DateTime?
+  replyUpdatedAt DateTime?
+  reportedAt     DateTime?
+  reportReason   ReviewReportReason?
+  reportDetails  String? // ≤ 500, never public
+
+  @@index([kennelId, createdAt])
+}
+
+// Single-use review link. Only a hash of the token is stored: the link is shown
+// once (createReviewInvite) and never listed again. Needed by: createReviewInvite,
+// the public review page, the invite-expiry job.
+model ReviewInvite {
+  id          String    @id @default(uuid())
+  kennelId    String
+  kennel      Kennel    @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  email       String?
+  tokenHash   String    @unique // sha256(token), hex
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime // e.g. createdAt + 30 days
+  usedAt      DateTime?
+  emailSentAt DateTime? // null until an email relay exists
+  review      Review?
+
+  @@index([kennelId, createdAt])
+}
+
+// Missing row = the default (all on except WAITLIST_ACTIVITY).
+// Needed by: getNotificationPreferences, updateNotificationPreferences.
+model NotificationPreference {
+  ownerId      String
+  owner        Owner                      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  type         NotificationPreferenceType
+  emailEnabled Boolean
+
+  @@id([ownerId, type])
+}
+
+// One current request per kennel. Documents stay out of Media on purpose (they
+// must never reach a public gallery query). Needed by: getVerification,
+// getVerificationStatus, submitVerification, withdrawVerification,
+// getProfileStrength, getOverview, saveKennelProfile (back to review).
+model VerificationRequest {
+  id                String             @id @default(uuid())
+  kennelId          String             @unique
+  kennel            Kennel             @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  status            VerificationStatus @default(NOT_SUBMITTED)
+  cbkcRegistration  String?
+  documentUrls      String[] // 1..5 Cloudinary URLs
+  documentPublicIds String[] // same order as documentUrls (asset deletion)
+  submittedAt       DateTime?
+  decidedAt         DateTime?
+  reviewerNote      String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+// The bell. Needed by: getNotifications (+ a mark-read mutation, not built), the
+// code paths and jobs that create them.
+model Notification {
+  id        String           @id @default(uuid())
+  kennelId  String
+  kennel    Kennel           @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  params    Json
+  createdAt DateTime         @default(now())
+  readAt    DateTime?
+
+  @@index([kennelId, createdAt])
+}
+
+// Overview "Recent activity". Needed by: getOverview; written by createLead,
+// inbound messages, review creation, updateDogStatus, updateLitter/Status (born).
+model ActivityEvent {
+  id        String       @id @default(uuid())
+  kennelId  String
+  kennel    Kennel       @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  type      ActivityType
+  params    Json
+  createdAt DateTime     @default(now())
+
+  @@index([kennelId, createdAt])
+}
+
+// Public contact rows (Settings → Kennel profile). A row exists only with a value.
+// Needed by: getKennelProfile, saveKennelProfile, getProfileStrength, the public page.
+model KennelContact {
+  kennelId String
+  kennel   Kennel         @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  channel  ContactChannel
+  value    String // phone/WhatsApp as typed, email lower-cased, Instagram without "@"
+  isPublic Boolean        @default(false)
+
+  @@id([kennelId, channel])
+}
+
+// Old slugs, for 308 redirects and so nobody else can claim them.
+// Needed by: saveKennelProfile, checkSlugAvailability, /kennel/[slug].
+model KennelSlugHistory {
+  slug      String   @id
+  kennelId  String
+  kennel    Kennel   @relation(fields: [kennelId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([kennelId])
+}
+
+// Cloudinary assets to delete after a transaction commits (replaced logo/cover,
+// deleted photos, account deletion). Processed by a job. No relation on purpose:
+// the rows outlive what they pointed at.
+model AssetDeletion {
+  id           String    @id @default(uuid())
+  publicId     String
+  resourceType String    @default("image")
+  createdAt    DateTime  @default(now())
+  attempts     Int       @default(0)
+  lastError    String?
+  doneAt       DateTime?
+
+  @@index([doneAt, createdAt])
+}
+
+// =============================================================================
+// NEW ENUMS
+// =============================================================================
+
+enum LeadStage {
+  NEW
+  CONTACTED
+  INTERESTED
+  FOLLOW_UP
+  RESERVED
+  SOLD
+  LOST
+}
+
+enum LostReason {
+  NO_RESPONSE
+  BOUGHT_ELSEWHERE
+  CHANGED_MIND
+  TOO_FAR
+  OTHER
+}
+
+enum LeadSource {
+  PUBLIC_FORM
+  DIRECTORY
+  REFERRAL
+  OTHER
+}
+
+enum PreferredContact {
+  EMAIL
+  PHONE
+  WHATSAPP
+}
+
+enum LeadEventType {
+  CREATED
+  STAGE_CHANGED
+  FOLLOW_UP_SET
+  FOLLOW_UP_DONE
+  MARKED_LOST
+  REOPENED
+  PUPPY_RESERVED
+  PUPPY_RELEASED
+  WAITLIST_ADDED
+  WAITLIST_REMOVED
+}
+
+enum MessageDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum MediaCategory {
+  GALLERY
+  HEALTH_DOCUMENT
+}
+
+enum VideoProvider {
+  YOUTUBE
+  VIMEO
+}
+
+enum ReviewReportReason {
+  INAPPROPRIATE
+  NOT_A_BUYER
+  SPAM
+  OTHER
+}
+
+enum NotificationPreferenceType {
+  NEW_LEAD
+  NEW_MESSAGE
+  NEW_REVIEW
+  WAITLIST_ACTIVITY
+  VERIFICATION_UPDATE
+}
+
+enum VerificationStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  NEW_LEAD
+  NEW_MESSAGE
+  NEW_REVIEW
+  FOLLOW_UP_DUE
+  VERIFICATION_REMINDER
+}
+
+enum ActivityType {
+  NEW_LEAD
+  NEW_MESSAGE
+  NEW_REVIEW
+  DOG_STATUS_CHANGED
+  LITTER_BORN
+}
+
+enum ContactChannel {
+  PHONE
+  EMAIL
+  WEBSITE
+  INSTAGRAM
+  WHATSAPP
+}
+
+// =============================================================================
+// RAW SQL (add to the migration by hand; Prisma can't express these)
+// =============================================================================
+//
+// CREATE EXTENSION IF NOT EXISTS unaccent;                       -- accent-insensitive search (Dogs, Leads, Messages)
+// ALTER TABLE "Lead"   ADD CONSTRAINT lead_email_lower  CHECK (email IS NULL OR email = lower(email));
+// ALTER TABLE "Owner"  ADD CONSTRAINT owner_email_lower CHECK (email = lower(email));   -- after lower-casing existing rows
+// ALTER TABLE "Review" ADD CONSTRAINT review_rating_1_5 CHECK (rating BETWEEN 1 AND 5);
+// ALTER TABLE "Kennel" ADD CONSTRAINT kennel_one_registration CHECK (cnpj IS NULL OR cpf IS NULL);
+// ALTER TABLE "Kennel" ADD CONSTRAINT kennel_cnpj_digits CHECK (cnpj IS NULL OR cnpj ~ '^[0-9]{14}$');   -- after normalizing
+// ALTER TABLE "Kennel" ADD CONSTRAINT kennel_cpf_digits  CHECK (cpf  IS NULL OR cpf  ~ '^[0-9]{11}$');
+// ALTER TABLE "Lead"   ADD CONSTRAINT lead_lost_reason   CHECK ((stage = 'LOST') = ("lostReason" IS NOT NULL));
+// CREATE INDEX message_unread_inbound ON "Message" ("conversationId") WHERE direction = 'INBOUND' AND "readAt" IS NULL;  -- optional partial index
